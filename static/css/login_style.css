@@ -44,12 +44,13 @@ body {
 	margin: 15px 0 10px;
 }
 .findPassword:hover {
-	color: #8736ce; /* 鼠标悬停时的文字颜色 */
+	color: #5f2e8b; /* 鼠标悬停时的文字颜色 */
 	text-decoration: dotted; /* 去掉下划线 */
+  text-shadow: #512da8 0px 0px 1px; /* 文字阴影 */
 }
 
 button {
-	background-color: #512da8;
+	background-color: #616161;
 	color: #fff;
 	font-size: 12px;
 	padding: 10px 45px;
@@ -60,6 +61,10 @@ button {
 	text-transform: uppercase;
 	margin-top: 10px;
 	cursor: pointer;
+}
+button:hover {
+	box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+	border: 1px solid #3498db;
 }
 
 .login_container button.hidden {
@@ -150,9 +155,9 @@ button {
 }
 
 .change {
-	background-color: #512da8;
+	background-color: #6b6a6a75;
 	height: 100%;
-	background: linear-gradient(to right, #5c6bc0, #512da8);
+	background: linear-gradient(to right, #616161,#6b6a6a75);
 	color: #fff;
 	position: relative;
 	left: -100%;
@@ -199,12 +204,12 @@ button {
 }
 .show {
 	width: 220px;
-	background-color: #8a9fe4;
+	background-color: #607D8B;
 }
 
 
 /* 全宽输入框 */
-#find_email #find_uname {
+#find_email, #find_uname {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -213,15 +218,16 @@ button {
   box-sizing: border-box;
 }
 
-/* 为所有按钮设置样式 */
+/* 为查找按钮设置样式 */
 #findPassword {
-  background-color: #4CAF50;
+  background-color: #39080846;
   color: white;
   padding: 14px 20px;
-  margin: 8px 0;
   border: none;
   cursor: pointer;
   width: 100%;
+  margin: 0 auto;
+
 }
 
 #findPassword:hover {
@@ -236,8 +242,10 @@ button {
 }
 
 img.avatar {
+	/*相对来说更合适的大小*/
   width: 40%;
   border-radius: 50%;
+  height: 40%;
 }
 
 .find-container {
@@ -252,7 +260,7 @@ img.avatar {
   top: 0;
   width: 100%; /* 全屏宽度 */
   height: 100%; /* 全高 */
-  overflow: auto; /* 如果需要启用滚动 */
+  /*overflow: none; !* 如果需要启用滚动 *!*/
   background-color: rgb(0,0,0); /* 后备颜色 */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
   padding-top: 60px;
@@ -264,7 +272,8 @@ img.avatar {
   background-color: #fefefe;
   margin: 5% auto 15% auto; /* 距顶部 5%，距底部 15% 并居中 */
   border: 1px solid #888;
-  width: 80%; /* 可以多也可以少，取决于屏幕尺寸 */
+  width: 20%; /* 让大小更加合适 */
+  border-radius: 20px; /* 添加圆角 */
 }
 
 /* 关闭按钮 (x) */
@@ -290,22 +299,12 @@ img.avatar {
 }
 
 @-webkit-keyframes animatezoom {
-  from {-webkit-transform: scale(0)} 
+  from {-webkit-transform: scale(0)}
   to {-webkit-transform: scale(1)}
 }
-  
+
 @keyframes animatezoom {
-  from {transform: scale(0)} 
+  from {transform: scale(0)}
   to {transform: scale(1)}
 }
 
-/* 在超小屏幕上改变 span 和 cancel 按钮的样式 */
-@media screen and (max-width: 300px) {
-  span.psw {
-     display: block;
-     float: none;
-  }
-  .cancelbtn {
-     width: 100%;
-  }
-}

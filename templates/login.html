@@ -11,12 +11,12 @@
 		<div class="login_container" id="login_container">
 			<!-- 注册界面的div -->
 			<div class="form-container sign-up">
-				<form>
+				<form id="registerForm">
 					<h1>Create Account</h1>
 					<div class="information"></div>
 					<span>by use your email for registering</span>
-					<input type="text" placeholder="Username" />
-					<input type="email" placeholder="Email" />
+					<input type="text" placeholder="Username" id="signUpUsernameField"/>
+					<input type="email" placeholder="Email" id="signUpEmailField"/>
 
 					<input
 						type="password"
@@ -27,16 +27,16 @@
 						Show Password
 					</button>
 
-					<button>Register</button>
+					<button id="signUpSubmitField">Register</button>
 				</form>
 			</div>
 
 			<div class="form-container sign-in">
-				<form>
+				<form id="loginForm">
 					<h1>Enter System</h1>
 					<div class="information"></div>
 					<span>by use your username and password</span>
-					<input type="text" placeholder="Username" />
+					<input type="text" placeholder="Username" id="signInUsernameField"/>
 
 					<input
 						type="password"
@@ -55,7 +55,7 @@
 						Forget Your Password?
 					</a>
 
-					<button>Login</button>
+					<button id="signInSubmitField">Login</button>
 				</form>
 			</div>
 
@@ -79,7 +79,7 @@
 		</div>
 
 		<div id="getPassword" class="modal">
-			<form class="modal-content animate" action="#" method="post">
+			<form class="modal-content animate" action="#" method="post" id="findForm">
 				<div class="imgcontainer">
 					<span
 						onclick="document.getElementById('getPassword').style.display='none'"
@@ -155,9 +155,9 @@
 				}
 			}
 
-			var modal = document.getElementById("getPassword");
+            const modal = document.getElementById("getPassword");
 
-			// 当用户点击模态之外的任何地方时，关闭它
+            // 当用户点击模态之外的任何地方时，关闭它
 			window.onclick = function (event) {
 				if (event.target == modal) {
 					modal.style.display = "none";
