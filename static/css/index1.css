@@ -5,37 +5,57 @@
 	/*让整个界面的设置是这样的*/
 }
 *::-webkit-scrollbar-thumb {
-    border-radius: 5px; /* 滚动条滑块圆角 */
-    box-shadow: inset 0 0 5px rgba(215, 198, 198, 0.422); /* 滚动条滑块阴影效果 */
+	border-radius: 5px; /* 滚动条滑块圆角 */
+	box-shadow: inset 0 0 5px rgba(215, 198, 198, 0.422); /* 滚动条滑块阴影效果 */
 }
 *::-webkit-scrollbar {
-    width: 8px; /* 滚动条宽度 */
+	width: 8px; /* 滚动条宽度 */
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: #918b8b; /* 滚动条滑块颜色 */
+	background-color: #918b8b; /* 滚动条滑块颜色 */
 }
 
 *::-webkit-scrollbar-track {
-    background-color: #f1f1f1; /* 滚动条背景颜色 */
+	background-color: #f1f1f1; /* 滚动条背景颜色 */
 }
 
 /* 这一部分是汉堡按钮的地方 */
 .hamburger {
+	position: relative;
 	display: inline-block;
 	cursor: pointer;
-	margin: 5px;
-	width: 50px;
-	height: 50px;
+	margin: 3px;
+	width: 45px;
+	height: 45px;
 	display: flex;
 	justify-content: center; /* 水平居中 */
 	align-items: center; /* 垂直居中 */
 	border-radius: 25%;
 	transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 过渡效果 */
 }
+
+.hamburger1_title {
+	position: absolute;
+    left: 50%;
+	top: 100%;
+    transform: translateX(-50%);
+    background-color: #333;
+    padding: 3px;
+    border-radius: 8%; /* 弧状矩形轮廓 */
+    border: 1px solid #cccccc; /* 边框样式 */
+    display: none; /* 初始时隐藏提示文本 */
+	font-size: 10px;
+	color: aliceblue;
+	white-space: nowrap;
+}
 .hamburger:hover {
 	background-color: #ab8e8e;
 	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
+}
+.hamburger:hover .hamburger1_title {
+	display: block;
+	z-index: 1000;
 }
 .bar1,
 .bar2,
@@ -58,24 +78,126 @@
 
 /* 这一部分是header部分 */
 .header {
-	overflow: hidden;
+	/* overflow: hidden; */
 	background-color: #e5e7e9;
 	padding: 0;
 	margin: 0;
 	float: left;
 	width: 100%;
-	height: 60px;
+	height: 55px;
 }
+/* 这些是header左边 */
 .header-left {
 	float: left;
+	display: flex;
+	align-items: center; /* 垂直居中对齐 */
 	width: 20%;
 	height: 100%;
 }
+.c_icon {
+    width: 45px;
+    height: 45px;
+    margin: 3px;
+    margin-left: 10px;
+    position: relative;
+}
+
+#c_icon {
+    width: 100%; /* 图片宽度100%，填充父元素 */
+    height: 100%; /* 图片高度100%，填充父元素 */
+}
+
+.c_icon_title {
+    position: absolute;
+    left: 50%;
+	top: 100%;
+    transform: translateX(-50%);
+    background-color: #333;
+    padding: 3px;
+    border-radius: 8%; /* 弧状矩形轮廓 */
+    border: 1px solid #cccccc; /* 边框样式 */
+    display: none; /* 初始时隐藏提示文本 */
+	font-size: 10px;
+	color: aliceblue;
+	white-space: nowrap;
+}
+.c_icon:hover .c_icon_title {
+    display: block; /* 鼠标悬停时显示提示文本 */
+	z-index: 1000;
+}
+
+/* 这些是header中间 */
+.header-center {
+	height: 100%;
+	width: auto;
+	float: left;
+	display: flex;
+	align-items: center; /* 垂直居中 */
+}
+.today_container {
+	width: auto;
+	height: auto;
+	margin-left: -15px;
+	position: relative;
+}
+#to_today {
+	padding: 5px 8px;
+	font-size: 20px;
+	text-align: center;
+	cursor: pointer;
+	outline: none;
+	color: #fff;
+	background-color: #ab8e8eb3;
+	border: none;
+	border-radius: 15px;
+	box-shadow: 0 4px #999;
+  }
+
+  #to_today:hover {background-color: #ab8e8e}
+
+  #to_today:active {
+	background-color:#ab8e8eb3;
+	box-shadow: 0 5px #666;
+	transform: translateY(2px);
+  }
+
+.today_title {
+    position: absolute;
+    left: 50%;
+	top: 100%;
+    transform: translateX(-50%);
+    background-color: #333;
+    padding: 3px;
+    border-radius: 8%; /* 弧状矩形轮廓 */
+    border: 1px solid #cccccc; /* 边框样式 */
+    display: none; /* 初始时隐藏提示文本 */
+	font-size: 10px;
+	color: aliceblue;
+	white-space: nowrap;
+}
+.today_container:hover .today_title {
+    display: block; /* 鼠标悬停时显示提示文本 */
+	z-index: 1000;
+}
+
+
+
+
+
+
+/* 这些是header右边 */
 .header-right {
 	float: right;
 	width: 20%;
 	height: 100%;
 }
+
+
+
+
+
+
+
 /* 这一部分是侧边栏leftNav*/
 .leftNav {
 	height: 100%;
@@ -86,27 +208,28 @@
 	left: 0;
 	background-color: #f2f3f4e7; /* 黑色*/
 	overflow-x: hidden; /* 禁用水平滚动 */
-    overflow-y: hidden;
+	overflow-y: hidden;
 	/* padding-top: 80px;  */
 	transition: 0.5s; /* 0.5 秒过渡效果在侧导航中滑动 */
-    margin-top: 60px;
+	margin-top: 55px;
 }
 .addIcon {
-    height: 80px;
+	height: 80px;
 }
 .smallContent {
-    height: 80%;
-    overflow: hidden;
-    transition: 0.5s;
-    margin-right: 5px;
+	height: 80%;
+	overflow: hidden;
+	transition: 0.5s;
+	margin-right: 5px;
+	border-top: 1px solid transparent;
 }
 .smallContent:hover {
-    overflow-y: auto;
+	overflow-y: auto;
+	box-shadow: 0px -2px 0px 0px rgba(0, 0, 0, 0.5);
 }
 
 @media screen and (max-height: 450px) {
-    .leftNav {
-        padding-top: 15px;
-    }
+	.leftNav {
+		padding-top: 15px;
+	}
 }
-
