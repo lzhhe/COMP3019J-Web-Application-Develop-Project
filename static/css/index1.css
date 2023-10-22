@@ -20,6 +20,25 @@
 	background-color: #f1f1f1; /* 滚动条背景颜色 */
 }
 
+/* 提示效果 */
+.title {
+	position: absolute;
+    left: 50%;
+	top: 100%;
+    transform: translate(-50%,-10%);
+    background-color: #333;
+    padding: 3px;
+    border-radius: 8%; /* 弧状矩形轮廓 */
+    border: 1px solid #cccccc; /* 边框样式 */
+    visibility: hidden; /* 初始时隐藏提示文本 */
+	opacity: 0; /* 初始时透明度为0 */
+	font-size: 12px;
+	color: aliceblue;
+	white-space: nowrap;
+	transition: visibility 0.1s linear, opacity 0.1s linear, transform 0.1s linear;
+	transition-delay: 0.8s; /* 延时 */
+}
+
 /* 这一部分是汉堡按钮的地方 */
 .hamburger {
 	position: relative;
@@ -34,27 +53,14 @@
 	border-radius: 25%;
 	transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 过渡效果 */
 }
-
-.hamburger1_title {
-	position: absolute;
-    left: 50%;
-	top: 100%;
-    transform: translateX(-50%);
-    background-color: #333;
-    padding: 3px;
-    border-radius: 8%; /* 弧状矩形轮廓 */
-    border: 1px solid #cccccc; /* 边框样式 */
-    display: none; /* 初始时隐藏提示文本 */
-	font-size: 10px;
-	color: aliceblue;
-	white-space: nowrap;
-}
 .hamburger:hover {
 	background-color: #ab8e8e;
 	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
 }
 .hamburger:hover .hamburger1_title {
-	display: block;
+	visibility: visible; /* 鼠标悬停时显示提示文本 */
+	opacity: 1;
+	transform: translate(-50%,10%);
 	z-index: 1000;
 }
 .bar1,
@@ -107,22 +113,10 @@
     height: 100%; /* 图片高度100%，填充父元素 */
 }
 
-.c_icon_title {
-    position: absolute;
-    left: 50%;
-	top: 100%;
-    transform: translateX(-50%);
-    background-color: #333;
-    padding: 3px;
-    border-radius: 8%; /* 弧状矩形轮廓 */
-    border: 1px solid #cccccc; /* 边框样式 */
-    display: none; /* 初始时隐藏提示文本 */
-	font-size: 10px;
-	color: aliceblue;
-	white-space: nowrap;
-}
 .c_icon:hover .c_icon_title {
-    display: block; /* 鼠标悬停时显示提示文本 */
+    visibility: visible; /* 鼠标悬停时显示提示文本 */
+	opacity: 1;
+	transform: translate(-50%,10%);
 	z-index: 1000;
 }
 
@@ -153,30 +147,18 @@
 	box-shadow: 0 4px #999;
   }
 
-  #to_today:hover {background-color: #ab8e8e}
+#to_today:hover {background-color: #ab8e8e}
 
-  #to_today:active {
+#to_today:active {
 	background-color:#ab8e8eb3;
 	box-shadow: 0 5px #666;
 	transform: translateY(2px);
   }
 
-.today_title {
-    position: absolute;
-    left: 50%;
-	top: 100%;
-    transform: translateX(-50%);
-    background-color: #333;
-    padding: 3px;
-    border-radius: 8%; /* 弧状矩形轮廓 */
-    border: 1px solid #cccccc; /* 边框样式 */
-    display: none; /* 初始时隐藏提示文本 */
-	font-size: 10px;
-	color: aliceblue;
-	white-space: nowrap;
-}
 .today_container:hover .today_title {
-    display: block; /* 鼠标悬停时显示提示文本 */
+	visibility: visible; /* 鼠标悬停时显示提示文本 */
+	opacity: 1;
+	transform: translate(-50%,10%);
 	z-index: 1000;
 }
 
