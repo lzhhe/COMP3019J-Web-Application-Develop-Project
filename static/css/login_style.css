@@ -1,314 +1,333 @@
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+/*让整个界面的设置是这样的*/
 }
 
 body {
-	font-family: "Montserrat", sans-serif;
-	background-color: #c9d6ff;
-	background: linear-gradient(to right, #e2e2e2, #c9d6ff);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	min-height: 100vh;
+    font-family: "Montserrat", sans-serif;
+    background: #c9d6ff linear-gradient(to right, #e2e2e2, #c9d6ff);
+    display: flex;
+    /*浮动布局*/
+    justify-content: center;
+    align-items: center;
+    /*居中显示*/
+    flex-direction: column;
+    /*子元素垂直排放*/
+    min-height: 100vh;
 }
-
+/*整个登录页面的最外层的div*/
 .login_container {
-	background-color: #fff;
-	border-radius: 30px;
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-	position: relative;
-	overflow: hidden;
-	width: 768px;
-	max-width: 100%;
-	min-height: 480px;
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    position: relative;
+    /*相对布局*/
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 480px;
 }
 
 .login_container p {
-	font-size: 14px;
-	line-height: 20px;
-	letter-spacing: 0.3px;
-	margin: 20px 0;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.3px;
+    margin: 20px 0;
 }
 
 .login_container span {
-	font-size: 12px;
+    font-size: 12px;
 }
 
 .login_container a {
-	color: #333;
-	font-size: 13px;
-	text-decoration: none;
-	margin: 15px 0 10px;
+    color: #333;
+    font-size: 13px;
+    text-decoration: none;
+    margin: 15px 0 10px;
 }
+
 .findPassword:hover {
-	color: #5f2e8b; /* 鼠标悬停时的文字颜色 */
-	text-decoration: dotted; /* 去掉下划线 */
-  text-shadow: #512da8 0px 0px 1px; /* 文字阴影 */
+    color: #5f2e8b; /* 鼠标悬停时的文字颜色 */
+    text-decoration: dotted; /* 去掉下划线 */
+    text-shadow: #512da8 0px 0px 1px; /* 文字阴影 */
 }
 
 button {
-	background-color: #616161;
-	color: #fff;
-	font-size: 12px;
-	padding: 10px 45px;
-	border: 1px solid transparent;
-	border-radius: 8px;
-	font-weight: 600;
-	letter-spacing: 0.5px;
-	text-transform: uppercase;
-	margin-top: 10px;
-	cursor: pointer;
+    background-color: #616161;
+    color: #fff;
+    font-size: 12px;
+    padding: 10px 45px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    /*大写文字*/
+    margin-top: 10px;
+    cursor: pointer;
+    /*变手*/
 }
+
 button:hover {
-	box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-	border: 1px solid #3498db;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    border: 1px solid #3498db;
 }
 
 .login_container button.hidden {
-	background-color: transparent;
-	border-color: #fff;
+    background-color: transparent;
+    border-color: #fff;
 }
 
+/*设置所有表单的整体样式*/
 .login_container form {
-	background-color: #fff;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	padding: 0 40px;
-	height: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0 40px;
+    height: 100%;
 }
 
+/*设置登录和注册表单内部的文本框的格式*/
 .login_container input {
-	background-color: #eee;
-	border: none;
-	margin: 8px 0;
-	padding: 10px 15px;
-	font-size: 13px;
-	border-radius: 8px;
-	width: 100%;
-	outline: none;
+    background-color: #eee;
+    border: none;
+    margin: 8px 0;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 8px;
+    width: 100%;
+    outline: none;
 }
+
 input:focus {
-	border-bottom: 1px solid rgba(0, 123, 255, 0.15);
-	box-shadow: 0 0 5px rgba(8, 0, 255, 0.13);
+    border-bottom: 1px solid rgba(0, 123, 255, 0.15);
+    box-shadow: 0 0 5px rgba(8, 0, 255, 0.13);
 }
 
 .form-container {
-	position: absolute;
-	top: 0;
-	height: 100%;
-	transition: all 0.6s ease-in-out;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
 }
-
+/*登录form的div，在第二层*/
 .sign-in {
-	left: 0;
-	width: 50%;
-	z-index: 2;
+    left: 0;
+    width: 50%;
+    z-index: 2;
 }
-
+/*如果有了动画效果，此div向右移动到另一边*/
 .login_container.active .sign-in {
-	transform: translateX(100%);
+    transform: translateX(100%);
 }
-
+/*注册form的div，在第一层，默认不可见*/
 .sign-up {
-	left: 0;
-	width: 50%;
-	opacity: 0;
-	z-index: 1;
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
 }
-
+/*有了动画效果并且可见，层次较高*/
 .login_container.active .sign-up {
-	transform: translateX(100%);
-	opacity: 1;
-	z-index: 5;
-	animation: move 0.6s;
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: SignUpMove 0.6s;
 }
-
-@keyframes move {
-	0%,
-	49.99% {
-		opacity: 0;
-		z-index: 1;
-	}
-	50%,
-	100% {
-		opacity: 1;
-		z-index: 5;
-	}
+/*这是注册表单的移动动画*/
+@keyframes SignUpMove {
+    0%,
+    49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+    50%,
+    100% {
+        opacity: 1;
+        z-index: 5;
+    }
 }
-
+/*这是提示区域的css，占据另一半*/
 .change-container {
-	position: absolute;
-	top: 0;
-	left: 50%;
-	width: 50%;
-	height: 100%;
-	overflow: hidden;
-	transition: all 0.6s ease-in-out;
-	border-radius: 150px 0 0 100px;
-	z-index: 1000;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: all 0.6s ease-in-out;
+    border-radius: 100px 0 0 50px;
+    z-index: 10;
 }
-
+/*这是提示区域的css，会向另一边移动*/
 .login_container.active .change-container {
-	transform: translateX(-100%);
-	border-radius: 0 150px 100px 0;
+    transform: translateX(-100%);
+    border-radius: 0 100px 50px 0;
 }
-
+/*里面存的提示语句*/
 .change {
-	background-color: #6b6a6a75;
-	height: 100%;
-	background: linear-gradient(to right, #616161,#6b6a6a75);
-	color: #fff;
-	position: relative;
-	left: -100%;
-	height: 100%;
-	width: 200%;
-	transform: translateX(0);
-	transition: all 0.6s ease-in-out;
+    height: 100%;
+    background: #6b6a6a75 linear-gradient(to right, #616161, #6b6a6a75);
+    color: #fff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: all 0.6s ease-in-out;
 }
-
+/*移动一半，如果缺失了会不显示*/
 .login_container.active .change {
-	transform: translateX(50%);
+    transform: translateX(50%);
 }
 
 .change-panel {
-	position: absolute;
-	width: 50%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	padding: 0 30px;
-	text-align: center;
-	top: 0;
-	transform: translateX(0);
-	transition: all 0.6s ease-in-out;
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0 30px;
+    text-align: center;
+    top: 0;
+    transform: translateX(0);
+    transition: all 0.6s ease-in-out;
 }
 
 .change-left {
-	transform: translateX(-200%);
+    transform: translateX(-200%);
 }
 
 .login_container.active .change-left {
-	transform: translateX(0);
+    transform: translateX(0);
 }
 
 .change-right {
-	right: 0;
-	transform: translateX(0);
+    right: 0;
+    transform: translateX(0);
 }
 
 .login_container.active .change-right {
-	transform: translateX(200%);
+    transform: translateX(200%);
 }
+/*展示密码的按钮的css*/
 .show {
-	width: 220px;
-	background-color: #607D8B;
+    width: 220px;
+    background-color: #607D8B;
 }
 
 
 /* 全宽输入框 */
 #find_email, #find_uname {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
 }
 
 /* 为查找按钮设置样式 */
 #findPassword {
-  background-color: #39080846;
-  color: white;
-  padding: 14px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin: 0 auto;
-
+    background-color: #39080846;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin: 0 auto;
 }
 
 #findPassword:hover {
-  opacity: 0.8;
+    opacity: 0.8;
 }
 
 /* 居中图像并定位关闭按钮 */
 .imgcontainer {
-  text-align: center;
-  margin: 24px 0 12px 0;
-  position: relative;
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
 }
 
 img.avatar {
-	/*相对来说更合适的大小*/
-  width: 40%;
-  border-radius: 50%;
-  height: 40%;
+    /*相对来说更合适的大小*/
+    width: 40%;
+    border-radius: 50%;
+    height: 40%;
 }
 
 .find-container {
-  padding: 16px;
+    padding: 16px;
 }
 
 /* 模态（背景）*/
 .modal {
-  display: none; /* 默认隐藏 */
-  position: fixed; /* 留在原地 */
-  left: 0;
-  top: 0;
-  width: 100%; /* 全屏宽度 */
-  height: 100%; /* 全高 */
-  /*overflow: none; !* 如果需要启用滚动 *!*/
-  background-color: rgb(0,0,0); /* 后备颜色 */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  padding-top: 60px;
-  z-index: 1000;
+    display: none; /* 默认隐藏 */
+    position: fixed; /* 留在原地 */
+    left: 0;
+    top: 0;
+    width: 100%; /* 全屏宽度 */
+    height: 100%; /* 全高 */
+    /*overflow: none; !* 如果需要启用滚动 *!*/
+    background-color: rgb(0, 0, 0); /* 后备颜色 */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    padding-top: 60px;
+    z-index: 10;
 }
 
 /* 模态内容/框 */
 .modal-content {
-  background-color: #fefefe;
-  margin: 5% auto 15% auto; /* 距顶部 5%，距底部 15% 并居中 */
-  border: 1px solid #888;
-  width: 20%; /* 让大小更加合适 */
-  border-radius: 20px; /* 添加圆角 */
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 距顶部 5%，距底部 15% 并居中 */
+    border: 1px solid #888;
+    width: 20%; /* 让大小更加合适 */
+    border-radius: 20px; /* 添加圆角 */
 }
 
 /* 关闭按钮 (x) */
 .close {
-  position: absolute;
-  right: 25px;
-  top: 0;
-  color: #000;
-  font-size: 35px;
-  font-weight: bold;
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-  color: red;
-  cursor: pointer;
+    color: red;
+    cursor: pointer;
 }
 
 /* 添加缩放动画 */
 .animate {
-  -webkit-animation: animatezoom 0.6s;
-  animation: animatezoom 0.6s
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
 }
 
 @-webkit-keyframes animatezoom {
-  from {-webkit-transform: scale(0)}
-  to {-webkit-transform: scale(1)}
+    from {
+        -webkit-transform: scale(0)
+    }
+    to {
+        -webkit-transform: scale(1)
+    }
 }
 
 @keyframes animatezoom {
-  from {transform: scale(0)}
-  to {transform: scale(1)}
+    from {
+        transform: scale(0)
+    }
+    to {
+        transform: scale(1)
+    }
 }
+
 

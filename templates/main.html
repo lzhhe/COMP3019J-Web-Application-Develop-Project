@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<link rel="stylesheet" href="../static/css/index1.css" />
+	</head>
+	<body>
+		<!-- 这是头部导航栏 -->
+		<div class="header">
+			<div class="header-left">
+				<!-- 这是汉堡按钮 -->
+				<div class="hamburger" id="hamburger" onclick="myFunction(this)">
+					<div class="hamburger1">
+						<div class="bar1"></div>
+						<div class="bar2"></div>
+						<div class="bar3"></div>
+					</div>
+				</div>
+			</div>
+			<div class="header-center"></div>
+			<div class="header-right"></div>
+		</div>
+
+		<div class="leftNav" id="leftNav">
+			<div class="addIcon"></div>
+            <div class="smallContent">
+
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+                <p>111</p><br>
+
+                <div class="smallCalendar">
+                   
+                </div>
+                <div class="smallEvents"></div>
+            </div>
+		</div>
+		<div id="main"></div>
+	</body>
+
+	<script>
+		function myFunction(x) {
+			x.classList.toggle("change");
+			if (x.classList.contains("change")) {
+				openNav();
+			} else {
+				closeNav();
+			}
+		}
+		function openNav() {
+			document.getElementById("leftNav").style.width = "20%";
+			document.getElementById("main").style.marginLeft = "20%";
+		}
+
+		function closeNav() {
+			document.getElementById("leftNav").style.width = "0";
+			document.getElementById("main").style.marginLeft = "0";
+		}
+	</script>
+</html>

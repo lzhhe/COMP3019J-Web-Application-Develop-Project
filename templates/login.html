@@ -4,7 +4,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="../static/css/login_style.css"/>
-    <script src="../static/js/jquery-3.7.1.min.js"></script>
+    <script src="../static/js/jquery-3.7.1.min.js" async></script>
     <title>Modern Login Page</title>
 </head>
 <body>
@@ -12,10 +12,12 @@
 <div class="login_container" id="login_container">
     <!-- 注册界面的div -->
     <div class="form-container sign-up">
+        {#注册表单#}
         <form id="registerForm" action="/register" method="post">
             <h1>Create Account</h1>
             <div class="information"></div>
             <span>by use your email for registering</span>
+            {#注册表单的input类#}
             <input type="text" placeholder="Username" name="signUpUsernameField" id="signUpUsernameField"/>
             <input type="email" placeholder="Email" name="signUpEmailField" id="signUpEmailField"/>
 
@@ -25,6 +27,7 @@
                     name="signUpPasswordField"
                     id="signUpPasswordField"
             />
+{#            展示密码#}
             <button type="button" id="changeSignUpPassword" class="show">
                 Show Password
             </button>
@@ -67,7 +70,7 @@
             <div class="change-panel change-left">
                 <h1>Welcome Back!</h1>
                 <p>Enter your personal details to use all of site features</p>
-                <button class="hidden" id="login">Sign In</button>
+                <button class="hidden" id="login">switch</button>
             </div>
 
             <div class="change-panel change-right">
@@ -75,7 +78,8 @@
                 <p>
                     Register with your personal details to use all of site features
                 </p>
-                <button class="hidden" id="register">Sign Up</button>
+{#                切换页面#}
+                <button class="hidden" id="register">switch</button>
             </div>
         </div>
     </div>
@@ -233,3 +237,4 @@
 </script>
 </body>
 </html>
+
