@@ -3,8 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import app, db
 import User
 
-app.secret_key = 'COMP3019J'
-@app.route('/register/', methods=['GET', 'POST'])
+
+@app.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':
         # 从表单中获取用户输入的用户名、密码和邮箱
@@ -34,8 +34,11 @@ def register():
 
     # 如果请求的HTTP方法不是POST，或者用户注册失败，显示注册页面
     return render_template('login.html')
-@app.route('/login/', methods=['GET', 'POST'])
+
+
+@app.route('/login', methods=['POST'])
 def login():
+    print(2222)
     if request.method == 'POST':
         username = request.form['signInUsernameField']
         password = request.form['signInPasswordField']
@@ -50,10 +53,41 @@ def login():
 
         # 这行代码检查用户是否存在并且输入的密码是否与数据库中存储的密码匹配
         if user and check_password_hash(user.password, password):
+            print(1111)
+
             session['user_id'] = user.get_UID()  # 将用户的ID存储在session中
             flash('登录成功', 'success')
             return redirect(url_for('month_view'))  # 跳转到monthView页面
         else:
+            print(1111)
+            flash('登录失败，请检查用户名和密码', 'danger')
+
+    return render_template('login.html')
+
+
+@app.route('/find_password', methods=['POST'])
+def find_password():
+    print(2222)
+    if request.method == 'POST':
+        username = request.form['find_uname']
+        email = request.form['find_email']
+
+        # 查询用户是否存在
+        user = User.query.filter_by(name=username).first()
+
+        # 这行代码使用用户名从数据库中查询用户信息。假设User是你的用户模型，
+        # .query.filter_by(name=username).first()表示在数据库中根据用户名查询用户信息。
+        # first()函数返回查询到的第一个结果，如果没有找到匹配的用户，user会是None。
+
+        # 这行代码检查用户是否存在并且输入的密码是否与数据库中存储的密码匹配
+        if user and check_password_hash(user.email, email):
+            print(1111)
+
+            session['user_id'] = user.get_UID()  # 将用户的ID存储在session中
+            flash('登录成功', 'success')
+            return redirect(url_for('month_view'))  # 跳转到monthView页面
+        else:
+            print(1111)
             flash('登录失败，请检查用户名和密码', 'danger')
 
     return render_template('login.html')
