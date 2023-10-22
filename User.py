@@ -33,3 +33,6 @@ class User(db.Model):
     @property
     def get_email(self):
         return self.email
+
+    def get_user_by_id(user_id):
+        return User.query.filter_by(UID=user_id).first()
