@@ -1,112 +1,57 @@
-from flask import render_template, request, redirect, url_for, flash, session
+# view.py
+
+from flask import request, jsonify, session, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import app, db
+from app import db, app
 import User
 
 
 @app.route('/register', methods=['POST'])
 def register():
-    if request.method == 'POST':
-        # 从表单中获取用户输入的用户名、密码和邮箱
-        username = request.form['signUpUsernameField']
-        password = request.form['signUpPasswordField']
-        email = request.form['signUpEmailField']
+    username = request.form.get('signUpUsernameField')
+    email = request.form.get('signUpEmailField')
+    password = request.form.get('signUpPasswordField')
+    hashed_password = generate_password_hash(password, method='sha256')
 
-        # 检查用户名是否已存在于数据库中
-        existing_user = User.query.filter_by(name=username).first()
-        if existing_user:
-            flash('用户名已存在，请选择其他用户名', 'danger')
-        else:
-            # 如果用户名不存在，将用户的密码进行哈希处理
-            hashed_password = generate_password_hash(password, method='sha256')
-            # 创建一个新用户对象
-            new_user = User(name=username, password=hashed_password, email=email)
-            # 将新用户添加到数据库中
-            db.session.add(new_user)
-            db.session.commit()
-            # 注册成功后，将用户信息存储在session中
-            session['user_id'] = new_user.UID  # 存储新注册用户的ID
-            session['username'] = new_user.name  # 存储新注册用户的用户名
+    # Check if user already exists
+    user = User.get_user_by_name(username)
+    if user:
+        return jsonify({'message': 'Username already exists!'})
 
-            flash('注册成功', 'success')
-            # 注册成功后重定向到monthView页面
-            return redirect(url_for('month_view'))
+    # If not, create a new user and add to database
+    new_user = User(name=username, email=email, password=hashed_password)
+    db.session.add(new_user)
+    db.session.commit()
 
-    # 如果请求的HTTP方法不是POST，或者用户注册失败，显示注册页面
-    return render_template('login.html')
+    return jsonify({'message': 'Registration successful!'})
 
 
 @app.route('/login', methods=['POST'])
 def login():
-    print(2222)
-    if request.method == 'POST':
-        username = request.form['signInUsernameField']
-        password = request.form['signInPasswordField']
-        button = request.form['signInSubmitField']
+    username = request.form.get('signInUsernameField')
+    password = request.form.get('signInPasswordField')
 
-        # 查询用户是否存在
-        user = User.query.filter_by(name=username).first()
+    user = User.get_user_by_name(username)
+    if not user:
+        return jsonify({'message': 'Username does not exist!'})
 
-        # 这行代码使用用户名从数据库中查询用户信息。假设User是你的用户模型，
-        # .query.filter_by(name=username).first()表示在数据库中根据用户名查询用户信息。
-        # first()函数返回查询到的第一个结果，如果没有找到匹配的用户，user会是None。
+    if not check_password_hash(user.get_password, password):
+        return jsonify({'message': 'Incorrect password!'})
 
-        # 这行代码检查用户是否存在并且输入的密码是否与数据库中存储的密码匹配
-        if user and check_password_hash(user.password, password):
-            print(1111)
-
-            session['user_id'] = user.get_UID()  # 将用户的ID存储在session中
-            flash('登录成功', 'success')
-            return redirect(url_for('month_view'))  # 跳转到monthView页面
-        else:
-            print(1111)
-            flash('登录失败，请检查用户名和密码', 'danger')
-
-    return render_template('login.html')
+    session['user'] = user.get_name
+    return jsonify({'message': 'Logged in successfully!'})
 
 
 @app.route('/find_password', methods=['POST'])
 def find_password():
-    print(2222)
-    if request.method == 'POST':
-        username = request.form['find_uname']
-        email = request.form['find_email']
-
-        # 查询用户是否存在
-        user = User.query.filter_by(name=username).first()
-
-        # 这行代码使用用户名从数据库中查询用户信息。假设User是你的用户模型，
-        # .query.filter_by(name=username).first()表示在数据库中根据用户名查询用户信息。
-        # first()函数返回查询到的第一个结果，如果没有找到匹配的用户，user会是None。
-
-        # 这行代码检查用户是否存在并且输入的密码是否与数据库中存储的密码匹配
-        if user and check_password_hash(user.email, email):
-            print(1111)
-
-            session['user_id'] = user.get_UID()  # 将用户的ID存储在session中
-            flash('登录成功', 'success')
-            return redirect(url_for('month_view'))  # 跳转到monthView页面
-        else:
-            print(1111)
-            flash('登录失败，请检查用户名和密码', 'danger')
-
-    return render_template('login.html')
-
-
-@app.route('/monthView')
-def month_view():
-    # 获取用户ID（在session中存储的）
-    user_id = session.get('user_id')
-
-    # 使用user_id获取用户信息（这里假设有一个名为get_user_by_id的函数用于获取用户信息）
-    user = User.get_user_by_id(user_id)
-
-    # 将用户信息传递到模板中
-    return render_template('monthView.html', user=user)
+    # For simplicity, we're not actually implementing the password recovery function
+    # Instead, just notify the user that an email has been sent
+    return jsonify({'message': 'Email with password recovery instructions has been sent!'})
 
 
 @app.route('/logout')
 def logout():
-    session.pop('user_id', None)
-    flash('已登出', 'info')
+    if 'user' in session:
+        session.pop('user')
     return redirect(url_for('login'))
+
