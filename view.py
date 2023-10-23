@@ -1,57 +1,88 @@
-# view.py
-
-from flask import request, jsonify, session, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import db, app
-import User
+from app import app, db
+from user import User
+from forms import RegistrationForm, LoginForm, FindPasswordForm
 
 
 @app.route('/register', methods=['POST'])
 def register():
-    username = request.form.get('signUpUsernameField')
-    email = request.form.get('signUpEmailField')
-    password = request.form.get('signUpPasswordField')
-    hashed_password = generate_password_hash(password, method='sha256')
+    reg_form = RegistrationForm()
+    response = {
+        'status': 'error',
+        'message': '未知错误'
+    }
 
-    # Check if user already exists
-    user = User.get_user_by_name(username)
-    if user:
-        return jsonify({'message': 'Username already exists!'})
+    if request.method == 'POST':
+        username = request.form['signUpUsernameField']
+        password = request.form['signUpPasswordField']
+        email = request.form['signUpEmailField']
 
-    # If not, create a new user and add to database
-    new_user = User(name=username, email=email, password=hashed_password)
-    db.session.add(new_user)
-    db.session.commit()
+        existing_user = User.query.filter_by(name=username).first()
 
-    return jsonify({'message': 'Registration successful!'})
-
+        if existing_user:
+            response['message'] = '已存在此用户'
+        else:
+            hashed_password = generate_password_hash(password, method='sha256')
+            new_user = User(name=username, password=hashed_password, email=email)
+            db.session.add(new_user)
+            db.session.commit()
+            response['status'] = 'success'
+            response['message'] = '注册成功'
+    return jsonify(response)
 
 @app.route('/login', methods=['POST'])
 def login():
-    username = request.form.get('signInUsernameField')
-    password = request.form.get('signInPasswordField')
+    login_form = LoginForm()
+    response = {
+        'status': 'error',
+        'message': '登录失败'
+    }
 
-    user = User.get_user_by_name(username)
-    if not user:
-        return jsonify({'message': 'Username does not exist!'})
+    username = request.form['signInUsernameField']
+    password = request.form['signInPasswordField']
 
-    if not check_password_hash(user.get_password, password):
-        return jsonify({'message': 'Incorrect password!'})
+    user = User.query.filter_by(name=username).first()
 
-    session['user'] = user.get_name
-    return jsonify({'message': 'Logged in successfully!'})
+    if user and check_password_hash(user.password, password):
+        session['user_id'] = user.UID
+        response['status'] = 'success'
+        response['message'] = '登录成功'
+    else:
+        response['message'] = '密码有误'
 
+    return jsonify(response)
 
 @app.route('/find_password', methods=['POST'])
 def find_password():
-    # For simplicity, we're not actually implementing the password recovery function
-    # Instead, just notify the user that an email has been sent
-    return jsonify({'message': 'Email with password recovery instructions has been sent!'})
+    find_form = FindPasswordForm()
+
+    response = {
+        'status': 'error',
+        'message': '找不到用户'
+    }
+
+    username = request.form['find_uname']
+    email = request.form['find_email']
+
+    user = User.query.filter_by(name=username, email=email).first()
+
+    if user:
+        response['status'] = 'info'
+        response['message'] = f'密码: {user.password}'  # 注意，这样做不是最佳实践，有安全风险
+
+    return jsonify(response)
+
+@app.route('/main')
+def month_view():
+    user_id = session.get('user_id')
+    user = User.get_user_by_id(user_id)
+
+    return render_template('main.html', user=user)
 
 
 @app.route('/logout')
 def logout():
-    if 'user' in session:
-        session.pop('user')
+    session.pop('user_id', None)
+    flash('已登出', 'info')
     return redirect(url_for('login'))
-
