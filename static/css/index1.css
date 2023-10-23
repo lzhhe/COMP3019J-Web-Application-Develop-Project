@@ -23,14 +23,14 @@
 /* 提示效果 */
 .title {
 	position: absolute;
-    left: 50%;
+	left: 50%;
 	top: 100%;
-    transform: translate(-50%,-10%);
-    background-color: #333;
-    padding: 3px;
-    border-radius: 8%; /* 弧状矩形轮廓 */
-    border: 1px solid #cccccc; /* 边框样式 */
-    visibility: hidden; /* 初始时隐藏提示文本 */
+	transform: translate(-50%, -10%);
+	background-color: #333;
+	padding: 3px;
+	border-radius: 8%; /* 弧状矩形轮廓 */
+	border: 1px solid #cccccc; /* 边框样式 */
+	visibility: hidden; /* 初始时隐藏提示文本 */
 	opacity: 0; /* 初始时透明度为0 */
 	font-size: 12px;
 	color: aliceblue;
@@ -60,7 +60,7 @@
 .hamburger:hover .hamburger1_title {
 	visibility: visible; /* 鼠标悬停时显示提示文本 */
 	opacity: 1;
-	transform: translate(-50%,10%);
+	transform: translate(-50%, 10%);
 	z-index: 1000;
 }
 .bar1,
@@ -101,22 +101,22 @@
 	height: 100%;
 }
 .c_icon {
-    width: 45px;
-    height: 45px;
-    margin: 3px;
-    margin-left: 10px;
-    position: relative;
+	width: 45px;
+	height: 45px;
+	margin: 3px;
+	margin-left: 10px;
+	position: relative;
 }
 
 #c_icon {
-    width: 100%; /* 图片宽度100%，填充父元素 */
-    height: 100%; /* 图片高度100%，填充父元素 */
+	width: 100%; /* 图片宽度100%，填充父元素 */
+	height: 100%; /* 图片高度100%，填充父元素 */
 }
 
 .c_icon:hover .c_icon_title {
-    visibility: visible; /* 鼠标悬停时显示提示文本 */
+	visibility: visible; /* 鼠标悬停时显示提示文本 */
 	opacity: 1;
-	transform: translate(-50%,10%);
+	transform: translate(-50%, 10%);
 	z-index: 1000;
 }
 
@@ -145,27 +145,60 @@
 	border: none;
 	border-radius: 15px;
 	box-shadow: 0 4px #999;
-  }
+	letter-spacing: 2.2pt;
+}
 
-#to_today:hover {background-color: #ab8e8e}
+#to_today:hover {
+	background-color: #ab8e8e;
+}
 
 #to_today:active {
-	background-color:#ab8e8eb3;
+	background-color: #ab8e8eb3;
 	box-shadow: 0 5px #666;
 	transform: translateY(2px);
-  }
+}
 
 .today_container:hover .today_title {
 	visibility: visible; /* 鼠标悬停时显示提示文本 */
 	opacity: 1;
-	transform: translate(-50%,10%);
+	transform: translate(-50%, 10%);
 	z-index: 1000;
 }
 
-
-
-
-
+.changeMonth {
+	width: auto;
+	height: auto;
+	margin-left: 50px;
+}
+.preRegion,.nextRegion{
+	display: inline-flex;
+	position: relative;
+}
+.changeMonth_button {
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	border: 0;
+	background: linear-gradient(225deg, #e6e2e2, #f2f1f1);
+	font-size: 30px;
+	margin: 7px;
+}
+.changeMonth_button:hover {
+	background: linear-gradient(225deg, #d0c9c9, #afa9a9);
+	box-shadow: -1px 1px 2px #a5a0a0, 1px -1px 2px #dfd8d8;
+	cursor: pointer;
+}
+.changeMonth_button:active {
+	background: linear-gradient(225deg, #d0c9c9, #afa9a9);
+	box-shadow: -1px 1px 2px #a5a0a0, 1px -1px 2px #dfd8d8;
+	transform: translateY(1px);
+}
+.preRegion:hover .changeMonth_title1,.nextRegion:hover .changeMonth_title2{
+	visibility: visible; /* 鼠标悬停时显示提示文本 */
+	opacity: 1;
+	transform: translate(-50%, 10%);
+	z-index: 1000;
+}
 
 /* 这些是header右边 */
 .header-right {
@@ -173,12 +206,6 @@
 	width: 20%;
 	height: 100%;
 }
-
-
-
-
-
-
 
 /* 这一部分是侧边栏leftNav*/
 .leftNav {
