@@ -6,11 +6,13 @@ export class DateItem {
 		this.preMonth = false;
 		this.nextMonth = false;
 		this.currentMonth = false;
+		this.selected = false;
 	}
 }
 
 const dayMs = 86400000;
 const weekMs = 604800000;
+const today = new Date();
 
 /**
  * 通过 getYear() 和 getMonth() 获取当前年份和月份，然后创建一个新的日期对象，表示当前月份的第一天（日期设置为1）。
@@ -98,7 +100,6 @@ export function getNextMonthDays(date,appendOrNot) {
 	const currentLastDateTime = currentLastDate.getTime();
 	for (let i = 0; i < (6 - currentLastDateWeekDay) + (appendOrNot ? 7 : 0); i++) {
 		const nextMonthDay = new Date(currentLastDateTime + dayMs * (1 + i));
-
         const dateItem = new DateItem(nextMonthDay);
         dateItem.nextMonth = true;
 		nextMonthDays.push(dateItem);
@@ -113,16 +114,13 @@ export function getCurrentMonthDays(date) {
 	const firstDate = getFirstDay(date);
 	const lastDate = getLastDay(date);
 	const lastDateNumber = lastDate.getDate();
-
-	const today = new Date();
-
 	for (let i = 1; i <= lastDateNumber; i++) {
 		const currentDate = new Date(firstDate);
 		currentDate.setDate(i);
-
         const dateItem = new DateItem(currentDate);
 		dateItem.currentMonth = true;
-		dateItem.today = isSameDate(currentDate, today);
+		dateItem.today = isSameDate(today, currentDate);
+		dateItem.selected = dateItem.today;
 		currentDays.push(dateItem);
 	}
 	return currentDays;
@@ -205,6 +203,7 @@ export class navCalendar {
     constructor() {
         this.selectedDate = new Date(); // 选中的日子，默认是当天
         this.listDates = []; // 所有相关的日子们
+		this.initDates();
     }
 
     initDates(){
@@ -227,11 +226,24 @@ export class navCalendar {
         this.to_random(new Date()); // 跳转到今天
     }
     to_random(date){
-        if (!isSameMonth(this.selectedDate, date)){
-            this.updateDates();
-        }
-        this.selectedDate = date;
-    }
+		const isDifferentMonth = !isSameMonth(this.selectedDate, date);
+		this.selectedDate = date;
+		if (isDifferentMonth) {
+			this.updateDates();
+		}
+		this.setSelectedDate(date);
+		// 如果是同一个月，则不需要再调用 updateDates() 函数
+	}
+	setSelectedDate(date) {
+		// 清除所有已选中的日期
+		this.listDates.forEach(item => item.selected = false);
+
+		// 找到与指定日期相同的日期并设置为已选中
+		const targetDate = this.listDates.find(item => isSameDate(item.date, date));
+		if (targetDate) {
+			targetDate.selected = true;
+		}
+	}
 }
 
 const smCalendar = new navCalendar();

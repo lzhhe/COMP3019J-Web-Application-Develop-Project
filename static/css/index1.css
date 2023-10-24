@@ -91,13 +91,14 @@
 	float: left;
 	width: 100%;
 	height: 55px;
+	display: grid;
+	grid-template-columns: 1fr 3fr 1fr;
 }
 /* 这些是header左边 */
 .header-left {
 	float: left;
 	display: flex;
 	align-items: center; /* 垂直居中对齐 */
-	width: 20%;
 	height: 100%;
 }
 .c_icon {
@@ -174,13 +175,21 @@
 	display: inline-flex;
 	position: relative;
 }
+.double_narrow {
+	height: 80%;
+	width: 100%;
+	position: absolute;
+    top: 50%; /* 将元素的顶部移动到父元素的中间 */
+    left: 50%; /* 将元素的左侧移动到父元素的中间 */
+    transform: translate(-50%, -50%);
+}
 .changeMonth_button {
-	border-radius: 50%;
+	border-radius: 10%;
 	width: 40px;
 	height: 40px;
 	border: 0;
 	background: linear-gradient(225deg, #e6e2e2, #f2f1f1);
-	font-size: 30px;
+	position: relative;
 	margin: 7px;
 }
 .changeMonth_button:hover {
@@ -219,7 +228,7 @@
 	overflow-x: hidden; /* 禁用水平滚动 */
 	overflow-y: hidden;
 	/* padding-top: 80px;  */
-	transition: 0.5s; /* 0.5 秒过渡效果在侧导航中滑动 */
+	transition: width 0.4s, opacity 0s;
 	margin-top: 55px;
 }
 .addIcon {
@@ -237,9 +246,129 @@
 	box-shadow: 0px -2px 0px 0px rgba(0, 0, 0, 0.5);
 }
 
+.smallCalendar {
+	width: 90%;
+	/* 头部信息，周，具体日期 1+1+6 = 8，每一行30px */
+	height: 240px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 2%;
+	padding-right: 2%;
+}
+.smallCalendar:hover {
+	border: 1px solid #c0c0c0;
+	box-shadow: 0px 2px 2px 0px rgba(152, 144, 144, 0.5);
+	border-radius: 5%;
+}
+
+.smCHead {
+	width: 100%;
+	height: 12.5%;
+	border-bottom: 1px solid #c0c0c0;
+	display: flex;
+	justify-content: space-between; /* 使子元素分布在容器的两端 */
+    align-items: center; /* 使子元素在容器中垂直居中 */
+}
+#smText {
+	padding-left: 4.5%;
+	font-family: 'Courier New', Courier, monospace;
+}
+.smButton {
+	width: 30%;
+	height: 100%;
+	text-align: center;
+	justify-content: center;
+}
+.smBtn {
+	border-radius: 10%;
+	width: 20px;
+	height: 20px;
+	border: 0;
+	background: linear-gradient(225deg, #b3a8a8, #f2f1f1);
+	position: relative;
+	display: inline-flex;
+	margin-top: 5px;
+}
+.smNarrow {
+	width: 80%;
+	height: 80%;
+	position: absolute;
+    top: 50%; /* 将元素的顶部移动到父元素的中间 */
+    left: 50%; /* 将元素的左侧移动到父元素的中间 */
+    transform: translate(-50%, -50%);
+}
+#smBtnL {
+	margin-right: 15%;
+}
+.smBtn:hover {
+	cursor: pointer;
+}
+.smBtn:active {
+	box-shadow: -0.1px 0.1px 0.1px #f3eae2e9, 0.1px -0.1px 1px #dfd8d8db;
+	transform: translateY(0.5px);
+}
+.smCDay {
+	width: 100%;
+	height: 12.5%;
+	border-bottom: 1px dotted #c0c0c0;
+	padding-left: 2%;
+	padding-right: 1%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.smCDayItem {
+	font-size: small;
+	font-family: 'Courier New', Courier, monospace;
+	color: #666666;
+	text-align: center;
+}
+.smDates {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+}
+.sm-calendar-date {
+	height: 30px;
+	width: 13%;
+	display: flex;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+}
+.sm-calendar-date:hover {
+	background-color: #e1eaff;
+}
+.sm-date-text {
+	font-family: 'Courier New', Courier, monospace !important;
+	color: #000000;
+	cursor: pointer !important;
+	border-radius: 50%;
+	height: 100%;
+	width: 100%;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.sm-pre,.sm-next {
+	color:#a69f9f;
+	opacity: 0.8;
+}
+.sm-today {
+	border: 1px solid #3370ff;
+}
+
+.sm-selected {
+	background-color: #3370ff;
+	color: #ffffff;
+}
+
 @media screen and (max-height: 450px) {
 	.leftNav {
 		padding-top: 15px;
 	}
 }
-

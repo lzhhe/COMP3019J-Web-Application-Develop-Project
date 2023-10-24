@@ -1,10 +1,15 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
-
+from flask_cors import CORS
+import mimetypes
 from forms import RegistrationForm, LoginForm, FindPasswordForm
 
-app = Flask(__name__)
+mimetypes.add_type('application/javascript', '.js')
+
+
+app = Flask(__name__, static_url_path='/static', static_folder='static')
+CORS(app)
 app.secret_key = 'COMP3019J'
 
 HOSTNAME = "127.0.0.1"

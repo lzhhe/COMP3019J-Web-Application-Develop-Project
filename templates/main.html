@@ -5,13 +5,15 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Document</title>
 		<link rel="stylesheet" href="../static/css/index1.css" />
+		<script type="module" src="{{ url_for('static', filename='js/nav.js') }}"></script>
+
 	</head>
 	<body>
 		<!-- 这是头部导航栏 -->
 		<div class="header">
 			<div class="header-left">
 				<!-- 这是汉堡按钮 -->
-				<div class="hamburger" id="hamburger" onclick="myFunction(this)">
+				<div class="hamburger" id="hamburger" >
 					<div class="hamburger1">
 						<div class="bar1"></div>
 						<div class="bar2"></div>
@@ -21,7 +23,7 @@
 					</div>
 				</div>
 				<div class="c_icon">
-					<img src="../static/pic/c_icon.jpg" alt="icon" id="c_icon" />
+					<img src="../static/pic/c_icon.jpg" alt="icon" id="c_icon"/>
 					<!-- 提示语 -->
 					<span class="c_icon_title title">this is calendar icon</span>
 				</div>
@@ -30,17 +32,21 @@
 				<div class="today_container">
 					<button id="to_today" class="today_button">Today</button>
 					<!-- 提示语 -->
-					<span class="today_title title" id="today_title">xxxxx</span>
+					<span class="today_title title" id="today_title"></span>
 				</div>
 				<div class="changeMonth">
 					<div class="preRegion">
-						<button class="changeMonth_button" id="pre_month">&#8249;</button>
+						<button class="changeMonth_button" id="pre">
+							<img src="../static/pic/doubleleft.png" alt="pre" class="double_narrow" />
+						</button>
 						<!-- 提示语 -->
 						<span class="changeMonth_title1 title">pre_month</span>
 					</div>
 
 					<div class="nextRegion">
-						<button class="changeMonth_button" id="next_month">&#8250;</button>
+						<button class="changeMonth_button" id="next">
+							<img src="../static/pic/doubleright.png" alt="next" class="double_narrow"/>
+						</button>
 						<!-- 提示语 -->
 						<span class="changeMonth_title2 title">next_month</span>
 					</div>
@@ -52,29 +58,32 @@
 		<div class="leftNav" id="leftNav">
 			<div class="addIcon"></div>
 			<div class="smallContent">
-				<div class="smallCalendar"></div>
+				<div class="smallCalendar">
+					<div class="smCHead">
+						<div id="smText"></div>
+						<div class="smButton">
+							<button class="smBtn" id="smBtnL">
+								<img src="../static/pic/s_left.png" alt="left" class="smNarrow" />
+							</button>
+							<button class="smBtn" id="smBtnR">
+								<img src="../static/pic/s_right.png" alt="right" class="smNarrow" />
+							</button>
+						</div>
+					</div>
+					<div class="smCDay" id="smCDay"></div>
+					<div class="smDates" id="smDates">
+
+
+					</div>
+				</div>
 				<div class="smallEvents"></div>
 			</div>
 		</div>
 		<div id="main"></div>
 	</body>
-	<script>
-		function myFunction(x) {
-			x.classList.toggle("change");
-			if (x.classList.contains("change")) {
-				openNav();
-			} else {
-				closeNav();
-			}
-		}
-		function openNav() {
-			document.getElementById("leftNav").style.width = "20%";
-			document.getElementById("main").style.marginLeft = "20%";
-		}
-
-		function closeNav() {
-			document.getElementById("leftNav").style.width = "0";
-			document.getElementById("main").style.marginLeft = "0";
-		}
-	</script>
 </html>
+
+
+
+
+
