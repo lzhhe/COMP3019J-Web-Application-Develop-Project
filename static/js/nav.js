@@ -353,6 +353,24 @@ document.addEventListener("DOMContentLoaded", function () {
         renderDates();
 		updateSmText();
 	});
+	document.getElementById("pre").addEventListener("click", function () {
+   // console.log("qqqqqq");
+   smCalendar.preMonth();
+       renderDates();
+   updateSmText();
+});
+document.getElementById("next").addEventListener("click", function () {
+   // console.log("qqqqqq");
+   smCalendar.nextMonth();
+       renderDates();
+   updateSmText();
+});
+   document.getElementById("to_today").addEventListener("click", function () {
+   // console.log("qqqqqq");
+   smCalendar.to_today();
+       renderDates();
+   updateSmText();
+});
 	updateSmText();
     const today_text = computeTdText();
     document.getElementById("today_title").textContent = today_text;
