@@ -6,7 +6,6 @@ export class DateItem {
 		this.preMonth = false;
 		this.nextMonth = false;
 		this.currentMonth = false;
-		this.selected = false;
 	}
 }
 
@@ -152,18 +151,25 @@ export function getPreDate(date) {
 		prevM = 11; // 12月
 	} else {
 		prevY = year;
-		prevM = month - 1;
+		prevM = month-1;
 	}
 
 	// 检查上个月的最后一天
-	const preMonthLastDay = new Date(prevY, prevM, 0).getDate();
+	// 重大bug，月份必须加一，因为0是前一个月的最后一天，如果忘了加一，那么就相当于往前多跑一个月
+	const preMonthLastDay = new Date(prevY, prevM+1, 0).getDate();
 
 	// 如果当天的日期大于上个月的总天数（例如5月31日，4月没有31号），则返回下个月的最后一天
-	const preD = day > preMonthLastDay ? preMonthLastDay : day;
+	let preD = 0;
+	if (day > preMonthLastDay){
+		preD = preMonthLastDay;
+	} else {
+		preD = day;
+	}
 
 	const new_date = new Date(prevY, prevM, preD);
-	const dateItem = new DateItem(new_date);
-
+	console.log(preMonthLastDay);
+	console.log(preD,11111);
+	console.log(day,222222);
 	return new_date;
 }
 
@@ -185,16 +191,21 @@ export function getNextDate(date) {
 	}
 
 	// 检查下个月的最后一天
-	const nextMonthLastDay = new Date(nextY, nextM, 0).getDate(); // 10
+	const nextMonthLastDay = new Date(nextY, nextM + 1, 0).getDate(); // 10
 
 	// 如果当天的日期大于下个月的总天数（例如3月31日，4月没有31号），则返回下个月的最后一天
-	const nextD = day > nextMonthLastDay ? nextMonthLastDay : day;
+	let nextD = 0;
+	if (day > nextMonthLastDay){
+		nextD = nextMonthLastDay;
+	} else {
+		nextD = day;
+	}
 
 	const new_date = new Date(nextY, nextM, nextD);
-	const dateItem = new DateItem(new_date);
-
+	console.log(nextMonthLastDay);
+	console.log(nextD,11111);
+	console.log(day,222222);
 	// console.log(new_date);
-
 	return new_date;
 }
 
@@ -231,18 +242,7 @@ export class navCalendar {
 		if (isDifferentMonth) {
 			this.updateDates();
 		}
-		this.setSelectedDate(date);
 		// 如果是同一个月，则不需要再调用 updateDates() 函数
-	}
-	setSelectedDate(date) {
-		// 清除所有已选中的日期
-		this.listDates.forEach(item => item.selected = false);
-
-		// 找到与指定日期相同的日期并设置为已选中
-		const targetDate = this.listDates.find(item => isSameDate(item.date, date));
-		if (targetDate) {
-			targetDate.selected = true;
-		}
 	}
 }
 

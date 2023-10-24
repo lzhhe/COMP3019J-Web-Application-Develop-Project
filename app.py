@@ -1,4 +1,4 @@
-from flask import Flask, render_template,send_from_directory
+from flask import Flask, render_template, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from flask_cors import CORS

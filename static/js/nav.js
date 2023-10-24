@@ -62,20 +62,12 @@ function renderDates() {
         if (dateItem.currentMonth) dateText.classList.add('sm-current');
         if (dateItem.preMonth) dateText.classList.add('sm-pre');
         if (dateItem.nextMonth) dateText.classList.add('sm-next');
-        if (dateItem.selected) dateText.classList.add('sm-selected');
-
-        dateElem.addEventListener('click', () => {
-            // 移除所有日期的选中状态
-            smCalendar.listDates.forEach(item => item.selected = false);
-            // 设置当前日期为选中状态
-            dateItem.selected = true;
-            // 跳转到被点击的日期
+        dateText.addEventListener('click',function(){
             smCalendar.to_random(dateItem.date);
-            // 重新渲染日期
             renderDates();
-		    updateSmText();
+            updateSmText();
         });
-
+        if (isSameDate(dateItem.date,smCalendar.selectedDate)) dateText.classList.add('sm-selected');
         dateElem.appendChild(dateText);
         dateContainer.appendChild(dateElem);
     });
