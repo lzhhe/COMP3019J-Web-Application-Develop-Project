@@ -1,7 +1,7 @@
 export class DateItem {
 	constructor(date) {
 		this.date = date;
-		this.day = date.getDate();
+		this.day = date.getDate(); // 得到几号
 		this.today = false;
 		this.preMonth = false;
 		this.nextMonth = false;
@@ -90,13 +90,13 @@ export function getPrevMonthDays(date) {
 /**
  * 得到下一个月补足的日期
  */
-export function getNextMonthDays(date) {
+export function getNextMonthDays(date,appendOrNot) {
 	// date为当前日期
 	const nextMonthDays = [];
 	const currentLastDate = getLastDay(date); //
 	const currentLastDateWeekDay = currentLastDate.getDay(); // 星期几，0表示周日，123456为周123456
 	const currentLastDateTime = currentLastDate.getTime();
-	for (let i = 0; i < 6 - currentLastDateWeekDay; i++) {
+	for (let i = 0; i < (6 - currentLastDateWeekDay) + (appendOrNot ? 7 : 0); i++) {
 		const nextMonthDay = new Date(currentLastDateTime + dayMs * (1 + i));
 
         const dateItem = new DateItem(nextMonthDay);
@@ -132,8 +132,9 @@ export function getCurrentMonthDays(date) {
  */
 export function getDates(date) {
 	const preDates = getPrevMonthDays(date);
-	const nextDates = getNextMonthDays(date);
 	const currentDates = getCurrentMonthDays(date);
+	const length = preDates.length + currentDates.length;
+	const nextDates = getNextMonthDays(date,(length <= 35 ? true : false));
 	return preDates.concat(currentDates).concat(nextDates);
 }
 
@@ -163,9 +164,9 @@ export function getPreDate(date) {
 	const preD = day > preMonthLastDay ? preMonthLastDay : day;
 
 	const new_date = new Date(prevY, prevM, preD);
-	const dateItem = new DateItem(date);
+	const dateItem = new DateItem(new_date);
 
-	return date;
+	return new_date;
 }
 
 export function getNextDate(date) {
@@ -192,7 +193,47 @@ export function getNextDate(date) {
 	const nextD = day > nextMonthLastDay ? nextMonthLastDay : day;
 
 	const new_date = new Date(nextY, nextM, nextD);
-	const dateItem = new DateItem(date);
+	const dateItem = new DateItem(new_date);
 
-	return date;
+	// console.log(new_date);
+
+	return new_date;
 }
+
+
+export class navCalendar {
+    constructor() {
+        this.selectedDate = new Date(); // 选中的日子，默认是当天
+        this.listDates = []; // 所有相关的日子们
+    }
+
+    initDates(){
+        this.updateDates();
+    }
+    updateDates(){
+        this.listDates = getDates(this.selectedDate);
+    }
+
+    nextMonth(){
+        this.selectedDate = getNextDate(this.selectedDate);
+        // console.log(this.selectedDate + "12121");
+        this.updateDates();
+    }
+    preMonth(){
+        this.selectedDate = getPreDate(this.selectedDate);
+        this.updateDates();
+    }
+    to_today(){
+        this.to_random(new Date()); // 跳转到今天
+    }
+    to_random(date){
+        if (!isSameMonth(this.selectedDate, date)){
+            this.updateDates();
+        }
+        this.selectedDate = date;
+    }
+}
+
+const smCalendar = new navCalendar();
+export default smCalendar;
+
