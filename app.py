@@ -34,7 +34,8 @@ def run():
     login_form = LoginForm()
     find_form = FindPasswordForm()
     print(1111111)
-    return render_template('loginMix.html', form={"reg_form": reg_form, "login_form": login_form, "find_form": find_form})
+    # return render_template('loginMix.html', form={"reg_form": reg_form, "login_form": login_form, "find_form": find_form})
+    return render_template('main.html')
 
 # @app.route('/main')
 # def main():
