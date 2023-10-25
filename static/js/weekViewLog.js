@@ -1,7 +1,7 @@
 const WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const DAY_MS = 86400000; 
+const DAY_MS = 86400000;
 const WEEK_MS = 7 * DAY_MS;
-const DAY_MINUTE = 24 * 60; 
+const DAY_MINUTE = 24 * 60;
 
 class WeekItem {
     constructor(date) {
@@ -21,7 +21,7 @@ class WeekItem {
 export class TimeLine {
     constructor(date, width, height) {
         this.top = height * 24 * ((date.getHours() * 60 + date.getMinutes()) / DAY_MINUTE);
-        this.left = date.getDay() * width; 
+        this.left = date.getDay() * width;
     }
 }
 
@@ -29,6 +29,7 @@ class WeekCalendar {
     constructor() {
         this.selectedDate = new Date();
         this.selectedDate.setHours(0, 0, 0, 0);
+        this.weekList = [];
         this.updateWeek();
     }
 
