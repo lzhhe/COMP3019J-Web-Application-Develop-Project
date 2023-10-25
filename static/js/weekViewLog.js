@@ -30,12 +30,14 @@ class WeekCalendar {
         this.selectedDate = new Date();
         this.selectedDate.setHours(0, 0, 0, 0);
         this.weekList = [];
-        this.updateWeek();
+        this.initWeek();
+    }
+    initWeek(){
+        this.updateWeek(this.selectedDate);
     }
 
-    updateWeek() {
-        const startOfWeek = this.startOfWeek(this.selectedDate);
-
+    updateWeek(date) {
+        const startOfWeek = this.startOfWeek(date);
         this.weekList = Array.from({ length: 7 }, (_, i) => {
             const currentDate = new Date(startOfWeek.getTime() + i * DAY_MS);
             return new WeekItem(currentDate);
@@ -44,7 +46,7 @@ class WeekCalendar {
 
     moveWeekBy(days) {
         this.selectedDate.setDate(this.selectedDate.getDate() + days);
-        this.updateWeek();
+        this.updateWeek(this.selectedDate);
     }
 
     toPreviousWeek() {
@@ -58,16 +60,17 @@ class WeekCalendar {
     toCurrentWeek() {
         this.selectedDate = new Date();
         this.selectedDate.setHours(0, 0, 0, 0);
-        this.updateWeek();
+        this.updateWeek(this.selectedDate);
     }
 
     setDate(date) {
         if (!this.inOneWeek(date, this.selectedDate)) {
-            this.selectedDate = date;
-            this.selectedDate.setHours(0, 0, 0, 0);
-            this.updateWeek();
+            this.updateWeek(date);
         }
+        this.selectedDate = date;
+        this.selectedDate.setHours(0, 0, 0, 0);
     }
+
 
     startOfWeek(date) {
         const start = new Date(date);

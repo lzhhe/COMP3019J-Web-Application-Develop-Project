@@ -236,14 +236,14 @@ export class navCalendar {
     to_today(){
         this.to_random(new Date()); // 跳转到今天
     }
-    to_random(date){
-		const isDifferentMonth = !isSameMonth(this.selectedDate, date);
-		this.selectedDate = date;
-		if (isDifferentMonth) {
-			this.updateDates();
-		}
-		// 如果是同一个月，则不需要再调用 updateDates() 函数
-	}
+    to_random(date) {
+        const isDifferentMonth = !isSameMonth(this.selectedDate, date);
+        this.selectedDate = date;
+        if (isDifferentMonth) {
+            this.updateDates();
+        }
+        // 如果是同一个月，则不需要再调用 updateDates() 函数
+    }
 }
 
 const smCalendar = new navCalendar();
