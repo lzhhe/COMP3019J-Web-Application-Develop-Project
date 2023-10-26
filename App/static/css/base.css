@@ -1,387 +1,494 @@
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	/*让整个界面的设置是这样的*/
-}
-*::-webkit-scrollbar-thumb {
-	border-radius: 5px; /* 滚动条滑块圆角 */
-	box-shadow: inset 0 0 5px rgba(215, 198, 198, 0.422); /* 滚动条滑块阴影效果 */
-}
-*::-webkit-scrollbar {
-	width: 8px; /* 滚动条宽度 */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /*让整个界面的设置是这样的*/
 }
 
 *::-webkit-scrollbar-thumb {
-	background-color: #918b8b; /* 滚动条滑块颜色 */
+    border-radius: 5px; /* 滚动条滑块圆角 */
+    box-shadow: inset 0 0 5px rgba(215, 198, 198, 0.422); /* 滚动条滑块阴影效果 */
+}
+
+*::-webkit-scrollbar {
+    width: 8px; /* 滚动条宽度 */
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #918b8b; /* 滚动条滑块颜色 */
 }
 
 *::-webkit-scrollbar-track {
-	background-color: #f1f1f1; /* 滚动条背景颜色 */
+    background-color: #f1f1f1; /* 滚动条背景颜色 */
 }
 
 .bodyMain {
-	display: flex;
-	flex-direction: row;
+    display: flex;
+    flex-direction: row;
 }
 
 /* 提示效果 */
 .title {
-	position: absolute;
-	left: 50%;
-	top: 100%;
-	transform: translate(-50%, -10%);
-	background-color: #333;
-	padding: 3px;
-	border-radius: 8%; /* 弧状矩形轮廓 */
-	border: 1px solid #cccccc; /* 边框样式 */
-	visibility: hidden; /* 初始时隐藏提示文本 */
-	opacity: 0; /* 初始时透明度为0 */
-	font-size: 12px;
-	color: aliceblue;
-	white-space: nowrap;
-	transition: visibility 0.1s linear, opacity 0.1s linear, transform 0.1s linear;
-	transition-delay: 0.8s; /* 延时 */
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, -10%);
+    background-color: #333;
+    padding: 3px;
+    border-radius: 8%; /* 弧状矩形轮廓 */
+    border: 1px solid #cccccc; /* 边框样式 */
+    visibility: hidden; /* 初始时隐藏提示文本 */
+    opacity: 0; /* 初始时透明度为0 */
+    font-size: 12px;
+    color: aliceblue;
+    white-space: nowrap;
+    transition: visibility 0.1s linear, opacity 0.1s linear, transform 0.1s linear;
+    transition-delay: 0.8s; /* 延时 */
 }
 
 /* 这一部分是汉堡按钮的地方 */
 .hamburger {
-	position: relative;
-	display: inline-block;
-	cursor: pointer;
-	margin: 3px;
-	width: 45px;
-	height: 45px;
-	display: flex;
-	justify-content: center; /* 水平居中 */
-	align-items: center; /* 垂直居中 */
-	border-radius: 25%;
-	transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 过渡效果 */
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin: 3px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    border-radius: 25%;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 过渡效果 */
 }
+
 .hamburger:hover {
-	background-color: #ab8e8e;
-	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
+    background-color: #ab8e8e;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
 }
+
 .hamburger:hover .hamburger1_title {
-	visibility: visible; /* 鼠标悬停时显示提示文本 */
-	opacity: 1;
-	transform: translate(-50%, 10%);
-	z-index: 1000;
+    visibility: visible; /* 鼠标悬停时显示提示文本 */
+    opacity: 1;
+    transform: translate(-50%, 10%);
+    z-index: 1000;
 }
+
 .bar1,
 .bar2,
 .bar3 {
-	width: 35px;
-	height: 5px;
-	background-color: #333;
-	margin: 6px 0;
-	transition: 0.3s ease; /* 过渡效果 */
+    width: 35px;
+    height: 5px;
+    background-color: #333;
+    margin: 6px 0;
+    transition: 0.3s ease; /* 过渡效果 */
 }
+
 .change .bar1 {
-	transform: rotate(-45deg) translate(-9px, 6px);
+    transform: rotate(-45deg) translate(-9px, 6px);
 }
+
 .change .bar2 {
-	opacity: 0;
+    opacity: 0;
 }
+
 .change .bar3 {
-	transform: rotate(45deg) translate(-8px, -8px);
+    transform: rotate(45deg) translate(-8px, -8px);
 }
 
 /* 这一部分是header部分 */
 .header {
-	/* overflow: hidden; */
-	background-color: #e5e7e9;
-	padding: 0;
-	margin: 0;
-	width: 100%;
-	height: 55px;
-	display: grid;
-	grid-template-columns: 1fr 3fr 1fr;
+    /* overflow: hidden; */
+    background-color: #e5e7e9;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 55px;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
 }
+
 /* 这些是header左边 */
 .header-left {
-	float: left;
-	display: flex;
-	align-items: center; /* 垂直居中对齐 */
-	height: 100%;
+    float: left;
+    display: flex;
+    align-items: center; /* 垂直居中对齐 */
+    height: 100%;
 }
+
 .c_icon {
-	width: 45px;
-	height: 45px;
-	margin: 3px 3px 3px 10px;
-	position: relative;
+    width: 45px;
+    height: 45px;
+    margin: 3px 3px 3px 10px;
+    position: relative;
 }
 
 #c_icon {
-	width: 100%; /* 图片宽度100%，填充父元素 */
-	height: 100%; /* 图片高度100%，填充父元素 */
+    width: 100%; /* 图片宽度100%，填充父元素 */
+    height: 100%; /* 图片高度100%，填充父元素 */
 }
 
 .c_icon:hover .c_icon_title {
-	visibility: visible; /* 鼠标悬停时显示提示文本 */
-	opacity: 1;
-	transform: translate(-50%, 10%);
-	z-index: 1000;
+    visibility: visible; /* 鼠标悬停时显示提示文本 */
+    opacity: 1;
+    transform: translate(-50%, 10%);
+    z-index: 1000;
 }
 
 /* 这些是header中间 */
 .header-center {
-	height: 100%;
-	width: auto;
-	float: left;
-	display: flex;
-	align-items: center; /* 垂直居中 */
+    height: 100%;
+    width: auto;
+    float: left;
+    display: flex;
+    align-items: center; /* 垂直居中 */
 }
+
 .today_container {
-	width: auto;
-	height: auto;
-	margin-left: -15px;
-	position: relative;
+    width: auto;
+    height: auto;
+    margin-left: -15px;
+    position: relative;
 }
+
 #to_today {
-	padding: 5px 8px;
-	font-size: 20px;
-	text-align: center;
-	cursor: pointer;
-	outline: none;
-	color: #fff;
-	background-color: #ab8e8eb3;
-	border: none;
-	border-radius: 15px;
-	box-shadow: 0 4px #999;
-	letter-spacing: 2.2pt;
+    padding: 5px 8px;
+    font-size: 20px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: #ab8e8eb3;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px #999;
+    letter-spacing: 2.2pt;
 }
 
 #to_today:hover {
-	background-color: #ab8e8e;
+    background-color: #ab8e8e;
 }
 
 #to_today:active {
-	background-color: #ab8e8eb3;
-	box-shadow: 0 5px #666;
-	transform: translateY(2px);
+    background-color: #ab8e8eb3;
+    box-shadow: 0 5px #666;
+    transform: translateY(2px);
 }
 
 .today_container:hover .today_title {
-	visibility: visible; /* 鼠标悬停时显示提示文本 */
-	opacity: 1;
-	transform: translate(-50%, 10%);
-	z-index: 1000;
+    visibility: visible; /* 鼠标悬停时显示提示文本 */
+    opacity: 1;
+    transform: translate(-50%, 10%);
+    z-index: 1000;
 }
 
 .changeMonth {
-	width: auto;
-	height: auto;
-	margin-left: 50px;
+    width: auto;
+    height: auto;
+    margin-left: 50px;
 }
+
 .preRegion,
 .nextRegion {
-	display: inline-flex;
-	position: relative;
+    display: inline-flex;
+    position: relative;
 }
+
 .double_narrow {
-	height: 80%;
-	width: 100%;
-	position: absolute;
-	top: 50%; /* 将元素的顶部移动到父元素的中间 */
-	left: 50%; /* 将元素的左侧移动到父元素的中间 */
-	transform: translate(-50%, -50%);
+    height: 80%;
+    width: 100%;
+    position: absolute;
+    top: 50%; /* 将元素的顶部移动到父元素的中间 */
+    left: 50%; /* 将元素的左侧移动到父元素的中间 */
+    transform: translate(-50%, -50%);
 }
+
 .changeMonth_button {
-	border-radius: 10%;
-	width: 40px;
-	height: 40px;
-	border: 0;
-	background: linear-gradient(225deg, #e6e2e2, #f2f1f1);
-	position: relative;
-	margin: 7px;
+    border-radius: 10%;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    background: linear-gradient(225deg, #e6e2e2, #f2f1f1);
+    position: relative;
+    margin: 7px;
 }
+
 .changeMonth_button:hover {
-	background: linear-gradient(225deg, #d0c9c9, #afa9a9);
-	box-shadow: -1px 1px 2px #a5a0a0, 1px -1px 2px #dfd8d8;
-	cursor: pointer;
+    background: linear-gradient(225deg, #d0c9c9, #afa9a9);
+    box-shadow: -1px 1px 2px #a5a0a0, 1px -1px 2px #dfd8d8;
+    cursor: pointer;
 }
+
 .changeMonth_button:active {
-	background: linear-gradient(225deg, #d0c9c9, #afa9a9);
-	box-shadow: -1px 1px 2px #a5a0a0, 1px -1px 2px #dfd8d8;
-	transform: translateY(1px);
+    background: linear-gradient(225deg, #d0c9c9, #afa9a9);
+    box-shadow: -1px 1px 2px #a5a0a0, 1px -1px 2px #dfd8d8;
+    transform: translateY(1px);
 }
+
 .preRegion:hover .changeMonth_title1,
 .nextRegion:hover .changeMonth_title2 {
-	visibility: visible; /* 鼠标悬停时显示提示文本 */
-	opacity: 1;
-	transform: translate(-50%, 10%);
-	z-index: 1000;
+    visibility: visible; /* 鼠标悬停时显示提示文本 */
+    opacity: 1;
+    transform: translate(-50%, 10%);
+    z-index: 1000;
 }
 
 /* 这些是header右边 */
 .header-right {
-	float: right;
-	width: 20%;
-	height: 100%;
+    float: right;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s; /* 添加过渡效果 */
 }
+
+.header-right .information {
+    /* 添加这一行 */
+    margin: 5px 5px 5px auto;
+    width: 60%;
+    height: 45px;
+    float: right;
+    border-radius: 15px;
+    display: flex;
+    align-items: center; /* 垂直居中对齐 */
+    justify-content: center; /* 水平居中对齐 */
+}
+
+.information:hover {
+    background-color: #c7c3c3; /* 调整为更为柔和的灰色 */
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
+
+}
+
+.information a {
+    text-decoration: none; /* 去除链接下划线 */
+    color: #734444; /* 设定一个默认颜色 */
+    transition: color 0.3s; /* 添加文字颜色的过渡效果 */
+    flex: 1; /* 使链接占满整个容器 */
+    text-align: center; /* 文字居中 */
+    display: flex; /* 这也是为了使链接内的内容居中对齐 */
+    align-items: center; /* 如果链接有更多的内容，这将帮助垂直居中 */
+    justify-content: center; /* 水平居中对齐链接内容 */
+    font-size: x-large;
+    font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+}
+
+.information a:hover {
+    color: #0077cc; /* 鼠标悬停时的颜色 */
+}
+
+.user-infor {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+}
+
+.head-icon {
+    height: 45px;
+    width: 45px;
+    margin: auto;
+    border-radius: 100%;
+    overflow: hidden;
+
+}
+#head-icon {
+    width: 100%;
+    height: 100%;
+}
+.user-infor a {
+    width: 30%;
+    font-size:10px;
+}
+#userSelf {
+    width: 40%;
+    font-size:xx-large;
+    text-align: center; /* 文字居中 */
+    display: flex; /* 这也是为了使链接内的内容居中对齐 */
+    align-items: center; /* 如果链接有更多的内容，这将帮助垂直居中 */
+    justify-content: center;
+}
+
 
 /* 这一部分是侧边栏leftNav*/
 .leftNav {
-	height: 100%;
-	width: 0; /* 0 宽度 - 使用 JavaScript 更改 */
-	position: fixed; /* 原地不动 */
-	z-index: 1; /* 保持领先 */
-	top: auto;
-	left: 0;
-	background-color: #f2f3f4e7; /* 黑色*/
-	overflow-x: hidden; /* 禁用水平滚动 */
-	overflow-y: hidden;
-	/* padding-top: 80px;  */
-	transition: width 0.4s, opacity 0s;
+    height: 100%;
+    width: 0; /* 0 宽度 - 使用 JavaScript 更改 */
+    position: fixed; /* 原地不动 */
+    z-index: 1; /* 保持领先 */
+    top: auto;
+    left: 0;
+    background-color: #f2f3f4e7; /* 黑色*/
+    overflow-x: hidden; /* 禁用水平滚动 */
+    overflow-y: hidden;
+    /* padding-top: 80px;  */
+    transition: width 0.4s, opacity 0s;
 }
+
 .addIcon {
-	height: 80px;
+    height: 80px;
 }
+
 .smallContent {
-	height: 80%;
-	overflow: hidden;
-	transition: 0.5s;
-	margin-right: 5px;
-	border-top: 1px solid transparent;
+    height: 80%;
+    overflow: hidden;
+    transition: 0.5s;
+    margin-right: 5px;
+    border-top: 1px solid transparent;
 }
+
 .smallContent:hover {
-	overflow-y: auto;
-	box-shadow: 0 -2px 0 0 rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+    box-shadow: 0 -2px 0 0 rgba(0, 0, 0, 0.5);
 }
 
 .smallCalendar {
-	width: 90%;
-	/* 头部信息，周，具体日期 1+1+6 = 8，每一行30px */
-	height: 240px;
-	margin-left: auto;
-	margin-right: auto;
-	padding-left: 2%;
-	padding-right: 2%;
+    width: 90%;
+    /* 头部信息，周，具体日期 1+1+6 = 8，每一行30px */
+    height: 240px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 2%;
+    padding-right: 2%;
 }
+
 .smallCalendar:hover {
-	border: 1px solid #c0c0c0;
-	box-shadow: 0 2px 2px 0 rgba(152, 144, 144, 0.5);
-	border-radius: 5%;
+    border: 1px solid #c0c0c0;
+    box-shadow: 0 2px 2px 0 rgba(152, 144, 144, 0.5);
+    border-radius: 5%;
 }
 
 .smCHead {
-	width: 100%;
-	height: 12.5%;
-	border-bottom: 1px solid #c0c0c0;
-	display: flex;
-	justify-content: space-between; /* 使子元素分布在容器的两端 */
-	align-items: center; /* 使子元素在容器中垂直居中 */
+    width: 100%;
+    height: 12.5%;
+    border-bottom: 1px solid #c0c0c0;
+    display: flex;
+    justify-content: space-between; /* 使子元素分布在容器的两端 */
+    align-items: center; /* 使子元素在容器中垂直居中 */
 }
+
 #smText {
-	padding-left: 4.5%;
-	font-family: "Courier New", Courier, monospace;
+    padding-left: 4.5%;
+    font-family: "Courier New", Courier, monospace;
 }
+
 .smButton {
-	width: 30%;
-	height: 100%;
-	text-align: center;
-	justify-content: center;
+    width: 30%;
+    height: 100%;
+    text-align: center;
+    justify-content: center;
 }
+
 .smBtn {
-	border-radius: 10%;
-	width: 20px;
-	height: 20px;
-	border: 0;
-	background: linear-gradient(225deg, #b3a8a8, #f2f1f1);
-	position: relative;
-	display: inline-flex;
-	margin-top: 5px;
+    border-radius: 10%;
+    width: 20px;
+    height: 20px;
+    border: 0;
+    background: linear-gradient(225deg, #b3a8a8, #f2f1f1);
+    position: relative;
+    display: inline-flex;
+    margin-top: 5px;
 }
+
 .smNarrow {
-	width: 80%;
-	height: 80%;
-	position: absolute;
-	top: 50%; /* 将元素的顶部移动到父元素的中间 */
-	left: 50%; /* 将元素的左侧移动到父元素的中间 */
-	transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    position: absolute;
+    top: 50%; /* 将元素的顶部移动到父元素的中间 */
+    left: 50%; /* 将元素的左侧移动到父元素的中间 */
+    transform: translate(-50%, -50%);
 }
+
 #smBtnL {
-	margin-right: 15%;
+    margin-right: 15%;
 }
+
 .smBtn:hover {
-	cursor: pointer;
+    cursor: pointer;
 }
+
 .smBtn:active {
-	box-shadow: -0.1px 0.1px 0.1px #f3eae2e9, 0.1px -0.1px 1px #dfd8d8db;
-	transform: translateY(0.5px);
+    box-shadow: -0.1px 0.1px 0.1px #f3eae2e9, 0.1px -0.1px 1px #dfd8d8db;
+    transform: translateY(0.5px);
 }
+
 .smCDay {
-	width: 100%;
-	height: 12.5%;
-	border-bottom: 1px dotted #c0c0c0;
-	padding-left: 2%;
-	padding-right: 1%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+    width: 100%;
+    height: 12.5%;
+    border-bottom: 1px dotted #c0c0c0;
+    padding-left: 2%;
+    padding-right: 1%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
+
 .smCDayItem {
-	font-size: small;
-	font-family: "Courier New", Courier, monospace;
-	color: #666666;
-	text-align: center;
+    font-size: small;
+    font-family: "Courier New", Courier, monospace;
+    color: #666666;
+    text-align: center;
 }
+
 .smDates {
-	width: 100%;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: space-between;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
 }
+
 .sm-calendar-date {
-	height: 30px;
-	width: 13%;
-	display: flex;
-	text-align: center;
-	align-items: center;
-	justify-content: center;
-	border-radius: 50%;
+    height: 30px;
+    width: 13%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
 }
+
 .sm-calendar-date:hover {
-	background-color: #e1eaff;
+    background-color: #e1eaff;
 }
+
 .sm-date-text {
-	font-family: "Courier New", Courier, monospace !important;
-	color: #000000;
-	cursor: pointer !important;
-	border-radius: 50%;
-	height: 100%;
-	width: 100%;
-	text-align: center;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+    font-family: "Courier New", Courier, monospace !important;
+    color: #000000;
+    cursor: pointer !important;
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
 .sm-pre,
 .sm-next {
-	color: #a69f9f;
-	opacity: 0.8;
+    color: #a69f9f;
+    opacity: 0.8;
 }
+
 .sm-today {
-	border: 1px solid #3370ff;
+    border: 1px solid #3370ff;
 }
 
 .sm-selected {
-	background-color: #3370ff;
-	color: #ffffff;
+    background-color: #3370ff;
+    color: #ffffff;
 }
 
 @media screen and (max-height: 450px) {
-	.leftNav {
-		padding-top: 15px;
-	}
+    .leftNav {
+        padding-top: 15px;
+    }
 }
 
 /* 底下是main */
 #main {
-	transition: margin-left 0.4s ease;
-	flex-grow: 1;
+    transition: margin-left 0.4s ease;
+    flex-grow: 1;
 }
 
 

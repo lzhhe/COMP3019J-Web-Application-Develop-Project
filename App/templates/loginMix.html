@@ -18,7 +18,7 @@
         <!-- 默认访问当前的路由 -->
         <!-- 可以url -->
         <!-- 可以直接路由名 -->
-        <form id="registerForm" method="post" action="{{ url_for('cal_u.loginPage') }}">
+        <form id="registerForm" method="post" action="{{ url_for('cal_u.register') }}">
             <h1>Create Account</h1>
             <div class="information"></div>
             <span>by use your email for registering</span>
@@ -44,7 +44,7 @@
 
     <!-- Login form container -->
     <div class="form-container sign-in">
-        <form id="loginForm" method="post" action="">
+        <form id="loginForm" method="post" action="{{ url_for('cal_u.login') }}">
             <h1>Enter System</h1>
             <div class="information"></div>
             <span>by use your username and password</span>
@@ -88,7 +88,7 @@
 
 <!-- Password reset modal -->
 <div id="getPassword" class="modal">
-    <form class="modal-content animate" method="post" id="findForm" action="">
+    <form class="modal-content animate" method="post" id="findForm" action="{{ url_for('cal_u.find_password') }}">
         <div class="imgcontainer">
                 <span onclick="document.getElementById('getPassword').style.display='none'" class="close"
                       title="Close Modal">&times;</span>
