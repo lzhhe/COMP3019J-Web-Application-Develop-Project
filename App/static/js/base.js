@@ -372,6 +372,21 @@ document.addEventListener("DOMContentLoaded", function () {
         handleDateClick(smCalendar.selectedDate);
         console.log(smCalendar.selectedDate);
     });
+    document.getElementById("pre").addEventListener("click", function () {
+        smCalendar.preMonth(); // 此时的选中时间已经变了
+        handleDateClick(smCalendar.selectedDate);
+        console.log(smCalendar.selectedDate);
+    });
+    document.getElementById("next").addEventListener("click", function () {
+         smCalendar.nextMonth();
+        handleDateClick(smCalendar.selectedDate);
+        console.log(smCalendar.selectedDate);
+    });
+     document.getElementById("to_today").addEventListener("click", function () {
+        smCalendar.to_today();
+        renderDates();
+        updateSmText();
+    });
     updateSmText();
     const today_text = computeTdText();
     document.getElementById("today_title").textContent = today_text;
