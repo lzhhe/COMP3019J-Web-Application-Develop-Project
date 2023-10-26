@@ -4,53 +4,112 @@ from flask import Blueprint, render_template, request, redirect, session
 import requests
 from .models import *
 
-blue = Blueprint('cal_u', __name__)  # cal_u是这个蓝图的名称，全局一致即可
+blue = Blueprint('cal_u', __name__)  # cal_u is name of blueprint
 
 
-@blue.route('/')  # 这是默认访问路径
+@blue.route('/')
 @blue.route('/main')
 def main():
-    # cookie4,get内的与下面set的名一样
-    # username = request.cookies.get('user')
-    username = session.get('user')
-    return render_template('base.html', username=username)
+
+    # uid = request.cookies.get('uid')
+    # username = User.query.filter_by(UID=uid).first().name
+    # username = session.get('user')
+    return render_template('base.html')
 
 
 @blue.route('/weekView')
 def weekView():
-    # cookie4,get内的与下面set的名一样
-    # username = request.cookies.get('user')
-    username = session.get('user')
+
+    uid = request.cookies.get('uid')
+    username = User.query.filter_by(UID=uid).first().name
+    # username = session.get('user')
     return render_template('viewWeek.html', username=username)
 
 
-@blue.route('/loginPage', methods=['GET', 'POST'])  # 这是默认访问路径
+@blue.route('/loginPage', methods=['GET', 'POST'])
 def loginPage():
     # GET: 访问登录界面
     if request.method == 'GET':
         return render_template('loginMix.html')
+
+
+@blue.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('loginMix.html')
     elif request.method == 'POST':
-        # cookie1 得到内容
         username = request.form.get('signInUsernameField')
         password = request.form.get('signInPasswordField')
-        # cookie2 设置cookie
-        if username == 'zx' and password == '12345678':
+
+        user = User.query.filter_by(name=username, password=password).first()
+        if user:
             response = redirect('/weekView')
-            # cookie3 # 默认浏览器关闭没了
-            # response.set_cookie('user', username, max_age=3600 * 24 * 7)
-            # response.set_cookie('user', username, expires=datetime(2023, 12, 12))
-            session['user'] = username
-            session.permanent = True
+            response.set_cookie('uid', str(user.UID), max_age=7*24*3600)
             return response
         else:
-            return 'wrong'
+            return 'login failed'
+
+
+@blue.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'GET':
+        return render_template('loginMix.html')
+    elif request.method == 'POST':
+        return '111'
+
+
+@blue.route('/find_password', methods=['GET', 'POST'])
+def find_password():
+    if request.method == 'GET':
+        return render_template('loginMix.html')
+    elif request.method == 'POST':
+        return '111'
 
 
 @blue.route('/logout')
 def logout():
     response = redirect('main')
-    # cookie5 删除cookie
-    # response.delete_cookie('user')
 
-    session.pop('user')
-    return response
+
+
+
+
+@blue.route('/')
+@blue.route('/main')
+def main():
+    # uid = request.cookies.get('uid')
+    # username = User.query.filter_by(UID=uid).first().name
+    # username = session.get('user')
+    return render_template('base.html')
+
+
+@blue.route('/weekView')
+def weekView():
+    # cookie4,get内的与下面set的名一样
+    uid = request.cookies.get('uid')
+    username = User.query.filter_by(UID=uid).first().name
+    # username = session.get('user')
+    return render_template('viewWeek.html', username=username)
+
+
+@blue.route('/loginPage', methods=['GET', 'POST'])  # 这是默认访问路径
+def loginPage():
+    if request.method == 'GET':
+        return render_template('loginMix.html')
+
+
+@blue.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('loginMix.html')
+    elif request.method == 'POST':
+        username = request.form.get('signInUsernameField')
+        password = request.form.get('signInPasswordField')
+
+        user = User.query.filter_by(name=username, password=password).first()
+        if user:
+            response = redirect('/weekView')
+            response.set_cookie('uid', str(user.UID), max_age=7*24*3600)
+            return response
+        else:
+            return 'login failed'
