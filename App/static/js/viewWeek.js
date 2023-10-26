@@ -80,6 +80,15 @@ class WeekCalendar {
         return start;
     }
 
+    function
+
+    endOfWeek(date) {
+        const end = new Date(date);
+        end.setDate(date.getDate() + (6 - date.getDay()));
+        end.setHours(23, 59, 59, 999);
+        return end;
+    }
+
     inOneWeek(date1, date2) {
         return this.startOfWeek(date1).getTime() === this.startOfWeek(date2).getTime();
     }
@@ -97,6 +106,28 @@ function initTimeZone() {
 function isPassed(date) {
     const today = new Date();
     return date.getTime() < today.getTime();
+}
+
+function updateTimeContainer() {
+    let tmText = computeTmText();
+    document.getElementById('time_container').textContent = tmText;
+}
+
+function computeTmText() {
+    const selectedDate = viewWeek.selectedDate;
+    const startOfWeek = viewWeek.startOfWeek(selectedDate);
+    const endOfWeek = viewWeek.endOfWeek(selectedDate);
+    const year1 = startOfWeek.getFullYear();
+    const year2 = endOfWeek.getFullYear();
+    const month1 = `${startOfWeek.getMonth() + 1}`.padStart(2,'0');
+    const month2 = `${endOfWeek.getMonth() + 1}`.padStart(2,'0');
+    if (year1 === year2 && month1 === month2){
+        return `${year1}-${month1}`
+    } else if (year1 === year2 && month1 !== month2){
+        return `${year1}-${month1}--${month2}`
+    } else {
+         return `${year1}-${month1}--${year2}-${month2}`
+    }
 }
 
 function updateWeekView() {
@@ -141,6 +172,9 @@ function handleDateClick(date) {
     renderDates();
     updateSmText();
     updateWeekView();
+    updateTimeContainer();
+
+
     // console.log(smCalendar.selectedDate,222)
 }
 
@@ -148,6 +182,7 @@ document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
 
     initTimeZone();
     updateWeekView();
+    updateTimeContainer();
     const btn_pre = document.getElementById("pre")
     const btn_next = document.getElementById("next")
     btn_pre.addEventListener("click", function () {
@@ -159,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
         renderDates();
         updateSmText();
         updateWeekView();
-
+        updateTimeContainer()
         console.log(smCalendar.selectedDate);
         console.log(viewWeek.selectedDate, 1111);
     });
@@ -171,6 +206,7 @@ document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
         renderDates();
         updateSmText();
         updateWeekView();
+        updateTimeContainer()
         console.log(smCalendar.selectedDate);
         console.log(viewWeek.selectedDate, 1111);
 
@@ -182,6 +218,7 @@ document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
         smCalendar.selectedDate = viewWeek.selectedDate;
         renderDates();
         updateSmText();
+        updateTimeContainer()
         updateWeekView();
     });
 });

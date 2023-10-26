@@ -354,7 +354,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const btn_pre = document.getElementById("pre")
     const btn_next = document.getElementById("next")
     btn_pre.addEventListener("click", function () {
-        if (currentFilename !== ''){
+        if (currentFilename !== '' && currentFilename !== 'main'){
             console.log(currentFilename)
             return;
         }
@@ -363,7 +363,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(smCalendar.selectedDate);
     });
     btn_next.addEventListener("click", function () {
-        if (currentFilename !== ''){
+        if (currentFilename !== '' && currentFilename !== 'main'){
             return;
         }
         smCalendar.nextMonth();

@@ -20,13 +20,14 @@ def weekView():
     if uid:
         username = User.query.filter_by(UID=uid).first().name
         gender = User.query.filter_by(UID=uid).first().gender
+        email = User.query.filter_by(UID=uid).first().email
         if gender == 1:
             gender_pic = '../static/pic/male.jpg'
         elif gender == 2:
             gender_pic = '../static/pic/female.jpg'
         else:
             gender_pic = '../static/pic/forgetHead.png'
-        return render_template('viewWeek.html', username=username, gender_pic=gender_pic)
+        return render_template('viewWeek.html', username=username, gender_pic=gender_pic, email=email)
 
 
 @blue.route('/loginPage', methods=['GET', 'POST'])  # 这是默认访问路径

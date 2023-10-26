@@ -53,6 +53,7 @@
                 <span class="changeMonth_title2 title">next_month</span>
             </div>
         </div>
+        <div class="time_container" id="time_container"></div>
     </div>
     <div class="header-right">
         <div class="information">
@@ -61,6 +62,8 @@
                     <div class="head-icon"><img id="head-icon" alt="head" src="{{ gender_pic }}"/></div>
                     <div id="userSelf">{{ username }}</div>
                     <a href="/logout" class="logout">logout</a>
+                    <span class="user_title title" id="user_title">welcome: {{ username }} <br>
+                    your email: {{ email }}</span>
                 </div>
 
             {% else %}
