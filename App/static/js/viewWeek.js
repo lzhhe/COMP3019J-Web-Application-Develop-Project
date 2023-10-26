@@ -143,10 +143,14 @@ function handleDateClick(date) {
     updateWeekView();
     // console.log(smCalendar.selectedDate,222)
 }
-document.addEventListener("DOMContentLoaded", function () {
+
+document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
+
     initTimeZone();
     updateWeekView();
-    document.getElementById("pre").addEventListener("click", function () {
+    const btn_pre = document.getElementById("pre")
+    const btn_next = document.getElementById("next")
+    btn_pre.addEventListener("click", function () {
         viewWeek.toPreviousWeek();
 
         smCalendar.listDates = getDates(smCalendar.selectedDate);
@@ -159,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(smCalendar.selectedDate);
         console.log(viewWeek.selectedDate, 1111);
     });
-    document.getElementById("next").addEventListener("click", function () {
+    btn_next.addEventListener("click", function () {
         viewWeek.toNextWeek();
 
         smCalendar.listDates = getDates(smCalendar.selectedDate);
@@ -171,6 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(viewWeek.selectedDate, 1111);
 
     });
+
     document.getElementById("to_today").addEventListener("click", function () {
         smCalendar.to_today();
         viewWeek.toCurrentWeek();

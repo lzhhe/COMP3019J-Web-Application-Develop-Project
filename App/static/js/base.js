@@ -260,10 +260,10 @@ class navCalendar {
         // 如果是同一个月，则不需要再调用 updateDates() 函数
     }
 }
+
 // export default viewWeek;
 
 const smCalendar = new navCalendar();
-
 
 
 function updateSmText() { // 更新显示文本
@@ -306,6 +306,7 @@ function closeNav() {
     document.getElementById("main").style.marginLeft = "0";
     document.getElementById("leftNav").style.opacity = "0"
 }
+
 function renderDates() {
     // 得到日期容器
     const dateContainer = document.querySelector('.smDates');
@@ -337,6 +338,7 @@ function renderDates() {
     });
     // console.log("renderDates function is called");
 }
+
 function handleDateClick(date) {
     // 更新 selectedDate
     smCalendar.to_random(date);
@@ -346,7 +348,28 @@ function handleDateClick(date) {
     // console.log(smCalendar.selectedDate,222)
 }
 
+
 document.addEventListener("DOMContentLoaded", function () {
+    const currentFilename = window.location.href.split('/').pop();
+    const btn_pre = document.getElementById("pre")
+    const btn_next = document.getElementById("next")
+    btn_pre.addEventListener("click", function () {
+        if (currentFilename !== ''){
+            console.log(currentFilename)
+            return;
+        }
+        smCalendar.preMonth(); // 此时的选中时间已经变了
+        handleDateClick(smCalendar.selectedDate);
+        console.log(smCalendar.selectedDate);
+    });
+    btn_next.addEventListener("click", function () {
+        if (currentFilename !== ''){
+            return;
+        }
+        smCalendar.nextMonth();
+        handleDateClick(smCalendar.selectedDate);
+        console.log(smCalendar.selectedDate);
+    });
 
     // 初始化周
     const weekList = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -372,17 +395,8 @@ document.addEventListener("DOMContentLoaded", function () {
         handleDateClick(smCalendar.selectedDate);
         console.log(smCalendar.selectedDate);
     });
-    document.getElementById("pre").addEventListener("click", function () {
-        smCalendar.preMonth(); // 此时的选中时间已经变了
-        handleDateClick(smCalendar.selectedDate);
-        console.log(smCalendar.selectedDate);
-    });
-    document.getElementById("next").addEventListener("click", function () {
-         smCalendar.nextMonth();
-        handleDateClick(smCalendar.selectedDate);
-        console.log(smCalendar.selectedDate);
-    });
-     document.getElementById("to_today").addEventListener("click", function () {
+
+    document.getElementById("to_today").addEventListener("click", function () {
         smCalendar.to_today();
         renderDates();
         updateSmText();

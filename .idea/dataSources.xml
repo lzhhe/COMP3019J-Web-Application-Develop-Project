@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="root@localhost" uuid="fef21b30-315b-4da8-8b21-2524827692d1">
+    <data-source source="LOCAL" name="calendar_web@localhost" uuid="1772ce75-a54e-4ae9-846c-2cfd643b46a3">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/calendar_application</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/calendar_web</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
