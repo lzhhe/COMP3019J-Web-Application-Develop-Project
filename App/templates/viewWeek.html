@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}
+    viewWeek
+{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="../static/css/viewWeek.css">
+{% endblock %}
+{% block extra_js %}
+     <script src="../static/js/viewWeek.js"></script>
+{% endblock %}
+{% block mainBody %}
+    <div id="calendarWeek">
+        <div class="week-title">
+            <div class="timeZone" id="timezoneDisplay"></div>
+            <div id="weekContainer"></div>
+        </div>
+    </div>
+{% endblock %}
+

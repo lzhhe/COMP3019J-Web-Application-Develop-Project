@@ -15,14 +15,27 @@
 
     <!-- Registration form container -->
     <div class="form-container sign-up">
-        <form id="registerForm" method="post">
+        <!-- 默认访问当前的路由 -->
+        <!-- 可以url -->
+        <!-- 可以直接路由名 -->
+        <form id="registerForm" method="post" action="{{ url_for('cal_u.loginPage') }}">
             <h1>Create Account</h1>
             <div class="information"></div>
             <span>by use your email for registering</span>
 
-            {{ form.reg_form.reg_username(placeholder="Username",id="signUpUsernameField") }}
-            {{ form.reg_form.reg_email(placeholder="Email",id="signUpEmailField") }}
-            {{ form.reg_form.reg_password(placeholder="Password" ,id="signUpPasswordField") }}
+            <input type="text" placeholder="Username" id="signUpUsernameField" name="signUpUsernameField"/>
+            <input type="email" placeholder="Email" id="signUpEmailField" name="signUpEmailField"/>
+
+            <input
+                    type="password"
+                    placeholder="Password"
+                    id="signUpPasswordField"
+                    name="signUpPasswordField"
+            />
+
+            {#            {{ form.reg_form.reg_username(placeholder="Username",id="signUpUsernameField") }}#}
+            {#            {{ form.reg_form.reg_email(placeholder="Email",id="signUpEmailField") }}#}
+            {#            {{ form.reg_form.reg_password(placeholder="Password" ,id="signUpPasswordField") }}#}
 
             <button type="button" id="changeSignUpPassword" class="show">Show Password</button>
             <button type="submit" id="signUpSubmitField">Register</button>
@@ -31,13 +44,21 @@
 
     <!-- Login form container -->
     <div class="form-container sign-in">
-        <form id="loginForm" method="post">
+        <form id="loginForm" method="post" action="">
             <h1>Enter System</h1>
             <div class="information"></div>
             <span>by use your username and password</span>
+            <input type="text" placeholder="Username" id="signInUsernameField" name="signInUsernameField"/>
 
-            {{ form.login_form.login_username(placeholder="Username",id="signInUsernameField") }}
-            {{ form.login_form.login_password(placeholder="Password",id="signInPasswordField") }}
+            <input
+                    type="password"
+                    placeholder="Password"
+                    id="signInPasswordField"
+                    name="signInPasswordField"
+            />
+
+{#            {{ form.login_form.login_username(placeholder="Username",id="signInUsernameField") }}#}
+{#            {{ form.login_form.login_password(placeholder="Password",id="signInPasswordField") }}#}
 
             <button type="button" id="changeSignInPassword" class="show">Show Password</button>
             <a href="#" class="findPassword" onclick="document.getElementById('getPassword').style.display='block'">
@@ -67,7 +88,7 @@
 
 <!-- Password reset modal -->
 <div id="getPassword" class="modal">
-    <form class="modal-content animate" method="post" id="findForm">
+    <form class="modal-content animate" method="post" id="findForm" action="">
         <div class="imgcontainer">
                 <span onclick="document.getElementById('getPassword').style.display='none'" class="close"
                       title="Close Modal">&times;</span>
@@ -75,9 +96,13 @@
         </div>
         <div class="find-container">
             <label for="find_uname"><b>Username</b></label>
-            {{ form.find_form.find_username(placeholder="Enter Username" ,id="find_uname") }}
+            <input type="text" placeholder="Enter Username" id="find_uname" name="find_uname"/>
+
+{#            {{ form.find_form.find_username(placeholder="Enter Username" ,id="find_uname") }}#}
             <label for="find_email"><b>Email</b></label>
-            {{ form.find_form.find_email(placeholder="Enter Email",id="find_email") }}
+            <input type="email" placeholder="Enter Email" id="find_email" name="find_email"/>
+
+{#            {{ form.find_form.find_email(placeholder="Enter Email",id="find_email") }}#}
             <button type="submit" id="findPassword">Retrieve Password</button>
         </div>
     </form>
@@ -150,42 +175,41 @@
     };
 
 
-    $(document).ready(function () {
-
-        function handleFormSubmit(formSelector, postUrl) {
-            $(formSelector).submit(function (event) {
-                event.preventDefault();
-
-                // 获取表单数据
-                var formData = $(this).serialize();
-
-                // 发送AJAX请求
-                $.ajax({
-                    type: "POST",
-                    url: postUrl,
-                    data: formData,
-                    dataType: "json",
-                    success: function (response) {
-                        let infoSelector = formSelector + " .information";
-                        $(infoSelector).text(response.message);
-
-                        // 如果是登录请求且状态为成功，则重定向到主页面
-                        if (response.status === "success" && postUrl === "/login") {
-                            window.location.href = "/main";
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert("请求失败: " + textStatus + "\n错误信息: " + errorThrown);
-                    }
-                });
-            });
-        }
-
-        handleFormSubmit("#registerForm", "/register");
-        handleFormSubmit("#loginForm", "/login");
-        handleFormSubmit("#findForm", "/find_password");
-
-    });
+    {#$(document).ready(function () {#}
+    {##}
+    {#    function handleFormSubmit(formSelector, postUrl) {#}
+    {#        $(formSelector).submit(function (event) {#}
+    {#            event.preventDefault();#}
+    {##}
+    {#            // 获取表单数据#}
+    {#            var formData = $(this).serialize();#}
+    {##}
+    {#            // 发送AJAX请求#}
+    {#            $.ajax({#}
+    {#                type: "POST",#}
+    {#                url: postUrl,#}
+    {#                data: formData,#}
+    {#                dataType: "json",#}
+    {#                success: function (response) {#}
+    {#                    let infoSelector = formSelector + " .information";#}
+    {#                    $(infoSelector).text(response.message);#}
+    {##}
+    {#                    // 如果是登录请求且状态为成功，则重定向到主页面#}
+    {#                    if (response.status === "success" && postUrl === "/login") {#}
+    {#                        window.location.href = "/main";#}
+    {#                    }#}
+    {#                },#}
+    {#                error: function (jqXHR, textStatus, errorThrown) {#}
+    {#                    alert("请求失败: " + textStatus + "\n错误信息: " + errorThrown);#}
+    {#                }#}
+    {#            });#}
+    {#        });#}
+    {#    }#}
+    {##}
+    {#    handleFormSubmit("#registerForm", "/register");#}
+    {#    handleFormSubmit("#loginForm", "/login");#}
+    {#    handleFormSubmit("#findForm", "/find_password");#}
+    {##}
 
 
 </script>

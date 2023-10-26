@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Document</title>
-    <link rel="stylesheet" href="../static/css/index1.css"/>
-    <script src="../static/js/nav.js"></script>
+    <title>{% block title %}base title{% endblock %}</title>
+    <link rel="stylesheet" href="../static/css/base.css"/>
+    {% block extra_css %}{% endblock %}
+    <script src="../static/js/base.js"></script>
+    {% block extra_js %}{% endblock %}
 
 </head>
 <body>
@@ -52,7 +54,11 @@
             </div>
         </div>
     </div>
-    <div class="header-right"></div>
+    <div class="header-right">
+        <div class="information">
+            <a href="/loginPage">login</a>
+        </div>
+    </div>
 </div>
 
 <div class="bodyMain">
@@ -78,12 +84,9 @@
         </div>
     </div>
     <div id="main">
-        <div id="calendarWeek">
-            <div class="week-title">
-                <div class="timeZone" id="timezoneDisplay"></div>
-                <div id="weekContainer"></div>
-            </div>
-        </div>
+        {% block mainBody %}
+
+        {% endblock %}
     </div>
 </div>
 
