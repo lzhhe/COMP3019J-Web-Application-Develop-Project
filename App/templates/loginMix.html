@@ -10,6 +10,22 @@
 </head>
 
 <body>
+{% if errors %}
+    <script>
+        var errorMsgs;
+        {% if errors is string %}
+            errorMsgs = "{{ errors }}";
+        {% else %}
+            errorMsgs = [
+                {% for field, error_messages in errors.items() %}
+                    "{{ error_messages|join(', ') }}",
+                {% endfor %}
+            ].join("\n");  // 使用换行符将每个字段的错误分隔开
+        {% endif %}
+        alert(errorMsgs);
+    </script>
+{% endif %}
+
 <!-- Main login container -->
 <div class="login_container" id="login_container">
 
@@ -21,7 +37,8 @@
         <form id="registerForm" method="post" action="{{ url_for('cal_u.register') }}">
             <h1>Create Account</h1>
             <div class="information"></div>
-            <span>by use your email for registering</span>
+            <span style="text-align: center">by use your email for registering<br>
+            password needs [a-z], [A-Z], [0-9] and [@$!%*?&#]</span>
 
             <input type="text" placeholder="Username" id="signUpUsernameField" name="signUpUsernameField"/>
             <input type="email" placeholder="Email" id="signUpEmailField" name="signUpEmailField"/>
@@ -32,11 +49,6 @@
                     id="signUpPasswordField"
                     name="signUpPasswordField"
             />
-
-            {#            {{ form.reg_form.reg_username(placeholder="Username",id="signUpUsernameField") }}#}
-            {#            {{ form.reg_form.reg_email(placeholder="Email",id="signUpEmailField") }}#}
-            {#            {{ form.reg_form.reg_password(placeholder="Password" ,id="signUpPasswordField") }}#}
-
             <button type="button" id="changeSignUpPassword" class="show">Show Password</button>
             <button type="submit" id="signUpSubmitField">Register</button>
         </form>
@@ -57,8 +69,8 @@
                     name="signInPasswordField"
             />
 
-{#            {{ form.login_form.login_username(placeholder="Username",id="signInUsernameField") }}#}
-{#            {{ form.login_form.login_password(placeholder="Password",id="signInPasswordField") }}#}
+            {#            {{ form.login_form.login_username(placeholder="Username",id="signInUsernameField") }}#}
+            {#            {{ form.login_form.login_password(placeholder="Password",id="signInPasswordField") }}#}
 
             <button type="button" id="changeSignInPassword" class="show">Show Password</button>
             <a href="#" class="findPassword" onclick="document.getElementById('getPassword').style.display='block'">
@@ -98,11 +110,14 @@
             <label for="find_uname"><b>Username</b></label>
             <input type="text" placeholder="Enter Username" id="find_uname" name="find_uname"/>
 
-{#            {{ form.find_form.find_username(placeholder="Enter Username" ,id="find_uname") }}#}
+            {#            {{ form.find_form.find_username(placeholder="Enter Username" ,id="find_uname") }}#}
             <label for="find_email"><b>Email</b></label>
             <input type="email" placeholder="Enter Email" id="find_email" name="find_email"/>
 
-{#            {{ form.find_form.find_email(placeholder="Enter Email",id="find_email") }}#}
+            <label for="find_password"><b>New password</b></label>
+            <input type="password" placeholder="Enter new password" id="find_password" name="find_password"/>
+
+            {#            {{ form.find_form.find_email(placeholder="Enter Email",id="find_email") }}#}
             <button type="submit" id="findPassword">Retrieve Password</button>
         </div>
     </form>

@@ -224,7 +224,7 @@ input:focus {
 
 
 /* 全宽输入框 */
-#find_email, #find_uname {
+#find_email, #find_uname, #find_password {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
