@@ -419,7 +419,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // 如果用户在下拉框外单击，则关闭下拉框
     window.onclick = function (event) {
-        if (!event.target.matches(changeViewButton)) {
+        if (!event.target.matches('#changeView')) {
             const dropdowns = document.getElementsByClassName("changeViewDrop");
             let i;
             for (i = 0; i < dropdowns.length; i++) {
