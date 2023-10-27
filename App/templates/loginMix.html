@@ -184,7 +184,7 @@
 
     // 当用户点击模态之外的任何地方时，关闭它
     window.onclick = function (event) {
-        if (event.target == modal) {
+        if (event.target === modal) {
             modal.style.display = "none";
         }
     };

@@ -49,7 +49,6 @@
 /* 这一部分是汉堡按钮的地方 */
 .hamburger {
     position: relative;
-    display: inline-block;
     cursor: pointer;
     margin: 3px;
     width: 45px;
@@ -63,7 +62,7 @@
 
 .hamburger:hover {
     background-color: #ab8e8e;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
 }
 
 .hamburger:hover .hamburger1_title {
@@ -141,6 +140,7 @@
     float: left;
     display: flex;
     align-items: center; /* 垂直居中 */
+    position: relative;
 }
 
 .today_container {
@@ -185,8 +185,9 @@
     width: auto;
     height: auto;
     float: right;
-    position: relative;
-    margin-left: 20%;
+    margin-left: 25%;
+    position: absolute;
+    right: 0;
 }
 
 #changeView {
@@ -198,39 +199,52 @@
     color: #734444;
     background-color: #fff;
     border: none;
-    border-radius: 15px;
+    border-radius: 10px;
     box-shadow: 0 2px #999;
     letter-spacing: 2.2pt;
 }
+
+#changeView:hover {
+    transform: scale(1.1);
+}
+
+
 .changeViewDrop {
     visibility: hidden;
     position: absolute;
     background-color: #f1f1f1;
     min-width: 160px;
     overflow: auto;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     margin-top: 6px;
     z-index: 10000;
 }
-.changeViewDrop a{
+
+.changeViewDrop a {
     color: #333333;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
 }
+.changeViewDrop a:hover {
+    cursor: pointer;
+    background-color: #e8dede;
+}
+
 .showView {
     visibility: visible;
 }
 
 .time_container {
-    margin-left: 30px;
+    margin-left: 20px;
     position: relative;
     text-align: center;
     padding: 5px 8px;
-    font-size: 35px;
+    font-size: 30px;
     border-radius: 100%;
     letter-spacing: 1.8pt;
+    width: auto;
 }
 
 .changeMonth {
@@ -307,7 +321,7 @@
 
 .information:hover {
     background-color: #c7c3c3; /* 调整为更为柔和的灰色 */
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
 
 }
 
@@ -554,5 +568,4 @@
     transition: margin-left 0.4s ease;
     flex-grow: 1;
 }
-
 
