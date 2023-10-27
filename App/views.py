@@ -33,7 +33,7 @@ def session_required(fn):
 def weekView():
     # uid = request.cookies.get('uid')
     user = request.user
-    username = user.name
+    username = user.username
     gender = user.gender
     email = user.email
     if gender == 1:
@@ -58,7 +58,7 @@ def login():
     elif request.method == 'POST':
         username = request.form.get('signInUsernameField')
         password = request.form.get('signInPasswordField')
-        user = User.query.filter_by(name=username, password=password).first()
+        user = User.query.filter_by(username=username, password=password).first()
         if user:
             response = redirect('/weekView')
             session['uid'] = user.UID
