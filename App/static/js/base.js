@@ -354,7 +354,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const btn_pre = document.getElementById("pre")
     const btn_next = document.getElementById("next")
     btn_pre.addEventListener("click", function () {
-        if (currentFilename !== '' && currentFilename !== 'main'){
+        if (currentFilename !== '' && currentFilename !== 'main') {
             console.log(currentFilename)
             return;
         }
@@ -363,7 +363,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(smCalendar.selectedDate);
     });
     btn_next.addEventListener("click", function () {
-        if (currentFilename !== '' && currentFilename !== 'main'){
+        if (currentFilename !== '' && currentFilename !== 'main') {
             return;
         }
         smCalendar.nextMonth();
@@ -404,5 +404,38 @@ document.addEventListener("DOMContentLoaded", function () {
     updateSmText();
     const today_text = computeTdText();
     document.getElementById("today_title").textContent = today_text;
+    // 获取changeView按钮
+    let changeViewButton = document.getElementById('changeView');
+
+    // 获取所有的changeText元素
+    let changeTexts = document.querySelectorAll('.changeText');
+
+    const changeViewRegion = document.getElementById("changeViewDrop");
+    /* 当用户点击按钮时，
+    在隐藏和显示下拉内容之间切换 */
+    changeViewButton.addEventListener("click", function () {
+        changeViewRegion.classList.toggle("showView");
+    });
+
+// 如果用户在下拉框外单击，则关闭下拉框
+    window.onclick = function (event) {
+        if (!event.target.matches(changeViewButton)) {
+            const dropdowns = document.getElementsByClassName("changeViewDrop");
+            let i;
+            for (i = 0; i < dropdowns.length; i++) {
+                let openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('showView')) {
+                    openDropdown.classList.remove('showView');
+                }
+            }
+        }
+    }
+    // 为每个changeText元素添加点击事件
+    changeTexts.forEach(function (textElement) {
+        textElement.addEventListener('click', function () {
+            changeViewButton.innerText = this.innerText;
+        });
+    });
+
 });
 

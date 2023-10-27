@@ -181,6 +181,48 @@
     z-index: 1000;
 }
 
+.changeView {
+    width: auto;
+    height: auto;
+    float: right;
+    position: relative;
+    margin-left: 20%;
+}
+
+#changeView {
+    padding: 5px 8px;
+    font-size: 20px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #734444;
+    background-color: #fff;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 2px #999;
+    letter-spacing: 2.2pt;
+}
+.changeViewDrop {
+    visibility: hidden;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    border-radius: 10px;
+    margin-top: 6px;
+    z-index: 10000;
+}
+.changeViewDrop a{
+    color: #333333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+.showView {
+    visibility: visible;
+}
+
 .time_container {
     margin-left: 30px;
     position: relative;
