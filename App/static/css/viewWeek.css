@@ -3,6 +3,7 @@
 	height: 80px;
 	width: 100%;
 	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+	margin-top: 55px;
 }
 .timeZone {
 	width: 9%;
@@ -31,6 +32,11 @@
 	justify-content: space-between;
 	align-items: center;
 }
+.week-body {
+	height: calc(100vh - 80px);  /* 减去.week-title的高度 */
+	overflow-y: auto;
+}
+
 .week-item:hover {
 	background-color: #f9f2f2f6;
 }
@@ -54,4 +60,7 @@
 .is-selected {
 	background-color: #3370ff !important;
 	color: #ffffff !important;
+}
+.is-weekend {
+	background-color: #f6e1e1;
 }

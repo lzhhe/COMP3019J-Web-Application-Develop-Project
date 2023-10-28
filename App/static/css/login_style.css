@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-/*让整个界面的设置是这样的*/
+    /*让整个界面的设置是这样的*/
 }
 
 body {
@@ -17,6 +17,7 @@ body {
     /*子元素垂直排放*/
     min-height: 100vh;
 }
+
 /*整个登录页面的最外层的div*/
 .login_container {
     background-color: #fff;
@@ -114,16 +115,19 @@ input:focus {
     height: 100%;
     transition: all 0.6s ease-in-out;
 }
+
 /*登录form的div，在第二层*/
 .sign-in {
     left: 0;
     width: 50%;
     z-index: 2;
 }
+
 /*如果有了动画效果，此div向右移动到另一边*/
 .login_container.active .sign-in {
     transform: translateX(100%);
 }
+
 /*注册form的div，在第一层，默认不可见*/
 .sign-up {
     left: 0;
@@ -131,6 +135,7 @@ input:focus {
     opacity: 0;
     z-index: 1;
 }
+
 /*有了动画效果并且可见，层次较高*/
 .login_container.active .sign-up {
     transform: translateX(100%);
@@ -138,6 +143,7 @@ input:focus {
     z-index: 5;
     animation: SignUpMove 0.6s;
 }
+
 /*这是注册表单的移动动画*/
 @keyframes SignUpMove {
     0%,
@@ -151,6 +157,7 @@ input:focus {
         z-index: 5;
     }
 }
+
 /*这是提示区域的css，占据另一半*/
 .change-container {
     position: absolute;
@@ -163,11 +170,13 @@ input:focus {
     border-radius: 100px 0 0 50px;
     z-index: 10;
 }
+
 /*这是提示区域的css，会向另一边移动*/
 .login_container.active .change-container {
     transform: translateX(-100%);
     border-radius: 0 100px 50px 0;
 }
+
 /*里面存的提示语句*/
 .change {
     height: 100%;
@@ -175,11 +184,52 @@ input:focus {
     color: #fff;
     position: relative;
     left: -100%;
-    height: 100%;
     width: 200%;
     transform: translateX(0);
     transition: all 0.6s ease-in-out;
 }
+
+#register-message {
+    width: auto;
+    height: auto;
+    font-size: 6px;
+    position: absolute;
+    bottom: 10%;
+    display: inline-block;
+    visibility: hidden;
+}
+
+.valid {
+    color: #56e056;
+    font-size: 10px;
+
+}
+
+/* 添加红色文本颜色和“x”； 要求错误时的图标 */
+.invalid {
+    color: #e15050;
+    font-size: 10px;
+}
+
+#register-message span {
+    position: relative;
+    padding-left: 30px; /* 提供左侧的空间来显示对号或错号 */
+}
+
+/* 当span有.valid类时显示对号 */
+#register-message .valid:before {
+    content: "\2714";  /* 对号 */
+    position: absolute;
+    left: 30px;  /* 您可以根据需要调整此值以固定到左侧的距离 */
+}
+
+/* 当span有.invalid类时显示错号 */
+#register-message .invalid:before {
+    content: "\2716";  /* 错号 */
+    position: absolute;
+    left: 30px;  /* 您可以根据需要调整此值以固定到左侧的距离 */
+}
+
 /*移动一半，如果缺失了会不显示*/
 .login_container.active .change {
     transform: translateX(50%);
@@ -216,6 +266,7 @@ input:focus {
 .login_container.active .change-right {
     transform: translateX(200%);
 }
+
 /*展示密码的按钮的css*/
 .show {
     width: 220px;

@@ -149,7 +149,8 @@ function updateWeekView() {
             weekItem.classList.add('is-today');
         } else if (isPassed(week.date)) {
             weekItem.classList.add('is-passed');
-        } else if (week.isWeekend) {
+        }
+        if (week.isWeekend) {
             weekItem.classList.add('is-weekend');
         }
         if (week.date.toDateString() === viewWeek.selectedDate.toDateString()) weekItem.classList.add('is-selected');

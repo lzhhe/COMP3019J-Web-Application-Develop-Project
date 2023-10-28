@@ -46,6 +46,36 @@ def weekView():
     else:
         gender_pic = '../static/pic/forgetHead.png'
     return render_template('viewWeek.html', username=username, gender_pic=gender_pic, email=email)
+@blue.route('/monthView')
+@session_required
+def monthView():
+    # uid = request.cookies.get('uid')
+    user = request.user
+    username = user.username
+    gender = user.gender
+    email = user.email
+    if gender == 1:
+        gender_pic = '../static/pic/male.jpg'
+    elif gender == 2:
+        gender_pic = '../static/pic/female.jpg'
+    else:
+        gender_pic = '../static/pic/forgetHead.png'
+    return render_template('viewMonth.html', username=username, gender_pic=gender_pic, email=email)
+@blue.route('/yearView')
+@session_required
+def yearView():
+    # uid = request.cookies.get('uid')
+    user = request.user
+    username = user.username
+    gender = user.gender
+    email = user.email
+    if gender == 1:
+        gender_pic = '../static/pic/male.jpg'
+    elif gender == 2:
+        gender_pic = '../static/pic/female.jpg'
+    else:
+        gender_pic = '../static/pic/forgetHead.png'
+    return render_template('viewYear.html', username=username, gender_pic=gender_pic, email=email)
 
 
 @blue.route('/loginPage', methods=['GET', 'POST'])  # 这是默认访问路径
@@ -72,6 +102,8 @@ def login():
                 return render_template('loginMix.html', errors="the password is wrong")
         else:
             return render_template('loginMix.html', errors=form.errors)
+
+
 @blue.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':

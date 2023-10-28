@@ -87,6 +87,13 @@
                 <h1>Welcome Back!</h1>
                 <p>Enter your personal details to use all site features</p>
                 <button class="hidden" id="login">Switch to Login</button>
+                <div id="register-message">
+                    <span>Password must contain the following:</span> <br>
+                    <div id="letter" class="invalid">A <b>lowercase</b> letter</div> <br>
+                    <div id="capital" class="invalid">A <b>uppercase</b> letter</div> <br>
+                    <div id="number" class="invalid">A <b>number</b></div> <br>
+                    <div id="special" class="invalid">A <b>special</b> letter</div> <br>
+                </div>
             </div>
 
             <div class="change-panel change-right">
@@ -134,6 +141,10 @@
     const signInPasswordField = document.getElementById("signInPasswordField");
     const findUsernameField = document.getElementById("find_uname");
     const findEmailField = document.getElementById("find_email");
+    const letter = document.getElementById("letter");
+    const capital = document.getElementById("capital");
+    const number = document.getElementById("number");
+    const special = document.getElementById("special");
 
     registerBtn.addEventListener("click", () => {
         clearFormFields();
@@ -153,6 +164,14 @@
         signInPasswordField.value = "";
         findUsernameField.value = "";
         findEmailField.value = "";
+        letter.classList.remove("valid");
+        letter.classList.add("invalid");
+        capital.classList.remove("valid");
+        capital.classList.add("invalid");
+        number.classList.remove("valid");
+        number.classList.add("invalid");
+        special.classList.remove("valid");
+        special.classList.add("invalid");
     }
 
     const changeSignUpPassword = document.getElementById(
@@ -188,6 +207,57 @@
             modal.style.display = "none";
         }
     };
+    signUpPasswordField.onfocus = function () {
+        document.getElementById("register-message").style.visibility = "visible";
+    }
+
+    // 当用户在密码字段外点击时，隐藏消息框
+    signUpPasswordField.onblur = function () {
+        document.getElementById("register-message").style.visibility = "hidden";
+    }
+
+
+    signUpPasswordField.onkeyup = function () {
+        // 验证小写字母
+        let lowerCaseLetters = /[a-z]/g;
+        if (signUpPasswordField.value.match(lowerCaseLetters)) {
+            letter.classList.remove("invalid");
+            letter.classList.add("valid");
+        } else {
+            letter.classList.remove("valid");
+            letter.classList.add("invalid");
+        }
+
+        // 验证大写字母
+        const upperCaseLetters = /[A-Z]/g;
+        if (signUpPasswordField.value.match(upperCaseLetters)) {
+            capital.classList.remove("invalid");
+            capital.classList.add("valid");
+        } else {
+            capital.classList.remove("valid");
+            capital.classList.add("invalid");
+        }
+
+        // 验证数字
+        const numbers = /[0-9]/g;
+        if (signUpPasswordField.value.match(numbers)) {
+            number.classList.remove("invalid");
+            number.classList.add("valid");
+        } else {
+            number.classList.remove("valid");
+            number.classList.add("invalid");
+        }
+
+        const specialLetters = /[@$!%*?&#]/g;
+        if (signUpPasswordField.value.match(specialLetters)) {
+            special.classList.remove("invalid");
+            special.classList.add("valid");
+        } else {
+            special.classList.remove("valid");
+            special.classList.add("invalid");
+        }
+
+    }
 
 
     {#$(document).ready(function () {#}

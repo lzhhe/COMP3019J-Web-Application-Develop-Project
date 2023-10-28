@@ -430,11 +430,24 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     }
-    // 为每个changeText元素添加点击事件
+    /// 为每个changeText元素添加点击事件
     changeTexts.forEach(function (textElement) {
         textElement.addEventListener('click', function () {
             changeViewButton.innerText = this.innerText;
+            // 当用户选择一个选项时，保存选择到sessionStorage
+            sessionStorage.setItem('selectedView', this.innerText);
         });
+    });
+
+// 当页面加载时，检查sessionStorage并设置按钮文本
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const selectedView = sessionStorage.getItem('selectedView');
+        if (selectedView) {
+            changeViewButton.innerText = selectedView;
+        }
+    });
+    document.getElementById("logout").addEventListener('click', function () {
+        sessionStorage.removeItem('selectedView');
     });
 
 });

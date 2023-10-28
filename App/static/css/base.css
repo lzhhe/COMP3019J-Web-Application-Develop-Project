@@ -21,7 +21,10 @@
 *::-webkit-scrollbar-track {
     background-color: #f1f1f1; /* 滚动条背景颜色 */
 }
-
+body {
+    /*全局禁止滚动条，只有需要滚动的时候再设置*/
+    overflow: hidden;
+}
 .bodyMain {
     display: flex;
     flex-direction: row;
@@ -104,6 +107,8 @@
     height: 55px;
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
+    position: fixed; /* 将导航栏设置为固定位置 */
+    top: 0; /* 将导航栏放在页面顶部 */
 }
 
 /* 这些是header左边 */
@@ -227,6 +232,7 @@
     text-decoration: none;
     display: block;
 }
+
 .changeViewDrop a:hover {
     cursor: pointer;
     background-color: #e8dede;
@@ -393,7 +399,7 @@
     width: 0; /* 0 宽度 - 使用 JavaScript 更改 */
     position: fixed; /* 原地不动 */
     z-index: 1; /* 保持领先 */
-    top: auto;
+    top: 55px;
     left: 0;
     background-color: #f2f3f4e7; /* 黑色*/
     overflow-x: hidden; /* 禁用水平滚动 */
@@ -568,4 +574,5 @@
     transition: margin-left 0.4s ease;
     flex-grow: 1;
 }
+
 
