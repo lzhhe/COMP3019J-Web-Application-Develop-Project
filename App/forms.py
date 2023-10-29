@@ -1,4 +1,5 @@
 import wtforms
+from wtforms import validators
 from wtforms.validators import Email, Length, ValidationError
 from .models import *
 
@@ -56,3 +57,16 @@ class FindForm(wtforms.Form):
         user = User.query.filter_by(username=username).first()
         if not user:
             raise wtforms.ValidationError(message="the username has not been existed")
+
+
+class ChangeInfo(wtforms.Form):
+    new_password = wtforms.StringField(validators=[validators.InputRequired(message="Please type.")])
+    choose_gender = wtforms.StringField(validators=[validators.InputRequired(message="Please select a gender.")])
+    choose_grade = wtforms.StringField(validators=[validators.InputRequired(message="Please select a grade.")])
+
+
+class AddInfo(wtforms.Form):
+
+    new_password = wtforms.StringField(validators=[validators.InputRequired(message="Please type.")])
+    choose_gender = wtforms.StringField(validators=[validators.InputRequired(message="Please select a gender.")])
+    choose_grade = wtforms.StringField(validators=[validators.InputRequired(message="Please select a grade.")])

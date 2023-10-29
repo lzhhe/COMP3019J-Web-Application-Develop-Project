@@ -1,29 +1,164 @@
 .changeView {
     display: none;
 }
+
 .changeMonth {
     display: none;
 }
+
+.functions {
+    margin-top: 55px;
+    width: 100%;
+    height: 50px;
+}
+/* 为整个表格设置样式 */
+
 .users {
-	width: 100%;
-	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-	margin-top: 55px;
+    width: 100%;
+    border-collapse: collapse; /* 删除表格单元格之间的间距 */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
+/* 为表头设置样式 */
+.users thead {
+    background-color: #2f4050;
+    color: #ffffff;
+}
+
+.users thead th {
+    padding: 10px 20px;
+}
+
+/* 在表格行之间交替背景颜色 */
+.users tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* 为表格单元格设置样式 */
+.users td, .users th {
+    padding: 10px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+/* 为可排序的表头添加悬停效果 */
+.users th.sortable:hover {
+    background-color: #337ab7;
+    cursor: pointer;
+}
+
+/* 为按钮设置简单的样式 */
+.users button {
+    background-color: #337ab7;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.users button:hover {
+    background-color: #286090;
+}
+
+.teacher {
+    color: #020215; /* 或您想要的任何颜色 */
+    font-weight: bold; /* 加粗文本 */
+    font-size: large;
+    /* 其他你想添加的样式... */
+}
+
+.student {
+    color: rgba(5, 0, 0, 0.73); /* 或您想要的任何颜色 */
+    font-style: italic; /* 斜体文本 */
+    /* 其他你想添加的样式... */
+}
+
+.male {
+    font-weight: bold; /* 加粗文本 */
+    color: #1e1515;
+}
+
+.female {
+    font-weight: bold; /* 加粗文本 */
+    color: #734444;
+}
+
+.none {
+    color: black;
+}
+
+input {
+    display: none;
+}
+
+.option {
+    background-color: #00A8FF;
+    color: #FFFFFF;
+    border: 1px solid #00A8FF;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加一点阴影效果 */
+    transition: background-color 0.3s ease; /* 平滑过渡效果 */
+}
 
 /* 全宽输入框 */
-#find_email, #find_uname, #find_password {
+#new-password {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
     box-sizing: border-box;
+    transition: border-color 0.3s ease; /* 平滑过渡效果 */
+}
+.search {
+    width: 30%;
+    padding: 12px 20px;
+    margin: 8px 5px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease; /* 平滑过渡效果 */
 }
 
+.choice {
+    margin: 8px 0;
+}
+
+#new-password:focus, p:focus, .search:focus {
+    border-color: #00A8FF; /* 输入框聚焦时的边框颜色 */
+    outline: none; /* 移除默认的外轮廓 */
+}
+
+p {
+    border: none;
+    font-weight: bold; /* 加粗 */
+    letter-spacing: 0.5px; /* 字母间距 */
+    font-size: 16px; /* 字体大小 */
+}
+
+.block {
+    width: 40%;
+    display: inline-block; /* 使其水平显示 */
+    border: 1px solid #000000;
+    border-radius: 10px;
+    font-size: 20px;
+    line-height: 24px;
+    margin: 0 10px; /* 调整间距 */
+    padding: 5px 10px; /* 增加垂直填充 */
+    cursor: pointer; /* 显示为手型光标 */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* 添加过渡效果 */
+    text-align: center; /* 水平居中 */
+}
+
+.block:hover {
+    transform: scale(1.05); /* 悬浮时轻微放大 */
+}
+
+
 /* 为查找按钮设置样式 */
-#findPassword {
-    background-color: #39080846;
+#change-info {
+    background-color: rgba(35, 5, 5, 0.27);
     color: white;
     padding: 14px 20px;
     border: none;
@@ -32,12 +167,13 @@
     margin: 0 auto;
 }
 
-#findPassword:hover {
+#change-info:hover {
     opacity: 0.8;
 }
 
 .find-container {
     padding: 16px;
+    position: relative; /* 添加这一行 */
 }
 
 /* 模态（背景）*/
@@ -67,7 +203,7 @@
 /* 关闭按钮 (x) */
 .close {
     position: absolute;
-    right: 25px;
+    right: 10px;
     top: 0;
     color: #000;
     font-size: 35px;
