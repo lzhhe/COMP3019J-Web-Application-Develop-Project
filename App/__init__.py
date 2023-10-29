@@ -3,6 +3,8 @@ import datetime
 from flask import Flask
 from .views import blue
 from .extents import init_exts
+from .views_admin import admin
+from .views_teacher import teacher
 
 HOSTNAME = "127.0.0.1"
 PORT = 3306
@@ -16,6 +18,8 @@ def create_app():
 
     # 注册蓝图
     app.register_blueprint(blueprint=blue)
+    app.register_blueprint(blueprint=admin)
+    app.register_blueprint(blueprint=teacher)
 
     app.config['SECRET_KEY'] = 'COMP3019J'
     # app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=7)

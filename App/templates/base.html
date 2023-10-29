@@ -65,13 +65,22 @@
     </div>
     <div class="header-right">
         <div class="information">
-            {% if username %}
+            {% if user %}
                 <div class="user-infor">
-                    <div class="head-icon"><img id="head-icon" alt="head" src="{{ gender_pic }}"/></div>
-                    <div id="userSelf">{{ username }}</div>
+                    <div class="head-icon">
+                        {% if user.gender == 1 %}
+                            <img id="head-icon" alt="head" src="{{ url_for('static', filename='pic/male.jpg') }}"/>
+                        {% elif user.gender == 2 %}
+                            <img id="head-icon" alt="head" src="{{ url_for('static', filename='pic/female.jpg') }}"/>
+                        {% else %}
+                            <img id="head-icon" alt="head"
+                                 src="{{ url_for('static', filename='pic/forgetHead.png') }}"/>
+                        {% endif %}
+                    </div>
+                    <div id="userSelf">{{ user.username }}</div>
                     <a href="/logout" class="logout" id="logout">logout</a>
-                    <span class="user_title title" id="user_title">welcome: {{ username }} <br>
-                    your email: {{ email }}</span>
+                    <span class="user_title title" id="user_title">welcome: {{ user.username }} <br>
+                    your email: {{ user.email }}</span>
                 </div>
 
             {% else %}

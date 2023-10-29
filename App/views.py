@@ -1,7 +1,7 @@
 from datetime import datetime
 from functools import wraps
 
-from flask import Blueprint, render_template, request, redirect, session, url_for
+from flask import Blueprint, render_template, request, redirect, session, url_for, g
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 
@@ -20,10 +20,7 @@ def main():
 def session_required(fn):
     @wraps(fn)
     def inner(*args, **kwargs):
-        uid = session.get('uid')
-        if uid:
-            user = User.query.get(uid)
-            request.user = user
+        if g.user:
             return fn(*args, **kwargs)
         else:
             return redirect('loginPage')
@@ -35,47 +32,42 @@ def session_required(fn):
 @session_required
 def weekView():
     # uid = request.cookies.get('uid')
-    user = request.user
-    username = user.username
-    gender = user.gender
-    email = user.email
-    if gender == 1:
-        gender_pic = '../static/pic/male.jpg'
-    elif gender == 2:
-        gender_pic = '../static/pic/female.jpg'
+    user = g.user
+    if user.status == 1:
+        return render_template('viewWeek.html')
+    elif user.status == 2:
+        response = redirect(url_for('cal_t.teacherView'))
     else:
-        gender_pic = '../static/pic/forgetHead.png'
-    return render_template('viewWeek.html', username=username, gender_pic=gender_pic, email=email)
+        response = redirect(url_for('cal_a.adminView'))
+    return response
+
+
 @blue.route('/monthView')
 @session_required
 def monthView():
     # uid = request.cookies.get('uid')
-    user = request.user
-    username = user.username
-    gender = user.gender
-    email = user.email
-    if gender == 1:
-        gender_pic = '../static/pic/male.jpg'
-    elif gender == 2:
-        gender_pic = '../static/pic/female.jpg'
+    user = g.user
+    if user.status == 1:
+        return render_template('viewMonth.html')
+    elif user.status == 2:
+        response = redirect(url_for('cal_t.teacherView'))
     else:
-        gender_pic = '../static/pic/forgetHead.png'
-    return render_template('viewMonth.html', username=username, gender_pic=gender_pic, email=email)
+        response = redirect(url_for('cal_a.adminView'))
+    return response
+
+
 @blue.route('/yearView')
 @session_required
 def yearView():
     # uid = request.cookies.get('uid')
-    user = request.user
-    username = user.username
-    gender = user.gender
-    email = user.email
-    if gender == 1:
-        gender_pic = '../static/pic/male.jpg'
-    elif gender == 2:
-        gender_pic = '../static/pic/female.jpg'
+    user = g.user
+    if user.status == 1:
+        return render_template('viewYear.html')
+    elif user.status == 2:
+        response = redirect(url_for('cal_t.teacherView'))
     else:
-        gender_pic = '../static/pic/forgetHead.png'
-    return render_template('viewYear.html', username=username, gender_pic=gender_pic, email=email)
+        response = redirect(url_for('cal_a.adminView'))
+    return response
 
 
 @blue.route('/loginPage', methods=['GET', 'POST'])  # 这是默认访问路径
@@ -95,7 +87,12 @@ def login():
             password = form.signInPasswordField.data  # 修改这里
             user = User.query.filter_by(username=username).first()
             if check_password_hash(user.password, password):
-                response = redirect('/weekView')
+                if user.status == 1:
+                    response = redirect('/weekView')
+                elif user.status == 2:
+                    response = redirect(url_for('cal_t.teacherView'))
+                else:
+                    response = redirect(url_for('cal_a.adminView'))
                 session['uid'] = user.UID
                 return response
             else:

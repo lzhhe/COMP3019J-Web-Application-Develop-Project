@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}
+    adminView
+{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="../static/css/adminView.css">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="../static/js/adminJs.js"></script>
+{% endblock %}
+
+
+{% block mainBody %}
+    <table class="users" id="users">
+        <thead>
+        <tr>
+            <th>status</th>
+            <th>username</th>
+            <th>email</th>
+            <th>gender</th>
+            <th>grade</th>
+            <th>operation</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            {% set s = "student" if user.status == 1 else "teacher" %}
+            {% set g = "none" if user.gender == 0 else ("male" if user.gender == 1 else "female") %}
+            <tr>
+                <td>{{ s }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ g }}</td>
+                <td>{{ user.grade }}</td>
+                <td>
+                    <button onclick="document.getElementById('resetData').style.display='block'">alt</button>
+                    <button>del</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    <div id="resetData" class="modal">
+        <form class="modal-content animate" method="post" id="findForm" action="{{ url_for('cal_u.find_password') }}">
+            <span onclick="document.getElementById('resetData').style.display='none'" class="close"
+                      title="Close Modal">&times;</span>
+            <div class="find-container">
+                <label for="find_uname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" id="find_uname" name="find_uname"/>
+
+                {#            {{ form.find_form.find_username(placeholder="Enter Username" ,id="find_uname") }}#}
+                <label for="find_email"><b>Email</b></label>
+                <input type="email" placeholder="Enter Email" id="find_email" name="find_email"/>
+
+                <label for="find_password"><b>New password</b></label>
+                <input type="password" placeholder="Enter new password" id="find_password" name="find_password"/>
+
+                {#            {{ form.find_form.find_email(placeholder="Enter Email",id="find_email") }}#}
+                <button type="submit" id="findPassword">Retrieve Password</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+

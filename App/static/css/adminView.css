@@ -1,0 +1,105 @@
+.changeView {
+    display: none;
+}
+.changeMonth {
+    display: none;
+}
+.users {
+	width: 100%;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+	margin-top: 55px;
+}
+
+
+/* 全宽输入框 */
+#find_email, #find_uname, #find_password {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* 为查找按钮设置样式 */
+#findPassword {
+    background-color: #39080846;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin: 0 auto;
+}
+
+#findPassword:hover {
+    opacity: 0.8;
+}
+
+.find-container {
+    padding: 16px;
+}
+
+/* 模态（背景）*/
+.modal {
+    display: none; /* 默认隐藏 */
+    position: fixed; /* 留在原地 */
+    left: 0;
+    top: 0;
+    width: 100%; /* 全屏宽度 */
+    height: 100%; /* 全高 */
+    /*overflow: none; !* 如果需要启用滚动 *!*/
+    background-color: rgb(0, 0, 0); /* 后备颜色 */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    padding-top: 60px;
+    z-index: 10;
+}
+
+/* 模态内容/框 */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 距顶部 5%，距底部 15% 并居中 */
+    border: 1px solid #888;
+    width: 20%; /* 让大小更加合适 */
+    border-radius: 20px; /* 添加圆角 */
+}
+
+/* 关闭按钮 (x) */
+.close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    cursor: pointer;
+}
+
+/* 添加缩放动画 */
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+    from {
+        -webkit-transform: scale(0)
+    }
+    to {
+        -webkit-transform: scale(1)
+    }
+}
+
+@keyframes animatezoom {
+    from {
+        transform: scale(0)
+    }
+    to {
+        transform: scale(1)
+    }
+}
