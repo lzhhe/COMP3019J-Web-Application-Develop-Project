@@ -15,7 +15,7 @@ teacher = Blueprint('cal_t', __name__, url_prefix="/teacher")  # cal_u is name o
 def teacherView():
     # uid = request.cookies.get('uid')
     user = g.user
-    return render_template('viewYear.html')
+    return render_template('teacherView.html')
 
 
 @teacher.route('/logout')
