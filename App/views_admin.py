@@ -60,10 +60,13 @@ def adminView():
     # 动态排序
     order_func = desc if order == 'desc' else asc
     query = query.order_by(order_func(getattr(User, sort)))
+    page = request.args.get('page', default=1, type=int)  # 默认为第一页
+    per_page = request.args.get('per_page', default=8, type=int)  # 默认每页8条记录
+    # 使用paginate()方法
+    pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+    users = pagination.items
 
-    users = query.all()
-
-    return render_template('adminView.html', users=users, current_sort=sort, current_order=order)
+    return render_template('adminView.html', users=users, current_sort=sort, current_order=order, pagination=pagination)
 
 
 @admin.route('/searchThing')
@@ -101,9 +104,16 @@ def searchThing():
     # 最终组合条件
     final_conditions = or_(*conditions) & (User.status != 0)
 
-    users = User.query.filter(final_conditions).all()
+    # 获取分页参数
+    page = request.args.get('page', default=1, type=int)  # 默认为第一页
+    per_page = request.args.get('per_page', default=8, type=int)  # 默认每页8条记录
 
-    return render_template('adminView.html', users=users, current_sort='status', current_order='asc')
+    # 使用paginate()方法
+    pagination = User.query.filter(final_conditions).paginate(page=page, per_page=per_page, error_out=False)
+    users = pagination.items
+
+    return render_template('adminView.html', users=users, current_sort='status', current_order='asc',
+                           pagination=pagination)
 
 
 @admin.route('/logout')

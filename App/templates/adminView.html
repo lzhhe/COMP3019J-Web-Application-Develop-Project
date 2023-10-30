@@ -14,11 +14,50 @@
 {% block mainBody %}
     <div class="functions">
         <form class="searchThing" method="get" action="{{ url_for('cal_a.searchThing') }}">
-            <label for="search"></label><input class="search" id="search" type="search" placeholder="search" name="search">
+            <label for="search"></label><input class="search" id="search" type="search" placeholder="search"
+                                               name="search">
             <button class="searchButton" id="searchButton" type="submit">Search</button>
         </form>
         <button class="back" id="back">back index</button>
+
+        <div class="pagination">
+            {% if pagination.pages > 1 %}
+                <a href="{{ url_for('cal_a.adminView', page=1, sort=current_sort, order=current_order, search=request.args.get('search')) }}">&laquo;
+                    First</a>
+                <a href="{{ url_for('cal_a.adminView', page=pagination.prev_num, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                   {% if not pagination.has_prev %}class="disabled"{% endif %}>&lsaquo; Prev</a>
+
+                <!-- Always display the first page -->
+                <a href="{{ url_for('cal_a.adminView', page=1, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                   {% if 1 == pagination.page %}class="active"{% endif %}>1</a>
+                {% if pagination.page > 4 %}
+                    <span class="ellipsis">...</span>
+                {% endif %}
+
+                {% for page_num in range(pagination.page - 2, pagination.page + 3) %}
+                    {% if 1 < page_num < pagination.pages %}
+                        <a href="{{ url_for('cal_a.adminView', page=page_num, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                           {% if page_num == pagination.page %}class="active"{% endif %}>{{ page_num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if pagination.page < pagination.pages - 3 %}
+                    <span class="ellipsis">...</span>
+                {% endif %}
+
+                <!-- Always display the last page -->
+                <a href="{{ url_for('cal_a.adminView', page=pagination.pages, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                   {% if pagination.pages == pagination.page %}class="active"{% endif %}>{{ pagination.pages }}</a>
+
+                <a href="{{ url_for('cal_a.adminView', page=pagination.next_num, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                   {% if not pagination.has_next %}class="disabled"{% endif %}>Next &rsaquo;</a>
+                <a href="{{ url_for('cal_a.adminView', page=pagination.pages, sort=current_sort, order=current_order, search=request.args.get('search')) }}">Last
+                    &raquo;</a>
+            {% endif %}
+        </div>
+
     </div>
+
     <table class="users" id="users">
         <thead>
         <tr>
@@ -57,7 +96,8 @@
                 <td>{{ user.grade }}</td>
                 <td>
                     <button onclick="document.getElementById('resetData').style.display='block'"
-                    data-id="{{ user.UID }}">alt</button>
+                            data-id="{{ user.UID }}">alt
+                    </button>
                     <button data-id="{{ user.UID }}">del</button>
                 </td>
             </tr>
