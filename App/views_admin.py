@@ -136,6 +136,7 @@ def addInfor():
             db.session.add(user)
             db.session.commit()
 
+
             return redirect(url_for('cal_a.adminView'))
         else:
             return redirect(url_for('cal_a.adminView', error="the username has existed"))

@@ -59,6 +59,7 @@ class FindForm(wtforms.Form):
             raise wtforms.ValidationError(message="the username has not been existed")
 
 
+
 class ChangeInfo(wtforms.Form):
     new_password = wtforms.StringField(validators=[validators.InputRequired(message="Please type.")])
     choose_gender = wtforms.StringField(validators=[validators.InputRequired(message="Please select a gender.")])
