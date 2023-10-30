@@ -6,7 +6,7 @@ from sqlalchemy import or_, desc, asc
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 
-from .forms import RegisterForm, LoginForm, FindForm
+from .forms import RegisterForm, LoginForm, FindForm, AddInfo
 from .models import *
 from .views import session_required
 
@@ -20,6 +20,7 @@ def adminView():
     sort = request.args.get('sort', default='status', type=str)
     order = request.args.get('order', default='asc', type=str)
     search = request.args.get("search", default="", type=str)  # 获取可能存在的搜索参数
+    error = request.args.get('error', default="", type=str)
 
     # 确保sort是一个有效的字段
     valid_sort_fields = ['status', 'gender', 'grade']
@@ -66,7 +67,8 @@ def adminView():
     pagination = query.paginate(page=page, per_page=per_page, error_out=False)
     users = pagination.items
 
-    return render_template('adminView.html', users=users, current_sort=sort, current_order=order, pagination=pagination)
+    return render_template('adminView.html', users=users, current_sort=sort, current_order=order, pagination=pagination
+                           , errors=error)
 
 
 @admin.route('/searchThing')
@@ -114,6 +116,29 @@ def searchThing():
 
     return render_template('adminView.html', users=users, current_sort='status', current_order='asc',
                            pagination=pagination)
+
+
+@admin.route('/addInfor', methods=['GET', 'POST'])
+def addInfor():
+    if request.method == 'GET':
+        return redirect('/adminView')
+    else:
+        form = AddInfo(request.form)
+        if form.validate():
+            username = form.add_new_username.data
+            password = form.add_new_password.data
+            email = form.add_new_email.data
+            gender = form.add_choose_gender.data
+            status = form.add_choose_status.data
+            grade = form.add_choose_grade.data
+            user = User(username=username, email=email, password=generate_password_hash(password), gender=gender,
+                        status=status, grade=grade)
+            db.session.add(user)
+            db.session.commit()
+
+            return redirect(url_for('cal_a.adminView'))
+        else:
+            return redirect(url_for('cal_a.adminView', error="the username has existed"))
 
 
 @admin.route('/logout')

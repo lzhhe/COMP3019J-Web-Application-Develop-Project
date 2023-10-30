@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.style.display = "none";
         }
         if (event.target === modal2) {
-            modal.style.display = "none";
+            modal2.style.display = "none";
         }
     };
 });
@@ -25,7 +25,7 @@ $(document).ready(function () {
     $('.radio .block').click(function () {
         $(this).addClass('option').siblings().removeClass('option')
     })
-    $('.back').click(function () {
+    $('#back').click(function () {
         window.location.href = `/admin/adminView`;
     });
 });

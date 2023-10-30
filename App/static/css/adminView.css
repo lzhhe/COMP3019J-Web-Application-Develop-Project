@@ -14,6 +14,7 @@
     justify-content: space-around;
     align-items: center;
 }
+
 .searchThing {
     display: flex;
     align-items: center;
@@ -33,6 +34,7 @@
     border-color: #007bff;
     outline: none;
 }
+
 .searchButton {
     padding: 6px 15px;
     background-color: #007bff;
@@ -47,6 +49,7 @@
 .searchButton:hover {
     background-color: #0056b3;
 }
+
 .back {
     padding: 6px 15px;
     background-color: #6c757d;
@@ -190,7 +193,7 @@ input {
 }
 
 /* 全宽输入框 */
-#new-password {
+#new-password, #add-new-email, #add-new-password, #add-new-username {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -214,7 +217,7 @@ input {
     margin: 8px 0;
 }
 
-#new-password:focus, p:focus, .search:focus {
+#new-password:focus, p:focus, .search:focus, #add-new-email:focus, #add-new-password:focus, #add-new-username:focus {
     border-color: #00A8FF; /* 输入框聚焦时的边框颜色 */
     outline: none; /* 移除默认的外轮廓 */
 }
@@ -246,7 +249,7 @@ p {
 
 
 /* 为查找按钮设置样式 */
-#change-info {
+.change-info {
     background-color: rgba(35, 5, 5, 0.27);
     color: white;
     padding: 14px 20px;
@@ -256,7 +259,7 @@ p {
     margin: 0 auto;
 }
 
-#change-info:hover {
+.change-info:hover {
     opacity: 0.8;
 }
 

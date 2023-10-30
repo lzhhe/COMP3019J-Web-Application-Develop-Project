@@ -12,6 +12,21 @@
 
 
 {% block mainBody %}
+    {% if errors %}
+        <script>
+            let errorMsgs;
+            {% if errors is string %}
+                errorMsgs = "{{ errors }}";
+            {% else %}
+                errorMsgs = [
+                    {% for field, error_messages in errors.items() %}
+                        "{{ error_messages|join(', ') }}",
+                    {% endfor %}
+                ].join("\n");  // 使用换行符将每个字段的错误分隔开
+            {% endif %}
+            alert(errorMsgs);
+        </script>
+    {% endif %}
     <div class="functions">
         <form class="searchThing" method="get" action="{{ url_for('cal_a.searchThing') }}">
             <label for="search"></label><input class="search" id="search" type="search" placeholder="search"
@@ -19,6 +34,9 @@
             <button class="searchButton" id="searchButton" type="submit">Search</button>
         </form>
         <button class="back" id="back">back index</button>
+        <button class="back" id="add"
+                onclick="document.getElementById('addData').style.display='block'">add
+        </button>
 
         <div class="pagination">
             {% if pagination.pages > 1 %}
@@ -107,7 +125,7 @@
 
 
     <div id="resetData" class="modal">
-        <form class="modal-content animate" method="post" id="findForm" action="{{ url_for('cal_u.find_password') }}">
+        <form class="modal-content animate" method="post" id="resetForm" action="{{ url_for('cal_u.find_password') }}">
             <div class="find-container">
                 <span onclick="document.getElementById('resetData').style.display='none'" class="close"
                       title="Close Modal">&times;</span>
@@ -135,41 +153,52 @@
                     <input type="radio" name="choose_grade" id="choose-four" value="4">
                 </div>
 
-                <button type="submit" id="change-info">Change Information</button>
+                <button type="submit" class="change-info">Change Information</button>
             </div>
         </form>
     </div>
 
     <div id="addData" class="modal">
-        <form class="modal-content animate" method="post" id="findForm" action="{{ url_for('cal_u.find_password') }}">
+        <form class="modal-content animate" method="post" id="addForm" action="{{ url_for('cal_a.addInfor') }}">
             <div class="find-container">
-                <span onclick="document.getElementById('resetData').style.display='none'" class="close"
+                <span onclick="document.getElementById('addData').style.display='none'" class="close"
                       title="Close Modal">&times;</span>
-                <label for="new-password"><b>New password</b></label>
-                <input type="text" placeholder="Enter New password" id="new-password" name="new-password"/>
+                <label for="add-new-username"><b>New username</b></label>
+                <input type="text" placeholder="Enter New username" id="add-new-username" name="add_new_username"/>
+                <label for="add-new-password"><b>New password</b></label>
+                <input type="text" placeholder="Enter New password" id="add-new-password" name="add_new_password"/>
+                <label for="add-new-email"><b>New email</b></label>
+                <input type="email" placeholder="Enter New email" id="add-new-email" name="add_new_email"/>
 
                 <label><b>Choose gender</b></label>
                 <div class="choice radio">
-                    <label for="choose-male" class="block">male</label>
-                    <input type="radio" name="choose-gender" id="choose-male" value="1">
-                    <label for="choose-female" class="block">female</label>
-                    <input type="radio" name="choose-gender" id="choose-female" value="2">
+                    <label for="add-choose-male" class="block">male</label>
+                    <input type="radio" name="add_choose_gender" id="add-choose-male" value="1">
+                    <label for="add-choose-female" class="block">female</label>
+                    <input type="radio" name="add_choose_gender" id="add-choose-female" value="2">
+                </div>
+                <label><b>Choose status</b></label>
+                <div class="choice radio">
+                    <label for="add-choose-student" class="block">student</label>
+                    <input type="radio" name="add_choose_status" id="add-choose-student" value="1">
+                    <label for="add-choose-teacher" class="block">teacher</label>
+                    <input type="radio" name="add_choose_status" id="add-choose-teacher" value="2">
                 </div>
 
 
                 <label><b>Choose grade</b></label>
                 <div class="choice radio">
-                    <label for="choose-one" class="block">1</label>
-                    <input type="radio" name="choose-grade" id="choose-one" value="1">
-                    <label for="choose-two" class="block">2</label>
-                    <input type="radio" name="choose-grade" id="choose-two" value="2">
-                    <label for="choose-three" class="block">3</label>
-                    <input type="radio" name="choose-grade" id="choose-three" value="3">
-                    <label for="choose-four" class="block">4</label>
-                    <input type="radio" name="choose-grade" id="choose-four" value="4">
+                    <label for="add-choose-one" class="block">1</label>
+                    <input type="radio" name="add_choose_grade" id="add-choose-one" value="1">
+                    <label for="add-choose-two" class="block">2</label>
+                    <input type="radio" name="add_choose_grade" id="add-choose-two" value="2">
+                    <label for="add-choose-three" class="block">3</label>
+                    <input type="radio" name="add_choose_grade" id="add-choose-three" value="3">
+                    <label for="add-choose-four" class="block">4</label>
+                    <input type="radio" name="add_choose_grade" id="add-choose-four" value="4">
                 </div>
 
-                <button type="submit" id="change-info">Add Information</button>
+                <button type="submit" class="change-info">Add Information</button>
             </div>
         </form>
     </div>

@@ -66,7 +66,15 @@ class ChangeInfo(wtforms.Form):
 
 
 class AddInfo(wtforms.Form):
+    add_new_username = wtforms.StringField(validators=[validators.InputRequired(message="Please type username.")])
+    add_new_password = wtforms.StringField(validators=[validators.InputRequired(message="Please type password.")])
+    add_new_email = wtforms.StringField(validators=[Email(message="please input the right style")])
+    add_choose_gender = wtforms.StringField(validators=[validators.InputRequired(message="Please select a gender.")])
+    add_choose_status = wtforms.StringField(validators=[validators.InputRequired(message="Please select a status.")])
+    add_choose_grade = wtforms.StringField(validators=[validators.InputRequired(message="Please select a grade.")])
 
-    new_password = wtforms.StringField(validators=[validators.InputRequired(message="Please type.")])
-    choose_gender = wtforms.StringField(validators=[validators.InputRequired(message="Please select a gender.")])
-    choose_grade = wtforms.StringField(validators=[validators.InputRequired(message="Please select a grade.")])
+    def validate_add_new_username(self, field):
+        username = field.data
+        user = User.query.filter_by(username=username).first()
+        if user:
+            raise wtforms.ValidationError(message="the username has been existed")
