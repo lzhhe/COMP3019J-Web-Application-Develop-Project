@@ -1,12 +1,12 @@
 from datetime import datetime
 from functools import wraps
 
-from flask import Blueprint, render_template, request, redirect, session, url_for, g, abort
+from flask import Blueprint, render_template, request, redirect, session, url_for, g, abort, jsonify
 from sqlalchemy import or_, desc, asc
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 
-from .forms import RegisterForm, LoginForm, FindForm, AddInfo
+from .forms import RegisterForm, LoginForm, FindForm, AddInfo, ChangeInfo
 from .models import *
 from .views import session_required
 
@@ -136,11 +136,46 @@ def addInfor():
             db.session.add(user)
             db.session.commit()
 
+            return redirect(url_for('cal_a.adminView'))
+        else:
+            return redirect(url_for('cal_a.adminView', error="the username has existed"))
+
+
+@admin.route('/changeInfor', methods=['GET', 'POST'])
+def changeInfor():
+    if request.method == 'GET':
+        return redirect('/adminView')
+    else:
+        form = ChangeInfo(request.form)
+        if form.validate():
+            uid = form.user_uid.data
+            user = User.query.get(uid)
+            password = form.new_password.data
+            gender = form.choose_gender.data
+            grade = form.choose_grade.data
+            user.password = generate_password_hash(password)
+            user.gender = gender
+            user.grade = grade
+            db.session.commit()
 
             return redirect(url_for('cal_a.adminView'))
         else:
             return redirect(url_for('cal_a.adminView', error="the username has existed"))
 
+
+@admin.route('/delInfor', methods=['GET', 'POST'])
+def delInfor():
+    if request.method == 'GET':
+        return redirect('/adminView')
+    else:
+        uid = request.form.get('id')
+        user = User.query.get(uid)
+        try:
+            db.session.delete(user)
+            db.session.commit()
+        except Exception as e:
+            print('e:', e)
+        return jsonify({'code': 200, 'msg': 'delete successfully!'})
 
 
 @admin.route('/logout')

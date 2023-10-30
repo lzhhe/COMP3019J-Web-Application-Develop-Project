@@ -114,9 +114,9 @@
                 <td>{{ user.grade }}</td>
                 <td>
                     <button onclick="document.getElementById('resetData').style.display='block'"
-                            data-id="{{ user.UID }}">alt
+                            data-id="{{ user.UID }}" class="alt">alt
                     </button>
-                    <button data-id="{{ user.UID }}">del</button>
+                    <button data-id="{{ user.UID }}" class="del">del</button>
                 </td>
             </tr>
         {% endfor %}
@@ -125,7 +125,8 @@
 
 
     <div id="resetData" class="modal">
-        <form class="modal-content animate" method="post" id="resetForm" action="{{ url_for('cal_u.find_password') }}">
+        <form class="modal-content animate" method="post" id="resetForm" action="{{ url_for('cal_a.changeInfor') }}">
+            <input type="hidden" name="user_uid" id="user_uid">
             <div class="find-container">
                 <span onclick="document.getElementById('resetData').style.display='none'" class="close"
                       title="Close Modal">&times;</span>
@@ -186,7 +187,6 @@
                 </div>
 
 
-
                 <label><b>Choose grade</b></label>
                 <div class="choice radio">
                     <label for="add-choose-one" class="block">1</label>
@@ -204,6 +204,5 @@
         </form>
     </div>
 {% endblock %}
-
 
 

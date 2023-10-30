@@ -28,6 +28,22 @@ $(document).ready(function () {
     $('#back').click(function () {
         window.location.href = `/admin/adminView`;
     });
+    $('.del').click(function () {
+        let that = $(this);
+        let id = that.attr("data-id");
+        if (window.confirm("Are you sure to delete?")) {
+            $.post('/admin/delInfor', {id: id}, function (data) {
+                if (data.code === 200) {
+                    location.reload();
+                }
+            });
+        }
+    });
+    $('.alt').click(function () {
+        let that = $(this);
+        let uid = that.attr("data-id");
+        $('#user_uid').val(uid);
+    });
 });
 
 

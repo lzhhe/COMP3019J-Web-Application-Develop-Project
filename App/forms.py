@@ -59,8 +59,8 @@ class FindForm(wtforms.Form):
             raise wtforms.ValidationError(message="the username has not been existed")
 
 
-
 class ChangeInfo(wtforms.Form):
+    user_uid = wtforms.StringField()
     new_password = wtforms.StringField(validators=[validators.InputRequired(message="Please type.")])
     choose_gender = wtforms.StringField(validators=[validators.InputRequired(message="Please select a gender.")])
     choose_grade = wtforms.StringField(validators=[validators.InputRequired(message="Please select a grade.")])
@@ -79,4 +79,3 @@ class AddInfo(wtforms.Form):
         user = User.query.filter_by(username=username).first()
         if user:
             raise wtforms.ValidationError(message="the username has been existed")
-
