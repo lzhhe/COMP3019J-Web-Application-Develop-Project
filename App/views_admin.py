@@ -142,6 +142,7 @@ def addInfor():
             return redirect(url_for('cal_a.adminView', error="the username has existed"))
 
 
+
 @admin.route('/logout')
 def logout():
     session.pop('uid')

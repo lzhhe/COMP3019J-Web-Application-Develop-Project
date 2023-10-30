@@ -79,3 +79,4 @@ class AddInfo(wtforms.Form):
         user = User.query.filter_by(username=username).first()
         if user:
             raise wtforms.ValidationError(message="the username has been existed")
+
