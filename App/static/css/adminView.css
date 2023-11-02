@@ -109,9 +109,11 @@
     border-collapse: collapse; /* 删除表格单元格之间的间距 */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
+
 tbody {
     counter-reset: nums var(--starting-number);
 }
+
 tbody tr td:first-child::before {
     counter-increment: nums;
     content: counter(nums);
@@ -187,29 +189,6 @@ tbody tr td:first-child::before {
     color: black;
 }
 
-input {
-    display: none;
-}
-
-.option {
-    background-color: #00A8FF;
-    color: #FFFFFF;
-    border: 1px solid #00A8FF;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加一点阴影效果 */
-    transition: background-color 0.3s ease; /* 平滑过渡效果 */
-}
-
-/* 全宽输入框 */
-#new-password, #add-new-email, #add-new-password, #add-new-username {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease; /* 平滑过渡效果 */
-}
-
 .search {
     width: 30%;
     padding: 12px 20px;
@@ -220,123 +199,4 @@ input {
     transition: border-color 0.3s ease; /* 平滑过渡效果 */
 }
 
-.choice {
-    margin: 8px 0;
-}
-
-#new-password:focus, p:focus, .search:focus, #add-new-email:focus, #add-new-password:focus, #add-new-username:focus {
-    border-color: #00A8FF; /* 输入框聚焦时的边框颜色 */
-    outline: none; /* 移除默认的外轮廓 */
-}
-
-p {
-    border: none;
-    font-weight: bold; /* 加粗 */
-    letter-spacing: 0.5px; /* 字母间距 */
-    font-size: 16px; /* 字体大小 */
-}
-
-.block {
-    width: 40%;
-    display: inline-block; /* 使其水平显示 */
-    border: 1px solid #000000;
-    border-radius: 10px;
-    font-size: 20px;
-    line-height: 24px;
-    margin: 0 10px; /* 调整间距 */
-    padding: 5px 10px; /* 增加垂直填充 */
-    cursor: pointer; /* 显示为手型光标 */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* 添加过渡效果 */
-    text-align: center; /* 水平居中 */
-}
-
-.block:hover {
-    transform: scale(1.05); /* 悬浮时轻微放大 */
-}
-
-
-/* 为查找按钮设置样式 */
-.change-info {
-    background-color: rgba(35, 5, 5, 0.27);
-    color: white;
-    padding: 14px 20px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    margin: 0 auto;
-}
-
-.change-info:hover {
-    opacity: 0.8;
-}
-
-.find-container {
-    padding: 16px;
-    position: relative; /* 添加这一行 */
-}
-
-/* 模态（背景）*/
-.modal {
-    display: none; /* 默认隐藏 */
-    position: fixed; /* 留在原地 */
-    left: 0;
-    top: 0;
-    width: 100%; /* 全屏宽度 */
-    height: 100%; /* 全高 */
-    /*overflow: none; !* 如果需要启用滚动 *!*/
-    background-color: rgb(0, 0, 0); /* 后备颜色 */
-    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-    padding-top: 60px;
-    z-index: 10;
-}
-
-/* 模态内容/框 */
-.modal-content {
-    background-color: #fefefe;
-    margin: 5% auto 15% auto; /* 距顶部 5%，距底部 15% 并居中 */
-    border: 1px solid #888;
-    width: 20%; /* 让大小更加合适 */
-    border-radius: 20px; /* 添加圆角 */
-}
-
-/* 关闭按钮 (x) */
-.close {
-    position: absolute;
-    right: 10px;
-    top: 0;
-    color: #000;
-    font-size: 35px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: red;
-    cursor: pointer;
-}
-
-
-/* 添加缩放动画 */
-.animate {
-    -webkit-animation: animatezoom 0.6s;
-    animation: animatezoom 0.6s
-}
-
-@-webkit-keyframes animatezoom {
-    from {
-        -webkit-transform: scale(0)
-    }
-    to {
-        -webkit-transform: scale(1)
-    }
-}
-
-@keyframes animatezoom {
-    from {
-        transform: scale(0)
-    }
-    to {
-        transform: scale(1)
-    }
-}
 

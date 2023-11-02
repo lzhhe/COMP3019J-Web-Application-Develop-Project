@@ -22,9 +22,6 @@ $(document).ready(function () {
         // 添加sort, order和search查询参数
         window.location.href = `/admin/adminView?sort=${sortBy}&order=${newOrder}${searchParam}`;
     });
-    $('.radio .block').click(function () {
-        $(this).addClass('option').siblings().removeClass('option')
-    })
     $('#back').click(function () {
         window.location.href = `/admin/adminView`;
     });

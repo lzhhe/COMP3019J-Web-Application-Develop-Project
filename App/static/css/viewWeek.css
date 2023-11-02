@@ -1,66 +1,79 @@
 .week-title {
-	display: flex;
-	height: 80px;
-	width: 100%;
-	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-	margin-top: 55px;
+    display: flex;
+    height: 80px;
+    width: 100%;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    margin-top: 55px;
 }
+
 .timeZone {
-	width: 9%;
-	height: 100%;
-	font-size: 14px;
-	color: #666666;
-	display: flex;
-	justify-content: center;
-	align-items: flex-end;
+    width: 9%;
+    height: 100%;
+    font-size: 14px;
+    color: #666666;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 }
+
 #weekContainer {
-	flex-grow: 1;
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-around;
-	flex-direction: row;
+    flex-grow: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
 }
+
 .week-item {
-	width: 100%;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	cursor: pointer;
-	border-left: 1px solid #968585;
-	justify-content: space-between;
-	align-items: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border-left: 1px solid #968585;
+    justify-content: space-between;
+    align-items: center;
 }
+
 .week-body {
-	height: calc(100vh - 80px);  /* 减去.week-title的高度 */
-	overflow-y: auto;
+    height: calc(100vh - 80px); /* 减去.week-title的高度 */
+    overflow-y: auto;
 }
 
 .week-item:hover {
-	background-color: #f9f2f2f6;
+    background-color: #f9f2f2f6;
 }
+
 .week-item:active {
-	background-color: #efefef;
+    background-color: #efefef;
 }
+
 .week-item-date {
-	font-size: 32px;
+    font-size: 32px;
 }
+
 .week-item-day {
-	font-family: "Courier New", Courier, monospace !important;
-	font-size: 24px;
+    font-family: "Courier New", Courier, monospace !important;
+    font-size: 24px;
 }
+
 .is-today {
-	border:1px solid #3370ff;
-	color: #3370ff;
+    border: 1px solid #3370ff;
+    color: #3370ff;
 }
+
 .is-passed {
-	color: #999999;
+    color: #999999;
 }
+
 .is-selected {
-	background-color: #3370ff !important;
-	color: #ffffff !important;
+    background-color: #3370ff !important;
+    color: #ffffff !important;
 }
+
 .is-weekend {
-	background-color: #f6e1e1;
+    background-color: #f6e1e1;
 }
+
+

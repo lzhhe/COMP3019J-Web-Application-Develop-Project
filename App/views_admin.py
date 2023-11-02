@@ -153,9 +153,12 @@ def changeInfor():
             password = form.new_password.data
             gender = form.choose_gender.data
             grade = form.choose_grade.data
-            user.password = generate_password_hash(password)
-            user.gender = gender
-            user.grade = grade
+            if password:
+                user.password = generate_password_hash(password)
+            if gender:
+                user.gender = gender
+            if grade:
+                user.grade = grade
             db.session.commit()
 
             return redirect(url_for('cal_a.adminView'))

@@ -1,6 +1,6 @@
 import wtforms
 from wtforms import validators
-from wtforms.validators import Email, Length, ValidationError
+from wtforms.validators import Email, Length, ValidationError, Optional
 from .models import *
 
 import re
@@ -61,9 +61,9 @@ class FindForm(wtforms.Form):
 
 class ChangeInfo(wtforms.Form):
     user_uid = wtforms.StringField()
-    new_password = wtforms.StringField(validators=[validators.InputRequired(message="Please type.")])
-    choose_gender = wtforms.StringField(validators=[validators.InputRequired(message="Please select a gender.")])
-    choose_grade = wtforms.StringField(validators=[validators.InputRequired(message="Please select a grade.")])
+    new_password = wtforms.StringField(validators=[Optional()])
+    choose_gender = wtforms.StringField(validators=[Optional()])
+    choose_grade = wtforms.StringField(validators=[Optional()])
 
 
 class AddInfo(wtforms.Form):

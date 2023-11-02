@@ -119,14 +119,14 @@ function computeTmText() {
     const endOfWeek = viewWeek.endOfWeek(selectedDate);
     const year1 = startOfWeek.getFullYear();
     const year2 = endOfWeek.getFullYear();
-    const month1 = `${startOfWeek.getMonth() + 1}`.padStart(2,'0');
-    const month2 = `${endOfWeek.getMonth() + 1}`.padStart(2,'0');
-    if (year1 === year2 && month1 === month2){
+    const month1 = `${startOfWeek.getMonth() + 1}`.padStart(2, '0');
+    const month2 = `${endOfWeek.getMonth() + 1}`.padStart(2, '0');
+    if (year1 === year2 && month1 === month2) {
         return `${year1}-${month1}`
-    } else if (year1 === year2 && month1 !== month2){
+    } else if (year1 === year2 && month1 !== month2) {
         return `${year1}-${month1}--${month2}`
     } else {
-         return `${year1}-${month1}--${year2}-${month2}`
+        return `${year1}-${month1}--${year2}-${month2}`
     }
 }
 
@@ -222,4 +222,10 @@ document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
         updateTimeContainer()
         updateWeekView();
     });
+
 });
+
+
+
+
+

@@ -4,10 +4,12 @@
 {% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="../static/css/adminView.css">
+    <link rel="stylesheet" href="../static/css/modal.css">
 {% endblock %}
 
 {% block extra_js %}
     <script src="../static/js/adminJs.js"></script>
+    <script src="../static/js/resetData.js"></script>
 {% endblock %}
 
 
@@ -103,7 +105,7 @@
             <th>operation</th>
         </tr>
         </thead>
-        <tbody style="--starting-number: {{ (current_page-1) * per_page}}">
+        <tbody style="--starting-number: {{ (current_page-1) * per_page }}">
         {% for user in users %}
             {% set s = "student" if user.status == 1 else "teacher" %}
             {% set g = "none" if user.gender == 0 else ("male" if user.gender == 1 else "female") %}
