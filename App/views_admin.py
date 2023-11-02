@@ -149,19 +149,22 @@ def changeInfor():
         form = ChangeInfo(request.form)
         if form.validate():
             uid = form.user_uid.data
-            user = User.query.get(uid)
-            password = form.new_password.data
-            gender = form.choose_gender.data
-            grade = form.choose_grade.data
-            if password:
-                user.password = generate_password_hash(password)
-            if gender:
-                user.gender = gender
-            if grade:
-                user.grade = grade
-            db.session.commit()
+            if uid:
+                user = User.query.get(uid)
+                password = form.new_password.data
+                gender = form.choose_gender.data
+                grade = form.choose_grade.data
+                if password:
+                    user.password = generate_password_hash(password)
+                if gender:
+                    user.gender = gender
+                if grade:
+                    user.grade = grade
+                db.session.commit()
 
-            return redirect(url_for('cal_a.adminView'))
+                return redirect(url_for('cal_a.adminView'))
+            else:
+                return redirect(url_for('cal_a.adminView', error="admin cannot change"))
         else:
             return redirect(url_for('cal_a.adminView', error="the username has existed"))
 
