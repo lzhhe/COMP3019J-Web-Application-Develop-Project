@@ -109,6 +109,13 @@
     border-collapse: collapse; /* 删除表格单元格之间的间距 */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
+tbody {
+    counter-reset: nums var(--starting-number);
+}
+tbody tr td:first-child::before {
+    counter-increment: nums;
+    content: counter(nums);
+}
 
 /* 为表头设置样式 */
 .users thead {

@@ -79,6 +79,7 @@
     <table class="users" id="users">
         <thead>
         <tr>
+            <th>Number</th>
             <th class="sortable" data-sort="status"
                 {% if current_sort == "status" %}data-current-order="{{ current_order }}" {% endif %}>
                 status
@@ -102,11 +103,12 @@
             <th>operation</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody style="--starting-number: {{ (current_page-1) * per_page}}">
         {% for user in users %}
             {% set s = "student" if user.status == 1 else "teacher" %}
             {% set g = "none" if user.gender == 0 else ("male" if user.gender == 1 else "female") %}
             <tr>
+                <td class="numbers"></td>
                 <td class="{{ s }}">{{ s }}</td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>

@@ -68,7 +68,7 @@ def adminView():
     users = pagination.items
 
     return render_template('adminView.html', users=users, current_sort=sort, current_order=order, pagination=pagination
-                           , errors=error)
+                           , errors=error, current_page=page, per_page=per_page)
 
 
 @admin.route('/searchThing')
@@ -115,7 +115,7 @@ def searchThing():
     users = pagination.items
 
     return render_template('adminView.html', users=users, current_sort='status', current_order='asc',
-                           pagination=pagination)
+                           pagination=pagination, current_page=page, per_page=per_page)
 
 
 @admin.route('/addInfor', methods=['GET', 'POST'])
