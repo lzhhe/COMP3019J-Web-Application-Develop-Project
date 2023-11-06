@@ -1,3 +1,30 @@
+[class*="col-"] {
+    float: left;
+    padding: 15px;
+    border: 1px solid red;
+}
+body {
+    /*全局禁止滚动条，只有需要滚动的时候再设置*/
+    overflow: hidden;
+}
+#main {
+    overflow-y: hidden;
+}
+
+.col-1 {
+    width: 9%;
+}
+
+.col-2 {
+    width: 13%;
+}
+
+.week-body::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
 .week-title {
     display: flex;
     height: 80px;
@@ -74,6 +101,9 @@
 
 .is-weekend {
     background-color: #f6e1e1;
+}
+.weather-container {
+    display: none;
 }
 
 

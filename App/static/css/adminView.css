@@ -1,3 +1,8 @@
+body {
+    /*全局禁止滚动条，只有需要滚动的时候再设置*/
+    overflow: hidden;
+}
+
 .changeView {
     display: none;
 }
@@ -199,4 +204,6 @@ tbody tr td:first-child::before {
     transition: border-color 0.3s ease; /* 平滑过渡效果 */
 }
 
-
+.weather-container {
+    display: none;
+}

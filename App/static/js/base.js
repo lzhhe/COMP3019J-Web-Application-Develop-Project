@@ -353,6 +353,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentFilename = window.location.href.split('/').pop();
     const btn_pre = document.getElementById("pre")
     const btn_next = document.getElementById("next")
+    const logoutButton = document.getElementById("logout");
     btn_pre.addEventListener("click", function () {
         if (currentFilename !== '' && currentFilename !== 'main') {
             console.log(currentFilename)
@@ -438,17 +439,123 @@ document.addEventListener("DOMContentLoaded", function () {
             sessionStorage.setItem('selectedView', this.innerText);
         });
     });
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function () {
+            sessionStorage.removeItem('selectedView');
+        });
+    }
+    const selectedView = sessionStorage.getItem('selectedView');
+    if (selectedView) {
+        changeViewButton.innerText = selectedView;
+    }
 
-// 当页面加载时，检查sessionStorage并设置按钮文本
-    window.addEventListener('DOMContentLoaded', (event) => {
-        const selectedView = sessionStorage.getItem('selectedView');
-        if (selectedView) {
-            changeViewButton.innerText = selectedView;
+
+    const weatherContainer = document.querySelector('.weather-container');
+    const weatherSearch = document.querySelector('.weather-search-box button');
+    const weatherBox = document.querySelector('.weather-box');
+    const weatherDetails = document.querySelector('.weather-details');
+    const weatherError404 = document.querySelector('.weather-not-found');
+
+    weatherSearch.addEventListener('click', () => {
+        const APIKey = '185dbcc57e27f9315a49d3f1c762ebd7';
+        const cityInput = document.querySelector('.weather-search-box input');
+        const city = cityInput.value;
+
+        if (city === '') return;
+
+        fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${APIKey}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.cod !== '200') {
+                    displayError();
+                } else {
+                    displayWeather(data);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                displayError();
+            });
+    });
+
+    function displayError() {
+        weatherContainer.style.height = '400px';
+        weatherBox.style.display = 'none';
+        weatherDetails.style.display = 'none';
+        weatherError404.style.display = 'block';
+        weatherError404.classList.add('fadeIn');
+    }
+
+    function displayWeather(data) {
+        weatherError404.style.display = 'none';
+        weatherError404.classList.remove('fadeIn');
+
+        const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const tomorrowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+        const todaysForecasts = data.list.filter(forecast => {
+            const forecastDate = new Date(forecast.dt * 1000);
+            return forecastDate >= todayStart && forecastDate < tomorrowStart;
+        });
+
+        // Determine the max and min temperatures for today
+        let maxTemp = todaysForecasts.length > 0 ? todaysForecasts[0].main.temp_max : 0;
+        let minTemp = todaysForecasts.length > 0 ? todaysForecasts[0].main.temp_min : 0;
+
+        todaysForecasts.forEach(forecast => {
+            if (forecast.main.temp_max > maxTemp) {
+                maxTemp = forecast.main.temp_max;
+            }
+            if (forecast.main.temp_min < minTemp) {
+                minTemp = forecast.main.temp_min;
+            }
+        });
+
+        const image = document.querySelector('.weather-box img');
+        const temperature = document.querySelector('.weather-box .weather-temperature');
+        const description = document.querySelector('.weather-box .weather-description');
+        const humidity = document.querySelector('.weather-details .weather-humidity span');
+        const wind = document.querySelector('.weather-details .weather-wind span');
+        const tempMin = document.querySelector('.weather-box .weather-temp-range .temp-min');
+        const tempMax = document.querySelector('.weather-box .weather-temp-range .temp-max');
+
+        const currentForecast = todaysForecasts[0];
+
+        switch (currentForecast.weather[0].main) {
+            case 'Clear':
+                image.src = '../static/pic/images/clear.png';
+                break;
+            case 'Rain':
+                image.src = '../static/pic/images/rain.png';
+                break;
+            case 'Snow':
+                image.src = '../static/pic/images/snow.png';
+                break;
+            case 'Clouds':
+                image.src = '../static/pic/images/cloud.png';
+                break;
+            case 'Haze':
+                image.src = '../static/pic/images/mist.png';
+                break;
+            default:
+                image.src = '';
         }
-    });
-    document.getElementById("logout").addEventListener('click', function () {
-        sessionStorage.removeItem('selectedView');
-    });
+
+        temperature.innerHTML = `${parseInt(currentForecast.main.temp)}<span>°C</span>`;
+        description.innerHTML = currentForecast.weather[0].description;
+        humidity.innerHTML = `${currentForecast.main.humidity}%`;
+        wind.innerHTML = `${parseInt(currentForecast.wind.speed)} Km/h`;
+        tempMin.textContent = `${parseInt(minTemp)}°C`;
+        tempMax.textContent = `${parseInt(maxTemp)}°C`;
+
+        weatherBox.style.display = '';
+        weatherDetails.style.display = '';
+        weatherBox.classList.add('fadeIn');
+        weatherDetails.classList.add('fadeIn');
+        weatherContainer.style.height = 'auto';
+    }
+
 
 });
 

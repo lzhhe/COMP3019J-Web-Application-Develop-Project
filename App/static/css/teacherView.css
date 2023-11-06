@@ -5,3 +5,10 @@
 .changeMonth {
     display: none;
 }
+.weather-container {
+    display: none;
+}
+body {
+    /*全局禁止滚动条，只有需要滚动的时候再设置*/
+    overflow: hidden;
+}

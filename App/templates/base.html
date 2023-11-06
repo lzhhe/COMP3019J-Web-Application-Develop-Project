@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{% block title %}base title{% endblock %}</title>
     <link rel="stylesheet" href="../static/css/base.css"/>
+    <script src="https://kit.fontawesome.com/7c8801c017.js" crossorigin="anonymous"></script>
+
+    <!-- Roboto Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;900&display=swap"
+          rel="stylesheet">
     {% block extra_css %}{% endblock %}
     <script src="../static/js/base.js"></script>
     <script src="../static/js/jquery-3.7.1.min.js"></script>
@@ -114,7 +119,50 @@
             <div class="smallEvents"></div>
         </div>
     </div>
+    <div id="mianF">
+
+    </div>
     <div id="main">
+        <div class="weather-container">
+
+            <div class="weather-search-box">
+                <i class="fa-solid fa-location-dot"></i>
+                <input type="text" placeholder="Enter Your Location">
+                <button class="fa-solid fa-magnifying-glass"></button>
+            </div>
+
+            <div class="weather-not-found">
+                <img src="../static/pic/images/404.png" alt="...">
+                <p>Oops! Invalid Location :/</p>
+            </div>
+
+            <div class="weather-box">
+                <img src="" alt="...">
+                <p class="weather-temperature"></p>
+                <p class="weather-temp-range">
+                    <span class="temp-min"></span> - <span class="temp-max"></span>
+                </p>
+                <p class="weather-description"></p>
+            </div>
+
+            <div class="weather-details">
+                <div class="weather-humidity">
+                    <i class="fa-solid fa-water"></i>
+                    <div class="weather-text">
+                        <span></span>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+                <div class="weather-wind">
+                    <i class="fa-solid fa-wind"></i>
+                    <div class="weather-text">
+                        <span></span>
+                        <p>Wind Speed</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
         {% block mainBody %}
 
         {% endblock %}
