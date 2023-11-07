@@ -4,6 +4,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{% block title %}base title{% endblock %}</title>
+    <link rel="stylesheet" href="../static/css/colors.css"/>
     <link rel="stylesheet" href="../static/css/base.css"/>
     <script src="https://kit.fontawesome.com/7c8801c017.js" crossorigin="anonymous"></script>
 
@@ -164,7 +165,7 @@
 
         </div>
         {% block mainBody %}
-
+            <button id="theme-toggle-button">切换主题</button>
         {% endblock %}
     </div>
 </div>

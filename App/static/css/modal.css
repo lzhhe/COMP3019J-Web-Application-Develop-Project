@@ -3,10 +3,10 @@ input {
 }
 
 .option {
-    background-color: #00A8FF;
-    color: #FFFFFF;
-    border: 1px solid #00A8FF;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加一点阴影效果 */
+    background-color: var(--modal-option-blue);
+    color: var(--color-fff);
+    border: 1px solid var(--modal-option-blue);
+    box-shadow: 0 2px 4px var(--shadow-1); /* 添加一点阴影效果 */
     transition: background-color 0.3s ease; /* 平滑过渡效果 */
 }
 
@@ -16,7 +16,7 @@ input {
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-ccc);
     box-sizing: border-box;
     transition: border-color 0.3s ease; /* 平滑过渡效果 */
 }
@@ -27,7 +27,7 @@ input {
 }
 
 #new-password:focus, p:focus, .search:focus, #add-new-email:focus, #add-new-password:focus, #add-new-username:focus {
-    border-color: #00A8FF; /* 输入框聚焦时的边框颜色 */
+    border-color: var(--modal-option-blue); /* 输入框聚焦时的边框颜色 */
     outline: none; /* 移除默认的外轮廓 */
 }
 
@@ -41,7 +41,7 @@ p {
 .block {
     width: 40%;
     display: inline-block; /* 使其水平显示 */
-    border: 1px solid #000000;
+    border: 1px solid var(--color-000);
     border-radius: 10px;
     font-size: 20px;
     line-height: 24px;
@@ -59,8 +59,8 @@ p {
 
 /* 为查找按钮设置样式 */
 .change-info {
-    background-color: rgba(35, 5, 5, 0.27);
-    color: white;
+    background-color: var(--modal-change-info);
+    color: var(--text-color);
     padding: 14px 20px;
     border: none;
     cursor: pointer;
@@ -94,9 +94,9 @@ p {
 
 /* 模态内容/框 */
 .modal-content {
-    background-color: #fefefe;
+    background-color: var(--modal-content-background);
     margin: 5% auto 15% auto; /* 距顶部 5%，距底部 15% 并居中 */
-    border: 1px solid #888;
+    border: 1px solid var(--color-888);
     width: 20%; /* 让大小更加合适 */
     border-radius: 20px; /* 添加圆角 */
 }
@@ -106,14 +106,14 @@ p {
     position: absolute;
     right: 10px;
     top: 0;
-    color: #000;
+    color: var(--color-000);
     font-size: 35px;
     font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-    color: red;
+    color: var(--color-red);
     cursor: pointer;
 }
 

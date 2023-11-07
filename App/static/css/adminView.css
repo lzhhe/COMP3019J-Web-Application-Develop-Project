@@ -27,7 +27,7 @@ body {
 
 .search {
     padding: 8px 12px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--admin-search-border);
     border-radius: 4px;
     font-size: 14px;
     transition: border-color 0.3s;
@@ -36,14 +36,14 @@ body {
 }
 
 .search:focus {
-    border-color: #007bff;
+    border-color: var(--admin-search-focus);
     outline: none;
 }
 
 .searchButton {
     padding: 6px 15px;
-    background-color: #007bff;
-    color: #ffffff;
+    background-color: var(--admin-search-focus);
+    color: var(--sm-selected-color);
     border: none;
     border-radius: 4px;
     font-size: 14px;
@@ -52,13 +52,13 @@ body {
 }
 
 .searchButton:hover {
-    background-color: #0056b3;
+    background-color: var(--admin-searchButton-hover);
 }
 
 .back {
     padding: 6px 15px;
-    background-color: #6c757d;
-    color: #ffffff;
+    background-color: var(--admin-back);
+    color: var(--sm-selected-color);
     border: none;
     border-radius: 4px;
     font-size: 14px;
@@ -67,7 +67,7 @@ body {
 }
 
 .back:hover {
-    background-color: #565e63;
+    background-color: var(--admin-back-hover);
 }
 
 
@@ -77,33 +77,33 @@ body {
 }
 
 .pagination a {
-    color: #337ab7;
+    color: var(--pagination-a);
     padding: 8px 16px;
     text-decoration: none;
     transition: background-color .3s;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-ddd);
     margin: 0 4px;
 }
 
 .pagination a.active {
-    background-color: #337ab7;
-    color: white;
-    border: 1px solid #337ab7;
+    background-color: var(--pagination-a);
+    color: var(--color-ddd);
+    border: 1px solid var(--pagination-a);
 }
 
 .pagination a:hover:not(.active) {
-    background-color: #ddd;
+    background-color: var(--color-ddd);
 }
 
 .pagination a.disabled {
-    color: #aaa;
+    color: var(--color-aaa);
     cursor: default;
 }
 
 .ellipsis {
     display: inline-block;
     padding: 8px 12px;
-    color: #333;
+    color: var(--color-333);
 }
 
 
@@ -112,7 +112,7 @@ body {
 .users {
     width: 100%;
     border-collapse: collapse; /* 删除表格单元格之间的间距 */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 20px var(--changeViewDrop-shadow);
 }
 
 tbody {
@@ -126,36 +126,33 @@ tbody tr td:first-child::before {
 
 /* 为表头设置样式 */
 .users thead {
-    background-color: #2f4050;
-    color: #ffffff;
+    background-color: var(--admin-thead);
+    color: var(--sm-selected-color);
 }
 
 .users thead th {
     padding: 10px 20px;
 }
 
-/* 在表格行之间交替背景颜色 */
-.users tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
+
 
 /* 为表格单元格设置样式 */
 .users td, .users th {
     padding: 10px 15px;
     text-align: center;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-ddd);
 }
 
 /* 为可排序的表头添加悬停效果 */
 .users th.sortable:hover {
-    background-color: #337ab7;
+    background-color: var(--pagination-a);
     cursor: pointer;
 }
 
 /* 为按钮设置简单的样式 */
 .users button {
-    background-color: #337ab7;
-    color: #fff;
+    background-color: var(--pagination-a);
+    color: var(--text-color);
     border: none;
     padding: 5px 10px;
     border-radius: 3px;
@@ -164,34 +161,34 @@ tbody tr td:first-child::before {
 }
 
 .users button:hover {
-    background-color: #286090;
+    background-color: var(--admin-botton-hover);
 }
 
 .teacher {
-    color: #020215; /* 或您想要的任何颜色 */
+    color: var(--text-color); /* 或您想要的任何颜色 */
     font-weight: bold; /* 加粗文本 */
     font-size: large;
     /* 其他你想添加的样式... */
 }
 
 .student {
-    color: rgba(5, 0, 0, 0.73); /* 或您想要的任何颜色 */
+    color: var(--text-color); /* 或您想要的任何颜色 */
     font-style: italic; /* 斜体文本 */
     /* 其他你想添加的样式... */
 }
 
 .male {
     font-weight: bold; /* 加粗文本 */
-    color: #1e1515;
+    color: var(--text-color);
 }
 
 .female {
     font-weight: bold; /* 加粗文本 */
-    color: #734444;
+    color: var(--admin-female);
 }
 
 .none {
-    color: black;
+    color: var(--text-color);
 }
 
 .search {
@@ -199,7 +196,7 @@ tbody tr td:first-child::before {
     padding: 12px 20px;
     margin: 8px 5px;
     display: inline-block;
-    border: 1px solid #ccc;
+    border: 1px solid var(--admin-search-border);
     box-sizing: border-box;
     transition: border-color 0.3s ease; /* 平滑过渡效果 */
 }

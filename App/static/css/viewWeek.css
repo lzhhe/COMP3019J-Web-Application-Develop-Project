@@ -29,7 +29,7 @@ body {
     display: flex;
     height: 80px;
     width: 100%;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px 0 var(--changeViewDrop-shadow);
     margin-top: 55px;
 }
 
@@ -37,7 +37,7 @@ body {
     width: 9%;
     height: 100%;
     font-size: 14px;
-    color: #666666;
+    color: var(--smCDayItem-color);
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -58,7 +58,7 @@ body {
     display: flex;
     flex-direction: column;
     cursor: pointer;
-    border-left: 1px solid #968585;
+    border-left: 1px solid var(--week-item-border);
     justify-content: space-between;
     align-items: center;
 }
@@ -69,11 +69,11 @@ body {
 }
 
 .week-item:hover {
-    background-color: #f9f2f2f6;
+    background-color: var(--week-item-hover);
 }
 
 .week-item:active {
-    background-color: #efefef;
+    background-color: var(--week-item-active);
 }
 
 .week-item-date {
@@ -86,21 +86,21 @@ body {
 }
 
 .is-today {
-    border: 1px solid #3370ff;
-    color: #3370ff;
+    border: 1px solid var(--sm-today-border-color);
+    color: var(--sm-today-border-color);
 }
 
 .is-passed {
-    color: #999999;
+    color: var(--is-passed-color);
 }
 
 .is-selected {
-    background-color: #3370ff !important;
-    color: #ffffff !important;
+    background-color: var(--sm-today-border-color) !important;
+    color: var(--sm-selected-color) !important;
 }
 
 .is-weekend {
-    background-color: #f6e1e1;
+    background-color: var(--is-weekend-background);
 }
 .weather-container {
     display: none;
