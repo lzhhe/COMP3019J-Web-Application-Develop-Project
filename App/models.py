@@ -10,3 +10,4 @@ class User(db.Model):
     email = db.Column(db.String(30), nullable=False)  # 邮箱
     grade = db.Column(db.Integer, nullable=False, default=0)  # 年级 0，1，2，3，4
     gender = db.Column(db.Integer, nullable=False, default=0)  # gender male 1，female 2 . 0默认
+    color = db.Column(db.Integer, nullable=False, default=0)  # 0是light，1是dark

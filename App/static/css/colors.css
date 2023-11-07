@@ -1,4 +1,4 @@
-:root  [color-mode="light"] {
+:root[color-mode="light"] {
     --main-color: #fff;
     --input-color: #fff;
     --text-color: #4d4d4d; /* 白色 */
@@ -73,7 +73,7 @@
     --color-red: #FF0000;
 }
 
-:root{
+:root[color-mode="dark"]{
     --main-color:#4d4d4d;
     --input-color: #5d4343;
     --text-color: #bebeb5; /* 白色 */

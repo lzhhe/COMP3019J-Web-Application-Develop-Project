@@ -28,6 +28,7 @@ body {
     background-color: var(--main-color);
     color: var(--text-color);
 }
+
 input {
     background-color: var(--main-color);
 }
@@ -199,7 +200,7 @@ input {
     float: right;
     margin-left: 25%;
     position: absolute;
-    right: 0;
+    right: 10%;
 }
 
 #changeView {
@@ -321,6 +322,69 @@ input {
     align-items: center;
     transition: all 0.3s; /* 添加过渡效果 */
 }
+
+.toggle-switch {
+    position: relative;
+    width: 90px; /* 100px original width * 0.9 */
+    height: 45px; /* 50px original height * 0.9 */
+    --light: #d8dbe0;
+    --dark: #28292c;
+    --link: rgb(27, 129, 112);
+    --link-hover: rgb(24, 94, 82);
+}
+
+.switch-label {
+    position: absolute;
+    width: 100%;
+    height: 45px; /* 50px original height * 0.9 */
+    background-color: var(--dark);
+    border-radius: 22.5px; /* 25px original border-radius * 0.9 */
+    cursor: pointer;
+    border: 2.7px solid var(--dark); /* 3px original border * 0.9, rounded to the nearest tenth */
+}
+
+.checkbox {
+    position: absolute;
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 22.5px; /* 25px original border-radius * 0.9 */
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+}
+
+.checkbox:checked ~ .slider {
+    background-color: var(--light);
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    top: 9px; /* 10px original top * 0.9 */
+    left: 9px; /* 10px original left * 0.9 */
+    width: 22.5px; /* 25px original width * 0.9 */
+    height: 22.5px; /* 25px original height * 0.9 */
+    border-radius: 50%;
+    -webkit-box-shadow: inset 10.8px -3.6px 0px 0px var(--light); /* Adjust box shadow inset as well */
+    box-shadow: inset 10.8px -3.6px 0px 0px var(--light);
+    background-color: var(--dark);
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+}
+
+.checkbox:checked ~ .slider::before {
+    -webkit-transform: translateX(45px); /* 50px original translate * 0.9 */
+    -ms-transform: translateX(45px);
+    transform: translateX(45px);
+    background-color: var(--dark);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
 
 .header-right .information {
     /* 添加这一行 */

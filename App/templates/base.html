@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+{% if user %}
+    {% set mode = "light" if user.color == 0 else "dark" %}
+{% else %}
+    {% set mode = "light" %}
+{% endif %}
+<html lang="en" color-mode={{ mode }}>
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -72,6 +77,12 @@
         </div>
     </div>
     <div class="header-right">
+        <div class="toggle-switch">
+            <label class="switch-label">
+                <input type="checkbox" class="checkbox" id="changeMode">
+                <span class="slider"></span>
+            </label>
+        </div>
         <div class="information">
             {% if user %}
                 <div class="user-infor">
@@ -165,7 +176,6 @@
 
         </div>
         {% block mainBody %}
-            <button id="theme-toggle-button">切换主题</button>
         {% endblock %}
     </div>
 </div>

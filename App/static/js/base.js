@@ -348,8 +348,32 @@ function handleDateClick(date) {
     // console.log(smCalendar.selectedDate,222)
 }
 
+function userLoggedIn() {
+    // 通过检查用户信息div的存在来判断用户是否登录
+    return document.querySelector('.user-infor') !== null;
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
+    const checkbox = document.getElementById('changeMode');
+    const html = document.documentElement;
+
+    // 设置初始状态
+    checkbox.checked = (html.getAttribute('color-mode') === 'light');
+
+    // 监听开关的更改事件
+    checkbox.addEventListener('change', function () {
+        // 设置HTML属性
+        html.setAttribute('color-mode', checkbox.checked ? 'light' : 'dark');
+
+        if (userLoggedIn()) {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/updateColorMode');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({color: checkbox.checked ? 0 : 1}));
+        }
+
+    });
     const currentFilename = window.location.href.split('/').pop();
     const btn_pre = document.getElementById("pre")
     const btn_next = document.getElementById("next")
