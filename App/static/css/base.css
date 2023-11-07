@@ -404,7 +404,7 @@ input {
 
 }
 
-.information a {
+.information a, .noLoginFunction1 a, .noLoginFunction2 a {
     text-decoration: none; /* 去除链接下划线 */
     color: var(--changeView-color); /* 设定一个默认颜色 */
     transition: color 0.3s; /* 添加文字颜色的过渡效果 */
@@ -416,8 +416,12 @@ input {
     font-size: x-large;
     font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
 }
+.noLoginFunction1 a, .noLoginFunction2 a {
+    justify-content: start;
+    margin: 20px;
+}
 
-.information a:hover {
+.information a:hover, .noLoginFunction1 a:hover, .noLoginFunction2 a:hover {
     color: var(--information-a-hover); /* 鼠标悬停时的颜色 */
 }
 

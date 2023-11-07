@@ -1,4 +1,4 @@
-from flask import session, g, request, jsonify
+from flask import session, g, request, jsonify, redirect, url_for
 
 from App import create_app  # 第一次执行这个，然后执行蓝图，就执行到了views，再然后是数据库，最后执行到首页，然后再是create_app
 from App.extents import db
@@ -39,6 +39,20 @@ def update_color_mode():
     else:
         # 用户未登录
         return jsonify(success=False, message="User not logged in."), 401
+
+
+@app.route('/back')
+def back():
+    # 检查用户是否登录
+    if g.user:
+        if g.user.status == 0:
+            return redirect(url_for('cal_a.adminView'))
+        if g.user.status == 1:
+            return redirect(url_for('cal_u.weekView'))
+        if g.user.status == 2:
+            return redirect(url_for('cal_t.teacherView'))
+    else:
+        return redirect(url_for('cal_u.main'))
 
 
 if __name__ == '__main__':

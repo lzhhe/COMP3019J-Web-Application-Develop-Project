@@ -1,6 +1,6 @@
 import wtforms
 from wtforms import validators
-from wtforms.validators import Email, Length, ValidationError, Optional
+from wtforms.validators import Email, Length, ValidationError, Optional, DataRequired
 from .models import *
 
 import re
@@ -24,9 +24,9 @@ class PasswordComplexity(object):
 class RegisterForm(wtforms.Form):
     signUpEmailField = wtforms.StringField(validators=[Email(message="please input the right style")])
     signUpUsernameField = wtforms.StringField(
-        validators=[Length(min=1, max=20, message="please input the right length")])
+        validators=[Length(min=1, max=200, message="please input the right length")])
     signUpPasswordField = wtforms.StringField(
-        validators=[Length(min=1, max=20, message="please input the right length"), PasswordComplexity()])
+        validators=[Length(min=1, max=200, message="please input the right length"), PasswordComplexity()])
 
     # 如果您要验证用户名是否存在，需要更改此方法名以匹配新字段名
     def validate_signUpUsernameField(self, field):
@@ -37,8 +37,8 @@ class RegisterForm(wtforms.Form):
 
 
 class LoginForm(wtforms.Form):
-    signInUsernameField = wtforms.StringField()
-    signInPasswordField = wtforms.StringField()
+    signInUsernameField = wtforms.StringField(validators=[DataRequired()])
+    signInPasswordField = wtforms.StringField(validators=[DataRequired()])
 
     def validate_signInUsernameField(self, field):
         username = field.data
@@ -48,9 +48,9 @@ class LoginForm(wtforms.Form):
 
 
 class FindForm(wtforms.Form):
-    find_uname = wtforms.StringField()
+    find_uname = wtforms.StringField(validators=[DataRequired()])
     find_email = wtforms.StringField(validators=[Email(message="please input the right style")])
-    find_password = wtforms.StringField()
+    find_password = wtforms.StringField(validators=[DataRequired()])
 
     def validate_find_uname(self, field):
         username = field.data

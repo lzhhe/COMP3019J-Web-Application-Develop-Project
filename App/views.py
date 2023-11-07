@@ -17,6 +17,11 @@ def main():
     return render_template('base.html')
 
 
+@blue.route('/draw')
+def draw():
+    return render_template('draw.html')
+
+
 def session_required(fn):
     @wraps(fn)
     def inner(*args, **kwargs):
