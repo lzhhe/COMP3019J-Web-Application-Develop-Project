@@ -177,13 +177,17 @@ def changeInfor():
 
 
 @blue.route('/addEvent', methods=['GET', 'POST'])
-def changeInfor():
+def addEvent():
     if request.method == 'GET':
-        return redirect('/addEvent')
+        return render_template('addEvent.html')
     else:
         form = AddEvent(request.form)
         if form.validate():
             user = g.user
+
+
+
+
             db.session.commit()
             return redirect(url_for('cal_u.weekView'))
         else:

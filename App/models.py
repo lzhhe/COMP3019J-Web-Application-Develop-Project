@@ -20,11 +20,12 @@ class Event(db.Model):
     EID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(255), db.ForeignKey('user.username'))
     eventTitle = db.Column(db.String(256), unique=True, nullable=False)
-    content = db.Column(db.String, nullable=False)
+    content = db.Column(db.Text, nullable=False)
     startDate = db.Column(db.Date)
-    endDate = db.Column(db.Date,nullable=False)
+    endDate = db.Column(db.Date, nullable=False)
     startTime = db.Column(db.Time)
     endTime = db.Column(db.Time,nullable=False)
+    eventStatus = db.Column(db.Integer, nullable=False) # 0 Event 1 DDL
 
     @property
     def durationDate(self):
