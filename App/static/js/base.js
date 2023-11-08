@@ -353,24 +353,78 @@ function userLoggedIn() {
     return document.querySelector('.user-infor') !== null;
 }
 
+function fetchUserColorMode() {
+    // 假设服务器端点 '/getUserColorMode' 返回用户的颜色模式
+    return fetch('/getUserColorMode')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // 假设服务器返回的是 { colorMode: 0 } 或 { colorMode: 1 }
+            return data.colorMode === 0 ? 'light' : 'dark';
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const checkbox = document.getElementById('changeMode');
     const html = document.documentElement;
 
     // 设置初始状态
-    checkbox.checked = (html.getAttribute('color-mode') === 'light');
+    // const currentMode = localStorage.getItem('color-mode');
+    // if (!userLoggedIn()) {
+    //     if (currentMode) {
+    //         html.setAttribute('color-mode', currentMode); // 设置HTML属性
+    //         checkbox.checked = (currentMode === 'light'); // 更新checkbox状态
+    //     } else {
+    //         // 如果没有存储的值，默认使用light模式
+    //         html.setAttribute('color-mode', 'light');
+    //         checkbox.checked = true;
+    //     }
+    // } else {
+    //     localStorage.removeItem('color-mode');
+    //     checkbox.checked = (html.getAttribute('color-mode') === 'light');
+    // }
+    // 检查用户是否登录
+    if (userLoggedIn()) {
+        // 用户已登录，从服务器获取明暗模式
+        fetchUserColorMode().then(mode => {
+            html.setAttribute('color-mode', mode); // 设置HTML属性
+            checkbox.checked = (mode === 'light'); // 更新checkbox状态
+        });
+    } else {
+        // 用户未登录，使用localStorage
+        const currentMode = localStorage.getItem('color-mode');
+        if (currentMode) {
+            html.setAttribute('color-mode', currentMode); // 设置HTML属性
+            checkbox.checked = (currentMode === 'light'); // 更新checkbox状态
+        } else {
+            // 如果没有存储的值，默认使用light模式
+            html.setAttribute('color-mode', 'light');
+            checkbox.checked = true;
+        }
+    }
 
     // 监听开关的更改事件
     checkbox.addEventListener('change', function () {
         // 设置HTML属性
-        html.setAttribute('color-mode', checkbox.checked ? 'light' : 'dark');
+        const mode = checkbox.checked ? 'light' : 'dark';
+        // 设置HTML属性
+        html.setAttribute('color-mode', mode);
 
         if (userLoggedIn()) {
             let xhr = new XMLHttpRequest();
             xhr.open('POST', '/updateColorMode');
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify({color: checkbox.checked ? 0 : 1}));
+        } else {
+            localStorage.setItem('color-mode', mode);
         }
 
     });

@@ -41,6 +41,18 @@ def update_color_mode():
         return jsonify(success=False, message="User not logged in."), 401
 
 
+@app.route('/getUserColorMode')
+def get_user_color_mode():
+    if 'uid' not in session:
+        return jsonify({'error': 'User not logged in'}), 401
+
+    user = User.query.get(session['uid'])
+    if user:
+        return jsonify({'colorMode': user.color})
+    else:
+        return jsonify({'error': 'User not found'}), 404
+
+
 @app.route('/back')
 def back():
     # 检查用户是否登录

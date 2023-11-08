@@ -16,6 +16,7 @@ canvas {
     margin: 20px auto;
     border: 1px solid var(--color-ddd);
     box-shadow: 2px 2px 10px var(--shadow-1);
+    background-color: var(--canvas-background);
 }
 
 .controls {

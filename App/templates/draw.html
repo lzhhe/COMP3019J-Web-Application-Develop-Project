@@ -10,10 +10,8 @@
 
         </canvas>
         <div class="controls">
-            <div>
-                <label for="mycanvasColor">choose panel color：</label>
-                <input type="color" value="#ffffff" id="mycanvasColor" onchange="canvasColorChange()"/>
-            </div>
+            <input type="hidden" id="canvasBackground">
+
             <div>
                 <label for="mycolor">choose pen color：</label>
                 <input type="color" value="#ff0000" id="mycolor" onchange="colorChange()"/>
@@ -48,7 +46,7 @@
     <script>
         const back = document.getElementById('backIndex');
         back.addEventListener('click', function () {
-           window.location.href = '/back';
+            window.location.href = '/back';
         });
         const canvas = document.getElementById('cavsElem');
         const context = canvas.getContext('2d');
@@ -58,7 +56,8 @@
         let prevIndex = 0;
         let nextIndex = 0;
         let currentIndex = 0;
-        let backColor = getComputedStyle(document.documentElement).getPropertyValue('--canvas-background').trim();
+        let backColor;
+        const canvasBackground = document.getElementById('canvasBackground');
         initCanvas();
         addCanvasListeners();
 
@@ -140,7 +139,7 @@
         function setEraser() {
             mode = 'eraser';
             canvas.style.cursor = 'not-allowed';  // 使用不允许的图标模拟橡皮擦
-            context.strokeStyle = document.getElementById("mycanvasColor").value;
+            context.strokeStyle = backColor;
             context.lineWidth = (document.getElementById("gsize").value > 15) ? document.getElementById("gsize").value : 15;
         }
 
@@ -219,14 +218,6 @@
             context.closePath();
         }
 
-
-        function canvasColorChange() {
-            context.fillStyle = document.getElementById("mycanvasColor").value;
-            context.fillRect(0, 0, canvas.width, canvas.height);
-            pushImg(); // Save the canvas state after the action is done
-
-        }
-
         function colorChange() {
             if (mode === 'pen' || mode === 'shape') {
                 context.strokeStyle = document.getElementById("mycolor").value;
@@ -270,12 +261,9 @@
 
         function clearAll() {
             context.clearRect(0, 0, canvas.width, canvas.height);
-            if (mode === 'eraser') {
-                context.fillStyle = '#ffffff';
-                document.getElementById("mycanvasColor").value = '#ffffff';
-            } else {
-                context.fillStyle = document.getElementById("mycanvasColor").value;
-            }
+            backColor = getComputedStyle(document.documentElement).getPropertyValue('--canvas-background').trim();
+            canvasBackground.value = backColor;
+            context.fillStyle = canvasBackground.value;
             context.fillRect(0, 0, canvas.width, canvas.height);
             pushImg(); // 保存清空后的画布状态
         }
