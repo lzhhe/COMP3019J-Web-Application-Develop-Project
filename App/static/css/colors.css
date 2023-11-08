@@ -71,10 +71,13 @@
     --color-888: #888;
     --color-000: #000000;
     --color-red: #FF0000;
+    --select-hover: #f0f0f0;
+
+    --canvas-background: #f0f0f0;
 }
 
-:root[color-mode="dark"]{
-    --main-color:#4d4d4d;
+:root[color-mode="dark"] {
+    --main-color: #4d4d4d;
     --input-color: #5d4343;
     --text-color: #bebeb5; /* 白色 */
     --title-background-color: #1c1c1c; /* Dark background for titles */
@@ -148,5 +151,7 @@
     --color-888: #aaa; /* Lighter gray for less prominent text */
     --color-000: #ffffff; /* White text on dark backgrounds */
     --color-red: #FF0000; /* Red can remain the same as it stands out on dark */
+    --select-hover: #a69191;
 
+    --canvas-background: #757575;
 }
