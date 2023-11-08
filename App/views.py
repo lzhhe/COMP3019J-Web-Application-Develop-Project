@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, redirect, session, url_fo
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 
-from .forms import RegisterForm, LoginForm, FindForm, ChangeInfo
+from .forms import RegisterForm, LoginForm, FindForm, ChangeInfo, AddEvent
 from .models import *
 
 blue = Blueprint('cal_u', __name__)  # cal_u is name of blueprint
@@ -169,6 +169,23 @@ def changeInfor():
             return redirect(url_for('cal_u.weekView'))
         else:
             return redirect(url_for('cal_u.weekView', error="the username has existed"))
+
+
+@blue.route('/addEvent', methods=['GET', 'POST'])
+def changeInfor():
+    if request.method == 'GET':
+        return redirect('/addEvent')
+    else:
+        form = AddEvent(request.form)
+        if form.validate():
+            user = g.user
+            db.session.commit()
+            return redirect(url_for('cal_u.weekView'))
+        else:
+            return redirect(url_for('cal_u.weekView', error="The event may be has some problem"))
+
+
+
 
 
 @blue.route('/logout')

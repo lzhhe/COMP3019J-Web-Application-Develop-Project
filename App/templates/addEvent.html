@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Form</title>
+
+</head>
+<body>
+
+<form id="eventForm">
+    <label for="eventTitle">Event Title:</label>
+    <input type="text" id="eventTitle" name="eventTitle" required><br>
+
+    <label for="content">Content:</label>
+    <textarea id="content" name="content" required></textarea><br>
+
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" name="startDate" required><br>
+
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" name="endDate" required><br>
+
+    <label for="startTime">Start Time:</label>
+    <input type="time" id="startTime" name="startTime"><br>
+
+    <label for="endTime">End Time:</label>
+    <input type="time" id="endTime" name="endTime" required><br>
+
+    <button type="submit">Submit Event</button>
+</form>
+
+{#<script>#}
+{#    document.getElementById('eventForm').onsubmit = function(event) {#}
+{#        event.preventDefault();#}
+{#        #}
+{#        // 获取表单数据#}
+{#        var formData = {#}
+{#            eventTitle: document.getElementById('eventTitle').value,#}
+{#            content: document.getElementById('content').value,#}
+{#            startDate: document.getElementById('startDate').value,#}
+{#            endDate: document.getElementById('endDate').value,#}
+{#            startTime: document.getElementById('startTime').value,#}
+{#            endTime: document.getElementById('endTime').value#}
+{#        };#}
+{#        #}
+{#        console.log(formData); // 此处可以替换为将数据发送到服务器的代码#}
+{#        #}
+{#        // 
+{#        // 例如使用fetch() 或者XMLHttpRequest()#}
+{#    };#}
+{#</script>#}
+
+</body>
+</html>

@@ -2,6 +2,8 @@ import wtforms
 from wtforms import validators
 from wtforms.validators import Email, Length, ValidationError, Optional
 from .models import *
+import datetime
+
 
 import re
 
@@ -79,3 +81,33 @@ class AddInfo(wtforms.Form):
         user = User.query.filter_by(username=username).first()
         if user:
             raise wtforms.ValidationError(message="the username has been existed")
+
+
+class AddEvent(wtforms.Form):
+    add_new_Event_Title = wtforms.StringField('Event Title')
+    add_new_Event_content = wtforms.StringField('Event Content')
+    add_new_Event_Start_Date = wtforms.DateField('Start Date')
+    add_new_Event_End_Date = wtforms.DateField('End Date')
+    add_new_Event_Start_Time = wtforms.TimeField('Start Time')
+    add_new_Event_End_Time = wtforms.TimeField('End Time')
+
+    def validate(self):
+        if not super(AddEvent, self).validate():
+            return False
+
+        start_datetime = datetime.datetime.combine(
+            self.add_new_Event_Start_Date.data,
+            self.add_new_Event_Start_Time.data
+        )
+
+        end_datetime = datetime.datetime.combine(
+            self.add_new_Event_End_Date.data,
+            self.add_new_Event_End_Time.data
+        )
+
+        if start_datetime >= end_datetime:
+            self.add_new_Event_Start_Date.errors.append('The start date and time must be before the end date and time.')
+            self.add_new_Event_Start_Time.errors.append('The start date and time must be before the end date and time.')
+            return False
+
+        return True

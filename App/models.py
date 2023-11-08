@@ -1,3 +1,5 @@
+from datetime import datetime, date
+
 from .extents import db
 
 
@@ -11,3 +13,29 @@ class User(db.Model):
     grade = db.Column(db.Integer, nullable=False, default=0)  # 年级 0，1，2，3，4
     gender = db.Column(db.Integer, nullable=False, default=0)  # gender male 1，female 2 . 0默认
     color = db.Column(db.Integer, nullable=False, default=0)  # 0是light，1是dark
+
+
+class Event(db.Model):
+    __tablename__ = 'event'
+    EID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(255), db.ForeignKey('user.username'))
+    eventTitle = db.Column(db.String(256), unique=True, nullable=False)
+    content = db.Column(db.String, nullable=False)
+    startDate = db.Column(db.Date)
+    endDate = db.Column(db.Date,nullable=False)
+    startTime = db.Column(db.Time)
+    endTime = db.Column(db.Time,nullable=False)
+
+    @property
+    def durationDate(self):
+        if self.startDate and self.endDate:
+            return self.endDate - self.startDate
+        else:
+            return None
+
+    @property
+    def durationTime(self):
+        if self.startTime and self.endTime:
+            return datetime.combine(date.min, self.endTime) - datetime.combine(date.min, self.startTime)
+        else:
+            return None
