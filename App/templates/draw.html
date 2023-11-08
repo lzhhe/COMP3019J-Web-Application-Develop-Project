@@ -273,6 +273,18 @@
             const imageContainer = document.getElementById('imageContainer');
             imageContainer.classList.toggle('hidden');
         }
+
+        const checkbox = document.getElementById('changeMode');
+        checkbox.addEventListener('change', function () {
+            if (checkbox.checked) {
+                canvasBackground.value = '#f0f0f0';
+            } else {
+                canvasBackground.value = '#757575';
+            }
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.fillStyle = canvasBackground.value;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+        });
     </script>
 {% endblock %}
 
