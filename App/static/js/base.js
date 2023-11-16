@@ -1,292 +1,38 @@
-// import smCalendar from "./calendar.js";
-// import { isSameDate } from "./calendar.js";
-// import smCalendar from "./calendar.js";
-// import {isSameDate} from "./calendar.js";
-// import {getDates} from "./calendar.js";
-//
-// import viewWeek from "./weekViewLog.js";
-class DateItem {
-    constructor(date) {
-        this.date = date;
-        this.day = date.getDate(); // 得到几号
-        this.today = false;
-        this.preMonth = false;
-        this.nextMonth = false;
-        this.currentMonth = false;
-    }
-}
-
-const dayMs = 86400000;
-const weekMs = 604800000;
-const today = new Date();
-
-/**
- * 通过 getYear() 和 getMonth() 获取当前年份和月份，然后创建一个新的日期对象，表示当前月份的第一天（日期设置为1）。
- * @param {*} date
- * @returns
+import {isSameDate, navCalendar} from "./tempJs/calendar.js";
+/*
+侧边栏日历
  */
-function getFirstDay(date) {
-    // date为当前日期
-    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-    return firstDay;
-}
-
-/**
- * 获取当前年份和月份，然后创建一个新的日期对象，表示下个月份的第一天（月份+1）的前一天（日期设置为0）
- * 就是当前月的最后一天
- */
-function getLastDay(date) {
-    // date为当前日期
-    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    return lastDay;
-}
-
-/**
- * year是当前年
- * 闰年的判定规则：年份能被4整除但不能被100整除，或者能被400整除
- * @returns
- */
-function isLeapYear(year) {
-    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-}
-
-/**
- * 是否是同一天
- */
-function isSameDate(date1, date2) {
-    return (
-        date1.getFullYear() === date2.getFullYear() &&
-        date1.getMonth() === date2.getMonth() &&
-        date1.getDate() === date2.getDate()
-    );
-}
-
-/**
- * 是否是同一月
- */
-function isSameMonth(date1, date2) {
-    return (
-        date1.getFullYear() === date2.getFullYear() &&
-        date1.getMonth() === date2.getMonth()
-    );
-}
-
-/**
- * 得到上一个月遗留的日期
- */
-function getPrevMonthDays(date) {
-    // date为当前日期
-    const prevMonthDays = [];
-    const currentFirstDate = getFirstDay(date); // 得到当前月份的第一天
-    const currentFirstDateWeekDay = currentFirstDate.getDay(); // 星期几，0表示周日，123456为周123456
-    const currentFirstDateTime = currentFirstDate.getTime();
-    // 获取 currentFirstDate 对象的时间戳。基于1970.1.1，之前之后都可
-    // 利用毫秒可以在不同时区显示正确的时间
-
-    // 表示循环几次，这样就可以把前面的日期加进来了
-    // 比如是周三的话，需要插入周日，周一，周二，正好三次
-    for (let i = 0; i < currentFirstDateWeekDay; i++) {
-        const prevMonthDay = new Date(
-            currentFirstDateTime - dayMs * (currentFirstDateWeekDay - i)
-        );
-        // 这个表示往前一直推送，倒着推的
-        const dateItem = new DateItem(prevMonthDay);
-        dateItem.preMonth = true;
-        prevMonthDays.push(dateItem);
-    }
-    return prevMonthDays;
-}
-
-/**
- * 得到下一个月补足的日期
- */
-function getNextMonthDays(date, appendOrNot) {
-    // date为当前日期
-    const nextMonthDays = [];
-    const currentLastDate = getLastDay(date); //
-    const currentLastDateWeekDay = currentLastDate.getDay(); // 星期几，0表示周日，123456为周123456
-    const currentLastDateTime = currentLastDate.getTime();
-    for (let i = 0; i < (6 - currentLastDateWeekDay) + (appendOrNot ? 7 : 0); i++) {
-        const nextMonthDay = new Date(currentLastDateTime + dayMs * (1 + i));
-        const dateItem = new DateItem(nextMonthDay);
-        dateItem.nextMonth = true;
-        nextMonthDays.push(dateItem);
-    }
-    return nextMonthDays;
-}
-
-/**
- * 得到这一个月的所有日期
- */
-function getCurrentMonthDays(date) {
-    const currentDays = [];
-    const firstDate = getFirstDay(date);
-    const lastDate = getLastDay(date);
-    const lastDateNumber = lastDate.getDate();
-    for (let i = 1; i <= lastDateNumber; i++) {
-        const currentDate = new Date(firstDate);
-        currentDate.setDate(i);
-        const dateItem = new DateItem(currentDate);
-        dateItem.currentMonth = true;
-        dateItem.today = isSameDate(today, currentDate);
-        dateItem.selected = dateItem.today;
-        currentDays.push(dateItem);
-    }
-    return currentDays;
-}
-
-/**
- * 得到日历需要的日期
- */
-function getDates(date) {
-    const preDates = getPrevMonthDays(date);
-    const currentDates = getCurrentMonthDays(date);
-    const length = preDates.length + currentDates.length;
-    const nextDates = getNextMonthDays(date, (length <= 35 ? true : false));
-    return preDates.concat(currentDates).concat(nextDates);
-}
-
-function getPreDate(date) {
-    // 获取当年、当月、当日
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
-
-    // 计算上个月的年月
-    let prevY;
-    let prevM;
-    if (month === 0) {
-        // 一月
-        // 表示当前是第一个月，上一个月会是上一年的最后一个月
-        prevY = year - 1;
-        prevM = 11; // 12月
-    } else {
-        prevY = year;
-        prevM = month - 1;
-    }
-
-    // 检查上个月的最后一天
-    // 重大bug，月份必须加一，因为0是前一个月的最后一天，如果忘了加一，那么就相当于往前多跑一个月
-    const preMonthLastDay = new Date(prevY, prevM + 1, 0).getDate();
-
-    // 如果当天的日期大于上个月的总天数（例如5月31日，4月没有31号），则返回下个月的最后一天
-    let preD = 0;
-    if (day > preMonthLastDay) {
-        preD = preMonthLastDay;
-    } else {
-        preD = day;
-    }
-
-    const new_date = new Date(prevY, prevM, preD);
-    console.log(preMonthLastDay);
-    console.log(preD, 11111);
-    console.log(day, 222222);
-    return new_date;
-}
-
-function getNextDate(date) {
-    const year = date.getFullYear();
-    const month = date.getMonth(); // 9
-    const day = date.getDate();
-
-    // 计算下个月的年月
-    let nextY;
-    let nextM;
-    if (month === 11) {
-        // 12月
-        nextY = year + 1;
-        nextM = 0; // 1月
-    } else {
-        nextY = year;
-        nextM = month + 1; // 10
-    }
-
-    // 检查下个月的最后一天
-    const nextMonthLastDay = new Date(nextY, nextM + 1, 0).getDate(); // 10
-
-    // 如果当天的日期大于下个月的总天数（例如3月31日，4月没有31号），则返回下个月的最后一天
-    let nextD = 0;
-    if (day > nextMonthLastDay) {
-        nextD = nextMonthLastDay;
-    } else {
-        nextD = day;
-    }
-
-    const new_date = new Date(nextY, nextM, nextD);
-    console.log(nextMonthLastDay);
-    console.log(nextD, 11111);
-    console.log(day, 222222);
-    // console.log(new_date);
-    return new_date;
-}
-
-
-class navCalendar {
-    constructor() {
-        this.selectedDate = new Date(); // 选中的日子，默认是当天
-        this.listDates = []; // 所有相关的日子们
-        this.initDates();
-    }
-
-    initDates() {
-        this.updateDates();
-    }
-
-    updateDates() {
-        this.listDates = getDates(this.selectedDate);
-    }
-
-    nextMonth() {
-        this.selectedDate = getNextDate(this.selectedDate);
-        // console.log(this.selectedDate + "12121");
-        this.updateDates();
-    }
-
-    preMonth() {
-        this.selectedDate = getPreDate(this.selectedDate);
-        this.updateDates();
-    }
-
-    to_today() {
-        this.to_random(new Date()); // 跳转到今天
-    }
-
-    to_random(date) {
-        const isDifferentMonth = !isSameMonth(this.selectedDate, date);
-        this.selectedDate = date;
-        if (isDifferentMonth) {
-            this.updateDates();
-        }
-        // 如果是同一个月，则不需要再调用 updateDates() 函数
-    }
-}
-
-// export default viewWeek;
-
 const smCalendar = new navCalendar();
-
-
-function updateSmText() { // 更新显示文本
-    let smText = computeSmText();
-    document.getElementById("smText").textContent = smText;
+export default smCalendar;
+/*
+更新侧边栏时间文本
+ */
+export function updateSmText() { //
+    document.getElementById("smText").textContent = computeSmText();
 }
-
-function computeSmText() { // 计算当前的日期文本
+/*
+计算侧边栏时间文本
+ */
+export function computeSmText() { //
     const selectedDate = smCalendar.selectedDate;
     const year = selectedDate.getFullYear();
     const month = `${selectedDate.getMonth() + 1}`.padStart(2, "0");
     return `${year}-${month}`;
 }
-
-function computeTdText() { // 计算当前的日期文本
+/*
+计算今天的日期文本
+ */
+export function computeTdText() { //
     const selectedDate = smCalendar.selectedDate;
     const year = selectedDate.getFullYear();
     const month = `${selectedDate.getMonth() + 1}`.padStart(2, "0");
     const date = `${selectedDate.getDate()}`.padStart(2, "0");
     return `${year}-${month}-${date}`;
 }
-
-function showNav(x) { // 展示侧边栏
+/*
+展示侧边栏
+ */
+function showNav(x) { //
     x.classList.toggle("change");
     if (x.classList.contains("change")) {
         openNav();
@@ -306,9 +52,12 @@ function closeNav() {
     document.getElementById("main").style.marginLeft = "0";
     document.getElementById("leftNav").style.opacity = "0"
 }
-
-function renderDates() {
+/*
+渲染侧边栏日历的方法
+ */
+export function renderDates() {
     // 得到日期容器
+    let frag = document.createDocumentFragment();
     const dateContainer = document.querySelector('.smDates');
     dateContainer.innerHTML = '';  // 清空现有的日期
 
@@ -329,30 +78,36 @@ function renderDates() {
         if (dateItem.currentMonth) dateText.classList.add('sm-current');
         if (dateItem.preMonth) dateText.classList.add('sm-pre');
         if (dateItem.nextMonth) dateText.classList.add('sm-next');
-        if (isSameDate(dateItem.date, smCalendar.selectedDate)) dateText.classList.add('sm-selected');
+        if (isSameDate(dateItem.date,smCalendar.selectedDate)) dateText.classList.add('sm-selected');
         dateText.addEventListener('click', function () {
             handleDateClick(dateItem.date);
         });
         dateElem.appendChild(dateText);
-        dateContainer.appendChild(dateElem);
+        frag.appendChild(dateElem);
     });
-    // console.log("renderDates function is called");
+    dateContainer.appendChild(frag);
 }
-
+/*
+会更新侧边栏日历的selectedDate，重新渲染日期，更新日期文本
+ */
 function handleDateClick(date) {
     // 更新 selectedDate
     smCalendar.to_random(date);
     // 重新渲染日期和星期的显示
     renderDates();
     updateSmText();
+    console.log('month')
     // console.log(smCalendar.selectedDate,222)
 }
-
+/*
+通过检查用户信息div的存在来判断用户是否登录
+ */
 function userLoggedIn() {
-    // 通过检查用户信息div的存在来判断用户是否登录
     return document.querySelector('.user-infor') !== null;
 }
-
+/*
+得到用户的主题设置信息
+ */
 function fetchUserColorMode() {
     // 假设服务器端点 '/getUserColorMode' 返回用户的颜色模式
     return fetch('/getUserColorMode')
@@ -370,7 +125,6 @@ function fetchUserColorMode() {
             console.error('There has been a problem with your fetch operation:', error);
         });
 }
-
 
 document.addEventListener("DOMContentLoaded", function () {
     const checkbox = document.getElementById('changeMode');
@@ -391,12 +145,14 @@ document.addEventListener("DOMContentLoaded", function () {
     //     localStorage.removeItem('color-mode');
     //     checkbox.checked = (html.getAttribute('color-mode') === 'light');
     // }
-    // 检查用户是否登录
+    /*
+    检查用户是否登录
+     */
     if (userLoggedIn()) {
         // 用户已登录，从服务器获取明暗模式
         fetchUserColorMode().then(mode => {
-            html.setAttribute('color-mode', mode); // 设置HTML属性
-            checkbox.checked = (mode === 'light'); // 更新checkbox状态
+            html.setAttribute('color-mode', mode); // 设置HTML的color-mode的属性
+            checkbox.checked = (mode === 'light'); // 更新checkbox状态。因为开关情况和明暗互相影响
         });
     } else {
         // 用户未登录，使用localStorage
@@ -411,13 +167,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // 监听开关的更改事件
+    /*
+    监听亮暗转换
+     */
     checkbox.addEventListener('change', function () {
-        // 设置HTML属性
         const mode = checkbox.checked ? 'light' : 'dark';
-        // 设置HTML属性
         html.setAttribute('color-mode', mode);
-
+        // 如果是用户登录的情况，不仅需要改变明亮，还要把数据传到数据库
         if (userLoggedIn()) {
             let xhr = new XMLHttpRequest();
             xhr.open('POST', '/updateColorMode');
@@ -428,10 +184,25 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
     });
+    /*
+    得到当前的页面，来决定跳不跳过切换月的逻辑
+     */
     const currentFilename = window.location.href.split('/').pop();
+    /*
+    header的往前的切换按钮
+     */
     const btn_pre = document.getElementById("pre")
+    /*
+    header的往后的切换按钮
+     */
     const btn_next = document.getElementById("next")
+    /*
+    退出
+     */
     const logoutButton = document.getElementById("logout");
+    /*
+    在对应的页面会有对应的切换逻辑，非登陆页面可切换侧边栏，登陆页面就是登陆页面本身的切换逻辑
+     */
     btn_pre.addEventListener("click", function () {
         if (currentFilename !== '' && currentFilename !== 'main') {
             console.log(currentFilename)
@@ -441,8 +212,12 @@ document.addEventListener("DOMContentLoaded", function () {
         handleDateClick(smCalendar.selectedDate);
         console.log(smCalendar.selectedDate);
     });
+    /*
+    在对应的页面会有对应的切换逻辑，非登陆页面可切换侧边栏，登陆页面就是登陆页面本身的切换逻辑
+     */
     btn_next.addEventListener("click", function () {
         if (currentFilename !== '' && currentFilename !== 'main') {
+            console.log(currentFilename)
             return;
         }
         smCalendar.nextMonth();
@@ -450,7 +225,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(smCalendar.selectedDate);
     });
 
-    // 初始化周
+    // 初始化周。这是固定设置好的
     const weekList = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const weekContainer = document.getElementById("smCDay");
     weekList.forEach(week => {
@@ -459,13 +234,14 @@ document.addEventListener("DOMContentLoaded", function () {
         weekItem.textContent = week;
         weekContainer.appendChild(weekItem);
     });
-    renderDates();
+    renderDates(); // 渲染
+    updateSmText();
     document.getElementById("hamburger").addEventListener("click", function () {
         showNav(this);
     });
 
     document.getElementById("smBtnL").addEventListener("click", function () {
-        smCalendar.preMonth(); // 此时的选中时间已经变了
+        smCalendar.preMonth(); // 此时的选中时间已经变了，所以传入的日子就是改变后的
         handleDateClick(smCalendar.selectedDate);
         console.log(smCalendar.selectedDate);
     });
@@ -480,9 +256,7 @@ document.addEventListener("DOMContentLoaded", function () {
         renderDates();
         updateSmText();
     });
-    updateSmText();
-    const today_text = computeTdText();
-    document.getElementById("today_title").textContent = today_text;
+    document.getElementById("today_title").textContent = computeTdText();
     // 获取changeView按钮
     let changeViewButton = document.getElementById('changeView');
 

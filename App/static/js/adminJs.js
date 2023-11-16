@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById("resetData");
     const modal2 = document.getElementById("addData");
+    /*
+    关闭模态框
+     */
     window.onclick = function (event) {
         if (event.target === modal) {
             modal.style.display = "none";

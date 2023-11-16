@@ -1,4 +1,5 @@
 import datetime
+import mimetypes
 
 from flask import Flask
 from .views import blue
@@ -14,7 +15,7 @@ FLASK_DB = "calendar_web"
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='static')
 
     # 注册蓝图
     app.register_blueprint(blueprint=blue)
@@ -29,5 +30,6 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     init_exts(app)
+    mimetypes.add_type('application/javascript', '.js')
 
     return app

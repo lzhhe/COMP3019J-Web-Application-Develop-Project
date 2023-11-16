@@ -11,13 +11,14 @@
     <title>{% block title %}base title{% endblock %}</title>
     <link rel="stylesheet" href="../static/css/colors.css"/>
     <link rel="stylesheet" href="../static/css/base.css"/>
+    <link rel="shortcut icon" href="../static/pic/c_icon.jpg">
     <script src="https://kit.fontawesome.com/7c8801c017.js" crossorigin="anonymous"></script>
 
     <!-- Roboto Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;900&display=swap"
           rel="stylesheet">
     {% block extra_css %}{% endblock %}
-    <script src="../static/js/base.js"></script>
+    <script type="module" src="{{ url_for('static', filename='js/base.js') }}"></script>
     <script src="../static/js/jquery-3.7.1.min.js"></script>
     {% block extra_js %}{% endblock %}
 

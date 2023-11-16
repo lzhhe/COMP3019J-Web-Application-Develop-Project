@@ -1,10 +1,174 @@
 {% extends 'base.html' %}
 {% block title %}
-yearView
+    yearView
 {% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="../static/css/viewYear.css">
+    <link rel="stylesheet" href="../static/css/modal.css">
 {% endblock %}
 {% block extra_js %}
-     <script src="../static/js/viewYear.js"></script>
+    <script src="../static/js/viewYear.js" type="module"></script>
+    <script src="../static/js/resetData.js"></script>
+{% endblock %}
+
+{% block mainBody %}
+    <div class="months" id="months">
+        <div class="month" id="month1">
+            <div class="month-value" id="January">January</div>
+            <div class="month-week">
+                <div class="weekItem">Sun</div>
+                <div class="weekItem">Mon</div>
+                <div class="weekItem">Tue</div>
+                <div class="weekItem">Wed</div>
+                <div class="weekItem">Thu</div>
+                <div class="weekItem">Fri</div>
+                <div class="weekItem">Sat</div>
+            </div>
+            <div class="month-dates"></div>
+        </div>
+        <div class="month" id="month2">
+            <div class="month-value" id="February">February</div>
+            <div class="month-week">
+                <div class="weekItem">Sun</div>
+                <div class="weekItem">Mon</div>
+                <div class="weekItem">Tue</div>
+                <div class="weekItem">Wed</div>
+                <div class="weekItem">Thu</div>
+                <div class="weekItem">Fri</div>
+                <div class="weekItem">Sat</div>
+            </div>
+            <div class="month-dates"></div>
+        </div>
+        <div class="month" id="month3">
+            <div class="month-value" id="March">March</div>
+            <div class="month-week">
+                <div class="weekItem">Sun</div>
+                <div class="weekItem">Mon</div>
+                <div class="weekItem">Tue</div>
+                <div class="weekItem">Wed</div>
+                <div class="weekItem">Thu</div>
+                <div class="weekItem">Fri</div>
+                <div class="weekItem">Sat</div>
+            </div>
+            <div class="month-dates"></div>
+        </div>
+        <div class="month" id="month4">
+            <div class="month-value" id="April">April</div>
+            <div class="month-week">
+                <div class="weekItem">Sun</div>
+                <div class="weekItem">Mon</div>
+                <div class="weekItem">Tue</div>
+                <div class="weekItem">Wed</div>
+                <div class="weekItem">Thu</div>
+                <div class="weekItem">Fri</div>
+                <div class="weekItem">Sat</div>
+            </div>
+            <div class="month-dates"></div>
+        </div>
+        <div class="month" id="month5">
+            <div class="month-value" id="March">March</div>
+            <div class="month-week">
+                <div class="weekItem">Sun</div>
+                <div class="weekItem">Mon</div>
+                <div class="weekItem">Tue</div>
+                <div class="weekItem">Wed</div>
+                <div class="weekItem">Thu</div>
+                <div class="weekItem">Fri</div>
+                <div class="weekItem">Sat</div>
+            </div>
+            <div class="month-dates"></div>
+        </div>
+        <div class="month" id="month6">
+            <div class="month-value" id="June">June</div>
+            <div class="month-week">
+                <div class="weekItem">Sun</div>
+                <div class="weekItem">Mon</div>
+                <div class="weekItem">Tue</div>
+                <div class="weekItem">Wed</div>
+                <div class="weekItem">Thu</div>
+                <div class="weekItem">Fri</div>
+                <div class="weekItem">Sat</div>
+            </div>
+            <div class="month-dates"></div>
+        </div>
+        <div class="month" id="month7">
+            <div class="month-value" id="July">July</div>
+            <div class="month-week">
+                <div class="weekItem">Sun</div>
+                <div class="weekItem">Mon</div>
+                <div class="weekItem">Tue</div>
+                <div class="weekItem">Wed</div>
+                <div class="weekItem">Thu</div>
+                <div class="weekItem">Fri</div>
+                <div class="weekItem">Sat</div>
+            </div>
+            <div class="month-dates"></div>
+        </div>
+        <div class="month" id="month8">
+            <div class="month-value" id="August">August</div>
+            <div class="month-week">
+                <div class="weekItem">Sun</div>
+                <div class="weekItem">Mon</div>
+                <div class="weekItem">Tue</div>
+                <div class="weekItem">Wed</div>
+                <div class="weekItem">Thu</div>
+                <div class="weekItem">Fri</div>
+                <div class="weekItem">Sat</div>
+            </div>
+            <div class="month-dates"></div>
+        </div>
+        <div class="month" id="month9">
+            <div class="month-value" id="September">September</div>
+            <div class="month-week">
+                <div class="weekItem">Sun</div>
+                <div class="weekItem">Mon</div>
+                <div class="weekItem">Tue</div>
+                <div class="weekItem">Wed</div>
+                <div class="weekItem">Thu</div>
+                <div class="weekItem">Fri</div>
+                <div class="weekItem">Sat</div>
+            </div>
+            <div class="month-dates"></div>
+        </div>
+        <div class="month" id="month10">
+            <div class="month-value" id="October">October</div>
+            <div class="month-week">
+                <div class="weekItem">Sun</div>
+                <div class="weekItem">Mon</div>
+                <div class="weekItem">Tue</div>
+                <div class="weekItem">Wed</div>
+                <div class="weekItem">Thu</div>
+                <div class="weekItem">Fri</div>
+                <div class="weekItem">Sat</div>
+            </div>
+            <div class="month-dates"></div>
+        </div>
+        <div class="month" id="month11">
+            <div class="month-value" id="November">November</div>
+            <div class="month-week">
+                <div class="weekItem">Sun</div>
+                <div class="weekItem">Mon</div>
+                <div class="weekItem">Tue</div>
+                <div class="weekItem">Wed</div>
+                <div class="weekItem">Thu</div>
+                <div class="weekItem">Fri</div>
+                <div class="weekItem">Sat</div>
+            </div>
+            <div class="month-dates"></div>
+        </div>
+        <div class="month" id="month12">
+            <div class="month-value" id="December">December</div>
+            <div class="month-week">
+                <div class="weekItem">Sun</div>
+                <div class="weekItem">Mon</div>
+                <div class="weekItem">Tue</div>
+                <div class="weekItem">Wed</div>
+                <div class="weekItem">Thu</div>
+                <div class="weekItem">Fri</div>
+                <div class="weekItem">Sat</div>
+            </div>
+            <div class="month-dates"></div>
+        </div>
+    </div>
+    {% include 'resetInfor.html' %}
 {% endblock %}

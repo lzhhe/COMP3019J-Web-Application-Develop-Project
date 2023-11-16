@@ -1,7 +1,130 @@
 .weather-container {
     display: none;
 }
+
 body {
     /*全局禁止滚动条，只有需要滚动的时候再设置*/
     overflow: hidden;
 }
+
+#main {
+    overflow-y: hidden;
+}
+
+.mainBody {
+    overflow-y: auto;
+}
+
+.months {
+    height: calc(100vh - 80px); /* 减去.week-title的高度 */
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 20px 10px;
+    grid-auto-flow: row;
+    grid-template-areas:
+    ". . . ."
+    ". . . ."
+    ". . . .";
+    width: 100%;
+    box-shadow: 0 2px 4px 0 var(--changeViewDrop-shadow);
+    margin-top: 70px;
+}
+
+.month {
+    height: 240px;
+    width: 240px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 2%;
+    padding-right: 2%;
+    border: 1px solid var(--smallCalendar-hover-border);
+    box-shadow: 0 2px 2px 0 var(--smallCalendar-hover-shadow);
+    border-radius: 5%;
+}
+
+.month-value {
+    width: 100%;
+    height: 12.5%;
+    border-bottom: 1px solid var(--smallCalendar-hover-border);
+    display: flex;
+    justify-content: start; /* 使子元素分布在容器的两端 */
+    align-items: center; /* 使子元素在容器中垂直居中 */
+}
+
+.month-week {
+    width: 100%;
+    height: 12.5%;
+    border-bottom: 1px dotted var(--smallCalendar-hover-border);
+    padding-left: 2%;
+    padding-right: 1%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.weekItem {
+    font-size: small;
+    color: var(--smCDayItem-color);
+    text-align: center;
+}
+
+.month-dates {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.month-dates {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.specific-date {
+    height: 30px;
+    width: 13%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.specific-date:hover {
+    background-color: var(--sm-calendar-date-hover);
+}
+
+.specific-date-text {
+    font-family: "Courier New", Courier, monospace !important;
+    color: var(--sm-date-text-color);
+    cursor: pointer !important;
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.specific-pre,
+.specific-next {
+    color: var(--sm-pre-next-color);
+    opacity: 0.8;
+}
+
+.specific-today {
+    border: 1px solid var(--sm-today-border-color);
+}
+
+.specific-selected {
+    background-color: var(--sm-today-border-color);
+    color: var(--sm-selected-color);
+}
+
