@@ -22,6 +22,11 @@ def draw():
     return render_template('draw.html')
 
 
+@blue.route('/todo')
+def todo():
+    return render_template('todo.html')
+
+
 def session_required(fn):
     @wraps(fn)
     def inner(*args, **kwargs):
