@@ -120,8 +120,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // 在模态框中创建事件并添加到DOM
     document.getElementById('submit').addEventListener('click', () => {
-        const title = document.getElementById('inputTitle').value;
-        const description = document.getElementById('inputDescription').value;
+        const title = document.getElementById('inputTitle').value.trim();
+        const description = document.getElementById('inputDescription').value.trim();
+        if (!title){
+             alert('Please enter a title.');
+             return;
+        }
 
         // 创建event对象
         const newEvent = new Event(title, description);
