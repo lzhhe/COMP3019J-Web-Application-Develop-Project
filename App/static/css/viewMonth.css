@@ -4,14 +4,19 @@
 
 body {
     /*全局禁止滚动条，只有需要滚动的时候再设置*/
-    overflow: auto;
+    overflow: hidden;
 }
 
 #main {
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 .mainBody {
+    overflow-y: auto;
+}
+
+.monthContainer {
+    height: calc(100vh);
     overflow-y: auto;
 }
 
@@ -61,6 +66,7 @@ body {
     border-bottom: 1px solid var(--week-item-border);
     border-right: 1px solid var(--week-item-border);
 }
+
 .day.currentTime {
     background-color: #eee;
     z-index: 2;
@@ -72,9 +78,11 @@ body {
     font-weight: bold;
     padding-left: 45%;
 }
-.events {
-    padding: 10px;
 
+.events {
+    max-height: 100px;
+    padding: 10px;
+    overflow-y: auto;
 }
 
 .today {

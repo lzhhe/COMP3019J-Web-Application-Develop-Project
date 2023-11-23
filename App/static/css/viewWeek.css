@@ -4,14 +4,18 @@
 
 body {
     /*全局禁止滚动条，只有需要滚动的时候再设置*/
-    overflow: auto;
+    overflow: hidden;
 }
 
 #main {
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 .mainBody {
+    overflow-y: auto;
+}
+#calendarWeek {
+    height: calc(100vh);
     overflow-y: auto;
 }
 
