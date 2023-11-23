@@ -4,7 +4,44 @@
 {% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="../static/css/viewMonth.css">
+    <link rel="stylesheet" href="../static/css/modal.css">
+
 {% endblock %}
 {% block extra_js %}
-     <script src="../static/js/viewMonth.js"></script>
+    <script src="../static/js/viewMonth.js" type="module"></script>
+    <script src="../static/js/resetData.js"></script>
+
+{% endblock %}
+
+{% block mainBody %}
+    <div class="monthContainer" id="monthContainer">
+        <div class="monthWeekDay">
+            <div class="daysOut">
+                <div class="days">Sun</div>
+            </div>
+            <div class="daysOut">
+                <div class="days">Mon</div>
+            </div>
+            <div class="daysOut">
+                <div class="days">Tue</div>
+            </div>
+            <div class="daysOut">
+                <div class="days">Wed</div>
+            </div>
+            <div class="daysOut">
+                <div class="days">Thu</div>
+            </div>
+            <div class="daysOut">
+                <div class="days">Fri</div>
+            </div>
+            <div class="daysOut">
+                <div class="days">Sat</div>
+            </div>
+        </div>
+        <div class="monthDates">
+
+        </div>
+    </div>
+
+    {% include 'resetInfor.html' %}
 {% endblock %}

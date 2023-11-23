@@ -29,6 +29,19 @@ function toDate(date) {
         .toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 }
 
+function openModel(date, startTime, endTime) {
+    $("#eventModal").show(); // 显示模态窗口
+
+    $("#eventDate").val(date);
+    $("#eventStart").val(startTime);
+    $("#eventEnd").val(endTime);
+
+    $("#cancelButton").off("click").on("click", function () {
+        $("#eventModal").hide(); // 隐藏模态窗口
+    });
+
+}
+
 class TimeLine {
     constructor(date, width, height) {
         this.top = height * 24 * ((date.getHours() * 60 + date.getMinutes()) / DAY_MINUTE);
@@ -82,26 +95,11 @@ class WeekCalendar {
     }
 
     clickSlot(hour, dayIndex) {
-        console.log(hour.toString().padStart(2, "0") + ":00");
-        console.log(toDate(this.weekList[dayIndex].date));
-        // if (this.mode !== MODE.VIEW) return;
-        // this.mode = MODE.CREATE;
-        // const start = hour.toString().padStart(2, "0") + ":00";
-        // const end =
-        //     hour < 23
-        //         ? (hour + 1).toString().padStart(2, "0") + ":00"
-        //         : hour.toString().padStart(2, "0") + ":59";
-        //
-        // const date = dateString(addDays(this.weekStart, dayIndex));
-        // const event = new Event({
-        //     start,
-        //     end,
-        //     date,
-        //     title: "",
-        //     description: "",
-        //     color: "red",
-        // });
-        // this.openModal(event);
+        const date = toDate(this.weekList[dayIndex].date);
+        const startTime = hour.toString().padStart(2, "0") + ":00";
+        const endTime = hour < 23 ? (hour + 1).toString().padStart(2, "0") + ":00"
+            : hour.toString().padStart(2, "0") + ":59";
+        openModel(date, startTime, endTime);
     }
 
 
@@ -173,6 +171,7 @@ class WeekCalendar {
         return this.startOfWeek(date1).getTime() === this.startOfWeek(date2).getTime();
     }
 }
+
 
 const viewWeek = new WeekCalendar();
 
