@@ -5,6 +5,7 @@ const WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const DAY_MS = 86400000;
 const WEEK_MS = 7 * DAY_MS;
 const DAY_MINUTE = 24 * 60;
+
 /*
 创建week元素
  */
@@ -23,6 +24,11 @@ class WeekItem {
     }
 }
 
+function toDate(date) {
+    return `${date.getFullYear()}-${(date.getMonth() + 1)
+        .toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+}
+
 class TimeLine {
     constructor(date, width, height) {
         this.top = height * 24 * ((date.getHours() * 60 + date.getMinutes()) / DAY_MINUTE);
@@ -36,6 +42,75 @@ class WeekCalendar {
         this.selectedDate.setHours(0, 0, 0, 0);
         this.weekList = [];
         this.initWeek();
+        this.setupTimes();
+        this.setupDays();
+    }
+
+    setupTimes() {
+        const header = $("<div></div>").addClass("columnHeader");
+        const slots = $("<div></div>").addClass("slots");
+        for (let hour = 0; hour < 24; hour++) {
+            $("<div></div>")
+                .attr("data-hour", hour)
+                .addClass("time")
+                .text(`${hour}:00 - ${hour + 1}:00`)
+                .appendTo(slots);
+        }
+        $(".col-1").append(header).append(slots);
+    }
+
+    setupDays() {
+        const cal = this;
+        $(".day").each(function () {
+            const dayIndex = parseInt($(this).attr("data-dayIndex"));
+            const header = $("<div></div>").addClass("columnHeader").text(name);
+            const slots = $("<div></div>").addClass("slots");
+            $("<div></div>").addClass("dayDisplay").appendTo(header);
+            for (let hour = 0; hour < 24; hour++) {
+                $("<div></div>")
+                    .attr("data-hour", hour)
+                    .appendTo(slots)
+                    .addClass("slot")
+                    .click(() => cal.clickSlot(hour, dayIndex))
+                    .hover(
+                        () => cal.hoverOver(hour),
+                        () => cal.hoverOut()
+                    );
+            }
+            $(this).append(header).append(slots);
+        });
+    }
+
+    clickSlot(hour, dayIndex) {
+        console.log(hour.toString().padStart(2, "0") + ":00");
+        console.log(toDate(this.weekList[dayIndex].date));
+        // if (this.mode !== MODE.VIEW) return;
+        // this.mode = MODE.CREATE;
+        // const start = hour.toString().padStart(2, "0") + ":00";
+        // const end =
+        //     hour < 23
+        //         ? (hour + 1).toString().padStart(2, "0") + ":00"
+        //         : hour.toString().padStart(2, "0") + ":59";
+        //
+        // const date = dateString(addDays(this.weekStart, dayIndex));
+        // const event = new Event({
+        //     start,
+        //     end,
+        //     date,
+        //     title: "",
+        //     description: "",
+        //     color: "red",
+        // });
+        // this.openModal(event);
+    }
+
+
+    hoverOver(hour) {
+        $(`.time[data-hour=${hour}]`).addClass("currentTime");
+    }
+
+    hoverOut() {
+        $(".time").removeClass("currentTime");
     }
 
     initWeek() {
