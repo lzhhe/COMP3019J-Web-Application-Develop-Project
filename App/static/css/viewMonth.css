@@ -33,6 +33,7 @@ body {
     font-family: "Courier New", Courier, monospace;
     font-weight: bold;
     align-items: center;
+    padding-left: 10px;
 }
 
 .daysOut {
@@ -68,11 +69,27 @@ body {
 .dates {
     height: 20px;
     border-bottom: 1px dotted var(--week-item-border);
-
-
+    font-weight: bold;
+    padding-left: 45%;
 }
 .events {
     padding: 10px;
 
 }
+
+.today {
+    background-color: var(--sm-today-border-color);
+    color: var(--sm-selected-color);
+}
+
+.pre,
+.next {
+    color: var(--sm-pre-next-color);
+    opacity: 0.8;
+}
+
+
+
+
+
 

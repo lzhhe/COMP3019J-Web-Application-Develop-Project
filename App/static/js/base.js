@@ -90,7 +90,7 @@ export function renderDates() {
 /*
 会更新侧边栏日历的selectedDate，重新渲染日期，更新日期文本
  */
-function handleDateClick(date) {
+export function handleDateClick(date) {
     // 更新 selectedDate
     smCalendar.to_random(date);
     // 重新渲染日期和星期的显示
