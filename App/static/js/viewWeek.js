@@ -259,8 +259,12 @@ function handleDateClick(date) {
     updateSmText();
     updateWeekView();
     updateTimeContainer();
-    console.log('week')
+    console.log('week');
+    renderEvents();
     // console.log(smCalendar.selectedDate,222)
+}
+function renderEvents(){
+    console.log('events');
 }
 
 document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {

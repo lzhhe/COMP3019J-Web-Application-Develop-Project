@@ -54,6 +54,9 @@ function openModel(date) {
     });
 
 }
+function renderEvents(){
+    console.log('events');
+}
 
 
 $(document).ready(function () {
@@ -84,8 +87,8 @@ $(document).ready(function () {
             hoverOver,
             hoverOut
         );
-        (function(index){
-            dayDiv.click(function() {
+        (function (index) {
+            dayDiv.click(function () {
                 clickSlot(index);
             });
         })(i);
@@ -94,36 +97,40 @@ $(document).ready(function () {
     $('#time_container').text(monthTitle());
     $('#pre').click(function () {
         calendar.preMonth();
+        handleDateClick(calendar.selectedDate);
         updateDayDivText(); // 调用函数来更新日历视图
         $('#time_container').text(monthTitle());
-        smCalendar.preMonth();
-        handleDateClick(smCalendar.selectedDate);
+        renderEvents();
+
     });
 
     $('#next').click(function () {
         calendar.nextMonth();
+        handleDateClick(calendar.selectedDate);
         updateDayDivText(); // 调用函数来更新日历视图
         $('#time_container').text(monthTitle());
-        handleDateClick(smCalendar.selectedDate);
-
+        renderEvents();
     });
     $('#to_today').click(function () {
         calendar.to_today();
         updateDayDivText(); // 调用函数来更新日历视图
         $('#time_container').text(monthTitle());
+        renderEvents();
 
     });
     $('#smBtnL').click(function () {
         calendar.preMonth();
         updateDayDivText(); // 调用函数来更新日历视图
         $('#time_container').text(monthTitle());
+        handleDateClick(calendar.selectedDate);
+        renderEvents();
     });
     $('#smBtnR').click(function () {
         calendar.nextMonth();
         updateDayDivText(); // 调用函数来更新日历视图
         $('#time_container').text(monthTitle());
-        handleDateClick(smCalendar.selectedDate);
-
+        handleDateClick(calendar.selectedDate);
+        renderEvents();
     });
 
 });
