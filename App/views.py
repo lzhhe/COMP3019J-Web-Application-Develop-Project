@@ -143,9 +143,9 @@ def find_password():
     elif request.method == 'POST':
         form = FindForm(request.form)
         if form.validate():
-            username = form.find_uname.data  # 修改这里
-            email = form.find_email.data  # 修改这里
-            password = form.find_password.data  # 修改这里
+            username = form.find_uname.data
+            email = form.find_email.data
+            password = form.find_password.data
             user = User.query.filter_by(username=username).first()
             if email == user.email:
                 user.password = generate_password_hash(password)
@@ -184,6 +184,13 @@ def changeInfor():
             return redirect(url_for('cal_u.weekView', error="the username has existed"))
 
 
+@blue.route('/logout')
+def logout():
+    session.pop('uid')
+    response = redirect('main')
+    return response
+
+
 @blue.route('/addEvent', methods=['GET', 'POST'])
 def addEvent():
     if request.method == 'GET':
@@ -192,21 +199,49 @@ def addEvent():
         form = AddEvent(request.form)
         if form.validate():
             user = g.user
+            if user.status == 1: #student
+                userStatus = 0 # student personal event
+            elif user.status ==2:
+                userStatus = 1 # teacher personal event
 
+            if form.add_new_startDate is not None and form.add_new_startTime is not None:
+                eventStatus = 0
+            else:
+                eventStatus = 1
 
-
+            username = g.user.username
+            targetUser = username
+            eventTitle = form.add_new_eventTitle
+            content = form.add_new_content
+            startDate = form.add_new_startDate
+            endDate = form.add_new_endDate
+            startTime = form.add_new_startTime
+            endTime = form.add_new_endTime
+            color = form.add_new_color
 
             db.session.commit()
+
             return redirect(url_for('cal_u.weekView'))
         else:
-            return redirect(url_for('cal_u.weekView', error="The event may be has some problem"))
+            # 如果表单验证失败，重定向到相同页面并显示错误
+            return redirect(url_for('cal_u.weekView', error="The event may have some problems"))
+
+
+@blue.route('/addGroupEvent', methods=['GET', 'POST'])
+def addEvent():
+    if request.method == 'GET':
+        return render_template('addGroupEvent.html')
+    else:
+        form = AddEvent(request.form)
+        if form.validate():
+
+            # db.session.add(new_event)
+            db.session.commit()
+
+            return redirect(url_for('cal_u.weekView'))
+        else:
+            # 如果表单验证失败，重定向到相同页面并显示错误
+            return redirect(url_for('cal_u.weekView', error="The event may have some problems"))
 
 
 
-
-
-@blue.route('/logout')
-def logout():
-    session.pop('uid')
-    response = redirect('main')
-    return response

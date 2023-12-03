@@ -18,14 +18,17 @@ class User(db.Model):
 class Event(db.Model):
     __tablename__ = 'event'
     EID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(255), db.ForeignKey('user.username'))
-    eventTitle = db.Column(db.String(256), unique=True, nullable=False)
-    content = db.Column(db.Text, nullable=False)
+    username = db.Column(db.String(255), db.ForeignKey('user.username')) # who create this event
+    targetUser = db.Column(db.String(255), db.ForeignKey('user.username')) # the target user (like teacher send event to the student)
+    eventTitle = db.Column(db.String(256), nullable=False)
+    content = db.Column(db.Text)
     startDate = db.Column(db.Date)
     endDate = db.Column(db.Date, nullable=False)
     startTime = db.Column(db.Time)
     endTime = db.Column(db.Time,nullable=False)
-    eventStatus = db.Column(db.Integer, nullable=False) # 0 Event 1 DDL
+    color = db.Column(db.Integer, nullable=False)
+    eventStatus = db.Column(db.Integer, nullable=False)  # 0 Event 1 DDL
+    userStatus = db.Column(db.Integer, nullable=False)  # 0 event from student 1 event from teacher
 
     @property
     def durationDate(self):
