@@ -1,0 +1,146 @@
+#eventModal {
+    display: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px var(--changeViewDrop-shadow);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    z-index: 10;
+    padding: 20px;
+    width: 450px;
+    min-width: 250px;
+    background-color: var(--main-color);
+}
+
+#eventModal input {
+    display: inline-block;
+}
+
+#errors {
+    color: var(--color-red);
+}
+
+#modalTitle {
+    margin-bottom: 20px;
+}
+
+#eventModal label {
+    font-weight: bold;
+    display: inline-block;
+    margin: 20px 10px 5px 0px;
+    font-size: 16px;
+}
+
+
+#eventModal input[type="text"],
+#eventModal textarea {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+    font-size: 18px;
+    color: var(--text-color);
+    font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
+}
+
+#eventDate, #eventStart, #eventEnd {
+    width: 40%;
+    font-size: 16px;
+    color: var(--text-color);
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+#eventTitle {
+    width: 95% !important;
+}
+
+
+#eventDescription {
+    border: 1px solid #cecece;
+    width: 95% !important;
+    height: 170px;
+    min-height: 40px;
+    resize: none;
+    padding: 4px;
+    box-sizing: border-box;
+    background-color: var(--main-color);
+}
+
+#eventDescription:focus {
+    border: 1px solid var(--text-color);
+}
+
+#eventControls {
+    margin: 25px 0px 10px 0px;
+}
+
+.button {
+    padding: 10px 20px;
+    background-color: var(--todo1);
+    color: white;
+    cursor: pointer;
+    margin-right: 12px;
+    border-radius: 5px;
+    border: none;
+}
+
+#deleteButton {
+    background-color: var(--color-red);
+}
+
+.button:hover,
+.button:focus {
+    opacity: 0.8;
+}
+
+/* colors in event modal */
+
+#colors {
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 150px;
+}
+
+.color {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50%;
+    border: 5px solid white;
+    box-sizing: content-box;
+    cursor: pointer;
+}
+
+.color.active,
+.color:focus,
+.color:hover {
+    border: 5px solid #cecece;
+}
+
+.color-red {
+    background-color: var(--color-red);
+}
+
+.color-blue {
+    background-color: var(--todo1);
+}
+
+.color-green {
+    background-color: var(--done1);
+}
+
+.color-orange {
+    background-color: var(--doing1);
+}
+
+@media (max-width: 800px) {
+    #weekDisplay {
+        display: none;
+    }
+}

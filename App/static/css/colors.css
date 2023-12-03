@@ -74,6 +74,27 @@
     --select-hover: #f0f0f0;
 
     --canvas-background: #f0f0f0;
+
+    --todo1: #4a90e2;
+    --todo2: #7cafdc;
+    --doing1: #e1a659;
+    --doing2: #f7cc9b;
+    --done1: #4ebc86;
+    --done2: #a4d7c6;
+    --draggable-text: #e9550c;
+    --draggable-backgound: rgba(240, 240, 240, 0.7);
+
+    --draggable-border1: #743ad5;
+    --draggable-border2: #d53a9d;
+
+    --todobutton: #4caf50;
+    --todobutton-hover: #45a049;
+    --todocreate: #337ab7;
+    --todoback: #d9534f;
+    --todoclose: #d9534f;
+    --tododelete: #f44336;
+    --tododeletehover: #c9302c;
+
 }
 
 :root[color-mode="dark"] {
@@ -154,4 +175,24 @@
     --select-hover: #a69191;
 
     --canvas-background: #757575;
+
+    --todo1: #345b7b;
+    --todo2: #567d96;
+    --doing1: #a67c52;
+    --doing2: #b89a78;
+    --done1: #357f5c;
+    --done2: #60997e;
+    --draggable-text: #be8260;
+    --draggable-backgound: rgba(40, 40, 40, 0.7);
+
+    --draggable-border1: #5c3a9d;
+    --draggable-border2: #9d3a78;
+
+    --todobutton: #357a38;
+    --todobutton-hover: #2e6f2e;
+    --todocreate: #285a8f;
+    --todoback: #a63e2b;
+    --todoclose: #a63e2b;
+    --tododelete: #d32f2f;
+    --tododeletehover: #b71c1c;
 }

@@ -1,8 +1,14 @@
+import smCalendar, {renderDates, updateSmText} from "./base.js";
+import {getDates} from "./tempJs/calendar.js";
+
 const WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const DAY_MS = 86400000;
 const WEEK_MS = 7 * DAY_MS;
 const DAY_MINUTE = 24 * 60;
 
+/*
+创建week元素
+ */
 class WeekItem {
     constructor(date) {
         this.date = date;
@@ -18,6 +24,24 @@ class WeekItem {
     }
 }
 
+function toDate(date) {
+    return `${date.getFullYear()}-${(date.getMonth() + 1)
+        .toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+}
+
+function openModel(date, startTime, endTime) {
+    $("#eventModal").show(); // 显示模态窗口
+
+    $("#eventDate").val(date);
+    $("#eventStart").val(startTime);
+    $("#eventEnd").val(endTime);
+
+    $("#cancelButton").off("click").on("click", function () {
+        $("#eventModal").hide(); // 隐藏模态窗口
+    });
+
+}
+
 class TimeLine {
     constructor(date, width, height) {
         this.top = height * 24 * ((date.getHours() * 60 + date.getMinutes()) / DAY_MINUTE);
@@ -31,6 +55,60 @@ class WeekCalendar {
         this.selectedDate.setHours(0, 0, 0, 0);
         this.weekList = [];
         this.initWeek();
+        this.setupTimes();
+        this.setupDays();
+    }
+
+    setupTimes() {
+        const header = $("<div></div>").addClass("columnHeader");
+        const slots = $("<div></div>").addClass("slots");
+        for (let hour = 0; hour < 24; hour++) {
+            $("<div></div>")
+                .attr("data-hour", hour)
+                .addClass("time")
+                .text(`${hour}:00 - ${hour + 1}:00`)
+                .appendTo(slots);
+        }
+        $(".col-1").append(header).append(slots);
+    }
+
+    setupDays() {
+        const cal = this;
+        $(".day").each(function () {
+            const dayIndex = parseInt($(this).attr("data-dayIndex"));
+            const header = $("<div></div>").addClass("columnHeader").text(name);
+            const slots = $("<div></div>").addClass("slots");
+            $("<div></div>").addClass("dayDisplay").appendTo(header);
+            for (let hour = 0; hour < 24; hour++) {
+                $("<div></div>")
+                    .attr("data-hour", hour)
+                    .appendTo(slots)
+                    .addClass("slot")
+                    .click(() => cal.clickSlot(hour, dayIndex))
+                    .hover(
+                        () => cal.hoverOver(hour),
+                        () => cal.hoverOut()
+                    );
+            }
+            $(this).append(header).append(slots);
+        });
+    }
+
+    clickSlot(hour, dayIndex) {
+        const date = toDate(this.weekList[dayIndex].date);
+        const startTime = hour.toString().padStart(2, "0") + ":00";
+        const endTime = hour < 23 ? (hour + 1).toString().padStart(2, "0") + ":00"
+            : hour.toString().padStart(2, "0") + ":59";
+        openModel(date, startTime, endTime);
+    }
+
+
+    hoverOver(hour) {
+        $(`.time[data-hour=${hour}]`).addClass("currentTime");
+    }
+
+    hoverOut() {
+        $(".time").removeClass("currentTime");
     }
 
     initWeek() {
@@ -94,13 +172,13 @@ class WeekCalendar {
     }
 }
 
+
 const viewWeek = new WeekCalendar();
 
 function initTimeZone() {
     const timezoneDisplay = document.getElementById('timezoneDisplay');
     const offset = -new Date().getTimezoneOffset() / 60;
-    const timezone = `GMT${offset >= 0 ? '+' : '-'}${Math.abs(offset)}`;
-    timezoneDisplay.textContent = timezone;
+    timezoneDisplay.textContent = `GMT${offset >= 0 ? '+' : '-'}${Math.abs(offset)}`;
 }
 
 function isPassed(date) {
@@ -109,8 +187,7 @@ function isPassed(date) {
 }
 
 function updateTimeContainer() {
-    let tmText = computeTmText();
-    document.getElementById('time_container').textContent = tmText;
+    document.getElementById('time_container').textContent = computeTmText();
 }
 
 function computeTmText() {
@@ -131,6 +208,7 @@ function computeTmText() {
 }
 
 function updateWeekView() {
+    let frag = document.createDocumentFragment();
     const weekContainer = document.getElementById('weekContainer');
     weekContainer.innerHTML = '';  // 清空当前周的内容
 
@@ -159,8 +237,15 @@ function updateWeekView() {
         });
         weekItem.appendChild(weekItem1);
         weekItem.appendChild(weekItem2);
-        weekContainer.appendChild(weekItem);
+        frag.appendChild(weekItem);
         // console.log(week.date);
+    });
+    weekContainer.appendChild(frag);
+    const calendarDateDivs = document.querySelectorAll('.sm-calendar-date');
+    calendarDateDivs.forEach(div => {
+        div.addEventListener('click', function () {
+            handleDateClick(smCalendar.selectedDate);
+        });
     });
 
 }
@@ -174,9 +259,12 @@ function handleDateClick(date) {
     updateSmText();
     updateWeekView();
     updateTimeContainer();
-
-
+    console.log('week');
+    renderEvents();
     // console.log(smCalendar.selectedDate,222)
+}
+function renderEvents(){
+    console.log('events');
 }
 
 document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
@@ -186,17 +274,14 @@ document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
     updateTimeContainer();
     const btn_pre = document.getElementById("pre")
     const btn_next = document.getElementById("next")
+
+
     btn_pre.addEventListener("click", function () {
         viewWeek.toPreviousWeek();
 
         smCalendar.listDates = getDates(smCalendar.selectedDate);
         smCalendar.selectedDate = viewWeek.selectedDate;
-
-        renderDates();
-        updateSmText();
-        updateWeekView();
-        updateTimeContainer()
-        console.log(smCalendar.selectedDate);
+        handleDateClick(viewWeek.selectedDate);
         console.log(viewWeek.selectedDate, 1111);
     });
     btn_next.addEventListener("click", function () {
@@ -204,23 +289,26 @@ document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
 
         smCalendar.listDates = getDates(smCalendar.selectedDate);
         smCalendar.selectedDate = viewWeek.selectedDate;
-        renderDates();
-        updateSmText();
-        updateWeekView();
-        updateTimeContainer()
-        console.log(smCalendar.selectedDate);
-        console.log(viewWeek.selectedDate, 1111);
+        handleDateClick(smCalendar.selectedDate);
 
     });
+
+    document.getElementById("smBtnL").addEventListener("click", function () {
+        handleDateClick(smCalendar.selectedDate);
+        console.log(smCalendar.selectedDate);
+    });
+    document.getElementById("smBtnR").addEventListener("click", function () {
+        handleDateClick(smCalendar.selectedDate);
+        console.log(smCalendar.selectedDate);
+    });
+
 
     document.getElementById("to_today").addEventListener("click", function () {
         smCalendar.to_today();
         viewWeek.toCurrentWeek();
         smCalendar.selectedDate = viewWeek.selectedDate;
-        renderDates();
-        updateSmText();
-        updateTimeContainer()
-        updateWeekView();
+        handleDateClick(smCalendar.selectedDate);
+
     });
 
 });

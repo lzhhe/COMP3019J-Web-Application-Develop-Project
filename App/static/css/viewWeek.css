@@ -1,15 +1,29 @@
 [class*="col-"] {
     float: left;
-    padding: 15px;
-    border: 1px solid red;
 }
+
 body {
     /*全局禁止滚动条，只有需要滚动的时候再设置*/
     overflow: hidden;
 }
+
 #main {
     overflow-y: hidden;
 }
+
+.mainBody {
+    overflow-y: auto;
+}
+#calendarWeek {
+    height: calc(100vh);
+    overflow-y: auto;
+}
+
+
+.header {
+    z-index: 10;
+}
+
 
 .col-1 {
     width: 9%;
@@ -23,6 +37,42 @@ body {
     content: "";
     clear: both;
     display: table;
+}
+
+.slots {
+    position: relative;
+    z-index: 2;
+}
+
+.slot,
+.time {
+    border-top: 1px solid #cecece;
+    height: 30px;
+    z-index: 2;
+}
+
+.time {
+    font-size: 14px;
+    z-index: 2;
+    text-align: center;
+    padding-top: 5%;
+}
+
+.slot:hover {
+    cursor: pointer;
+    background-color: #eee;
+}
+
+.time.currentTime {
+    background-color: #eee;
+    z-index: 2;
+}
+
+.day {
+    width: 100%;
+    min-width: 110px;
+    border-left: 1px solid #cecece;
+    z-index: 2;
 }
 
 .week-title {
@@ -50,6 +100,8 @@ body {
     align-items: center;
     justify-content: space-around;
     flex-direction: row;
+    overflow-y: auto;
+
 }
 
 .week-item {
@@ -65,7 +117,6 @@ body {
 
 .week-body {
     height: calc(100vh - 80px); /* 减去.week-title的高度 */
-    overflow-y: auto;
 }
 
 .week-item:hover {
@@ -102,8 +153,8 @@ body {
 .is-weekend {
     background-color: var(--is-weekend-background);
 }
+
 .weather-container {
     display: none;
 }
-
 

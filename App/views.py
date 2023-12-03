@@ -22,6 +22,11 @@ def draw():
     return render_template('draw.html')
 
 
+@blue.route('/todo')
+def todo():
+    return render_template('todo.html')
+
+
 def session_required(fn):
     @wraps(fn)
     def inner(*args, **kwargs):
@@ -38,6 +43,7 @@ def session_required(fn):
 def weekView():
     # uid = request.cookies.get('uid')
     user = g.user
+    session['last_page'] = 'weekView'
     if user.status == 1:
         return render_template('viewWeek.html')
     elif user.status == 2:
@@ -52,6 +58,7 @@ def weekView():
 def monthView():
     # uid = request.cookies.get('uid')
     user = g.user
+    session['last_page'] = 'monthView'
     if user.status == 1:
         return render_template('viewMonth.html')
     elif user.status == 2:
@@ -66,6 +73,7 @@ def monthView():
 def yearView():
     # uid = request.cookies.get('uid')
     user = g.user
+    session['last_page'] = 'yearView'
     if user.status == 1:
         return render_template('viewYear.html')
     elif user.status == 2:

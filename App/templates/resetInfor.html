@@ -1,0 +1,34 @@
+<div id="resetData" class="modal">
+    <form class="modal-content animate" method="post" id="resetForm" action="{{ url_for('cal_u.changeInfor') }}">
+        <input type="hidden" name="user_uid" id="user_uid">
+        <div class="find-container">
+                <span onclick="document.getElementById('resetData').style.display='none'" class="close"
+                      title="Close Modal">&times;</span>
+            <label for="new-password"><b>New password</b></label>
+            <input type="text" placeholder="Enter New password" id="new-password" name="new_password"/>
+
+            <label><b>Choose gender</b></label>
+            <div class="choice radio">
+                <label for="choose-male" class="block">male</label>
+                <input type="radio" name="choose_gender" id="choose-male" value="1">
+                <label for="choose-female" class="block">female</label>
+                <input type="radio" name="choose_gender" id="choose-female" value="2">
+            </div>
+
+
+            <label><b>Choose grade</b></label>
+            <div class="choice radio">
+                <label for="choose-one" class="block">1</label>
+                <input type="radio" name="choose_grade" id="choose-one" value="1">
+                <label for="choose-two" class="block">2</label>
+                <input type="radio" name="choose_grade" id="choose-two" value="2">
+                <label for="choose-three" class="block">3</label>
+                <input type="radio" name="choose_grade" id="choose-three" value="3">
+                <label for="choose-four" class="block">4</label>
+                <input type="radio" name="choose_grade" id="choose-four" value="4">
+            </div>
+
+            <button type="submit" class="change-info">Change Information</button>
+        </div>
+    </form>
+</div>
