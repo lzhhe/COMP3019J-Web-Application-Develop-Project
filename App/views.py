@@ -1,7 +1,7 @@
 from datetime import datetime
 from functools import wraps
 
-from flask import Blueprint, render_template, request, redirect, session, url_for, g, app
+from flask import Blueprint, render_template, request, redirect, session, url_for, g, app, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 
@@ -60,12 +60,46 @@ def monthView():
     user = g.user
     session['last_page'] = 'monthView'
     if user.status == 1:
-        return render_template('viewMonth.html')
+        events = Event.query.filter_by(username=user.username).all()
+        return render_template('viewMonth.html', events=events)
     elif user.status == 2:
         response = redirect(url_for('cal_t.teacherView'))
     else:
         response = redirect(url_for('cal_a.adminView'))
     return response
+
+
+@blue.route('/addEvent', methods=['GET', 'POST'])
+def addEvent():
+    if request.method == 'GET':
+        return redirect(url_for('cal_u.monthView'))
+    else:
+        form = AddEvent(request.form)
+        if form.validate():
+            username = g.user.username
+            title = form.title.data
+            content = form.content.data
+            startDate = form.startDate.data
+            endDate = form.endDate.data
+            color = form.color.data
+            event = Event(username=username, eventTitle=title, content=content,
+                          startDate=startDate, endDate=endDate, color=color)
+            db.session.add(event)
+            db.session.commit()
+
+            new_event = {
+                "id": event.EID,
+                "title": event.eventTitle,
+                "startDate": event.startDate.isoformat(),
+                "endDate": event.endDate.isoformat(),
+                "content": event.content,
+                "color": event.color
+            }
+            return jsonify(new_event)
+
+        else:
+            # 如果表单验证失败，返回错误信息
+            return jsonify({'status': 'error', 'message': 'The event may have some problems'}), 400
 
 
 @blue.route('/yearView')
@@ -190,7 +224,6 @@ def logout():
     response = redirect('main')
     return response
 
-
 # @blue.route('/addEvent', methods=['GET', 'POST'])
 # def addEvent():
 #     if request.method == 'GET':
@@ -243,5 +276,3 @@ def logout():
 #             # 如果表单验证失败，重定向到相同页面并显示错误
 #             return redirect(url_for('cal_u.weekView', error="The event may have some problems"))
 #
-
-

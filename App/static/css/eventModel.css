@@ -45,8 +45,8 @@
     font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
 }
 
-#eventDate, #eventStart, #eventEnd {
-    width: 40%;
+input[type="date"], input[type="time"]{
+    width: 35%;
     font-size: 16px;
     color: var(--text-color);
     border: 1px solid #ddd;
@@ -60,7 +60,7 @@
 }
 
 
-#eventDescription {
+#content {
     border: 1px solid #cecece;
     width: 95% !important;
     height: 170px;
@@ -71,7 +71,7 @@
     background-color: var(--main-color);
 }
 
-#eventDescription:focus {
+#content:focus {
     border: 1px solid var(--text-color);
 }
 

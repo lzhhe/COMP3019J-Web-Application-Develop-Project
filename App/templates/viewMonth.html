@@ -9,9 +9,23 @@
 
 {% endblock %}
 {% block extra_js %}
+     <script type="text/javascript">
+        const eventsData = [
+            {% for event in events %}
+                {
+                    "id": "{{ event.EID }}",
+                    "title": "{{ event.eventTitle }}",
+                    "startDate": "{{ event.startDate.isoformat() }}",
+                    "endDate": "{{ event.endDate.isoformat() }}",
+                    "content": "{{ event.content }}",
+                    "color": "{{ event.color }}"
+                }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ];
+        const addEventUrl = "{{ url_for('cal_u.addEvent') }}";
+    </script>
     <script src="../static/js/viewMonth.js" type="module"></script>
     <script src="../static/js/resetData.js"></script>
-
 {% endblock %}
 
 {% block mainBody %}
@@ -43,9 +57,6 @@
 
         </div>
     </div>
-
-
-
     {% include 'resetInfor.html' %}
     {% include 'eventModel.html' %}
 {% endblock %}

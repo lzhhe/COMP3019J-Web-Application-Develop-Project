@@ -15,31 +15,12 @@ class User(db.Model):
     color = db.Column(db.Integer, nullable=False, default=0)  # 0是light，1是dark
 
 
-class Event(db.Model):
+class Event(db.Model):  # the event on the month view。只有学生自己能建呗，就不需要target了
     __tablename__ = 'event'
     EID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(255), db.ForeignKey('user.username')) # who create this event
-    targetUser = db.Column(db.String(255), db.ForeignKey('user.username')) # the target user (like teacher send event to the student)
+    username = db.Column(db.String(255), db.ForeignKey('user.username'))  # who create this event
     eventTitle = db.Column(db.String(256), nullable=False)
     content = db.Column(db.Text)
     startDate = db.Column(db.Date)
     endDate = db.Column(db.Date, nullable=False)
-    startTime = db.Column(db.Time)
-    endTime = db.Column(db.Time,nullable=False)
     color = db.Column(db.Integer, nullable=False)
-    eventStatus = db.Column(db.Integer, nullable=False)  # 0 Event 1 DDL
-    userStatus = db.Column(db.Integer, nullable=False)  # 0 event from student 1 event from teacher
-
-    @property
-    def durationDate(self):
-        if self.startDate and self.endDate:
-            return self.endDate - self.startDate
-        else:
-            return None
-
-    @property
-    def durationTime(self):
-        if self.startTime and self.endTime:
-            return datetime.combine(date.min, self.endTime) - datetime.combine(date.min, self.startTime)
-        else:
-            return None

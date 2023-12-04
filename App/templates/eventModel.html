@@ -5,37 +5,31 @@
     <input required type="text" id="eventTitle" name="title" placeholder="title"/>
     <label class="descriptor" for="date">Date</label>
     <br>
-    <input required type="date" id="eventDate" name="date"/>
-    <br>
-
-    <label class="descriptor" for="time">Time</label>
-    <br>
-
-    <input required type="time" id="eventStart" name="time" class="shortInput"/>
+    <input required type="date" id="startDate" name="startDate"/>
     <span> -- </span>
-    <input required type="time" id="eventEnd" name="time" class="shortInput"/>
+    <input required type="date" id="endDate" name="endDate"/>
     <br>
 
 
-    <label for="description">
-        Description
+    <label for="content">
+        Content
     </label>
-    <textarea id="eventDescription" name="description" placeholder="something you want"></textarea>
+    <textarea id="content" name="content" placeholder="something you want"></textarea>
 
     <label for="color">
         Color
     </label>
     <div id="colors">
 
-        <input type="button" name="color" value="" class="color color-red" data-color="red"/>
-        <input type="button" name="color" value="" class="color color-blue" data-color="blue"/>
-        <input type="button" name="color" value="" class="color color-green" data-color="green"/>
-        <input type="button" name="color" value="" class="color color-orange" data-color="orange"/>
+        <input type="button" name="color" value="" class="color color-red" data-color="1"/>
+        <input type="button" name="color" value="" class="color color-blue" data-color="2"/>
+        <input type="button" name="color" value="" class="color color-green" data-color="3"/>
+        <input type="button" name="color" value="" class="color color-orange" data-color="4"/>
     </div>
     <div id="eventControls">
         <input type="submit" value="Submit" class="button" id="submitButton"/>
         <input type="button" value="Cancel" class="button" id="cancelButton"/>
-        <input type="button" value="Delete" class="button" id="deleteButton"/>
+        <input type="submit" value="Delete" class="button" id="deleteButton"/>
     </div>
 
     <div id="errors">

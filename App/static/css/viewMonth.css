@@ -84,6 +84,12 @@ body {
     padding: 10px;
     overflow-y: auto;
 }
+.event {
+    height: 30px;
+    border-radius: 4px;
+    margin-bottom: 1px;
+    text-align: center;
+}
 
 .today {
     background-color: var(--sm-today-border-color);
