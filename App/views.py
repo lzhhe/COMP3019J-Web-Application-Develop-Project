@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, redirect, session, url_fo
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 
-from .forms import RegisterForm, LoginForm, FindForm, ChangeInfo, AddEvent, AddDeadline, AddSchedule
+from .forms import RegisterForm, LoginForm, FindForm, ChangeInfo, AddEvent,  AddSchedule
 from .models import *
 
 blue = Blueprint('cal_u', __name__)  # cal_u is name of blueprint
@@ -59,7 +59,9 @@ def addSchedule():
         return redirect(url_for('cal_u.weekView'))
     else:
         form = AddSchedule(request.form)
+
         if form.validate():
+
             username = g.user.username
             date = form.date.data
             title = form.title.data
@@ -67,20 +69,38 @@ def addSchedule():
             startTime = form.startTime.data
             endTime = form.endTime.data
             color = form.color.data
-            schedule = Schedule(username=username, scheduleTitle=title,content=content,date=date,startTime=startTime,endTime=endTime,color=color)
-            db.session.add(schedule)
-            db.session.commit()
 
-            new_schedule = {
-                "id": schedule.SID,
-                "title": schedule.scheduleTitle,
-                "content": schedule.content,
-                "date": schedule.date,
-                "startTime": schedule.startTime.isoformat(),
-                "endTime": schedule.endTime.isoformat(),
-                "color": schedule.color
-            }
-            return jsonify(new_schedule)
+            if startTime is None : # deadline
+                deadline = Deadline(username=username, targetUsername=username ,deadlineTitle=title, content=content, date=date,
+                                  endTime=endTime, color=color)
+                db.session.add(deadline)
+                db.session.commit()
+                new_deadline ={
+                    "id": deadline.DID,
+                    "title": deadline.deadlineTitle,
+                    "targetUsername": deadline.targetUsername,
+                    "content": deadline.content,
+                    "date": deadline.date,
+                    "endTime": deadline.endTime.isoformat(),
+                    "color": deadline.color
+                }
+                return jsonify(new_deadline)
+            else:
+                schedule = Schedule(username=username, scheduleTitle=title, content=content, date=date,
+                                    startTime=startTime, endTime=endTime, color=color)
+                db.session.add(schedule)
+                db.session.commit()
+
+                new_schedule = {
+                    "id": schedule.SID,
+                    "title": schedule.scheduleTitle,
+                    "content": schedule.content,
+                    "date": schedule.date,
+                    "startTime": schedule.startTime.isoformat(),
+                    "endTime": schedule.endTime.isoformat(),
+                    "color": schedule.color
+                }
+                return jsonify(new_schedule)
 
         else:
             # 如果表单验证失败，返回错误信息
@@ -88,38 +108,6 @@ def addSchedule():
 
 
 
-@blue.route('/addDeadline', methods=['GET', 'POST'])
-def addDeadline():
-    if request.method == 'GET':
-        return redirect(url_for('cal_u.weekView'))
-    else:
-        form = AddDeadline(request.form)
-        if form.validate():
-            username = g.user.username
-            date = form.date.data
-            title = form.title.data
-            content = form.content.data
-            endTime = form.endTime.data
-            color = form.color.data
-            # need a Date
-            deadline = Deadline(username=username, deadlineTitle=title, content=content,date=date,
-                                endTime=endTime, color=color)
-            db.session.add(deadline)
-            db.session.commit()
-
-            new_deadline = {
-                "id": deadline.DID,
-                "title": deadline.eventTitle,
-                "date":date,
-                "endTime": deadline.endTime.isoformat(),
-                "content": deadline.content,
-                "color": deadline.color
-            }
-            return jsonify(new_deadline )
-
-        else:
-            # 如果表单验证失败，返回错误信息
-            return jsonify({'status': 'error', 'message': 'The deadline may have some problems'}), 400
 
 
 @blue.route('/monthView')

@@ -324,7 +324,7 @@ $(document).ready(function () {
 
         const scheduleData = {
             title: $('#eventTitle').val(),
-            startTime: $('#startTime').val(),
+            startTime: $('#startTime').val() ,
             endTime: $('#endTime').val(),
             date: $('#date').val(),
             content: $('#content').val(),

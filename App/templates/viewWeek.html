@@ -16,7 +16,13 @@
                     "id": "{{ schedule.SID }}",
                     "title": "{{ schedule.scheduleTitle }}",
                     "date": "{{ schedule.date }}",
-                    "startTime": "{{ schedule.startTime.isoformat() }}",
+                    "startTime": (function() {
+                try {
+                    return schedule.startTime.isoformat();
+                } catch (e) {
+                    return '';
+                }
+            })(),
                     "endTime": "{{ schedule.endTime.isoformat() }}",
                     "content": "{{ schedule.content }}",
                     "color": "{{ schedule.color }}"

@@ -93,15 +93,8 @@ class AddEvent(wtforms.Form):
 class AddSchedule(wtforms.Form):
     title = wtforms.StringField('Schedule Title', validators=[DataRequired(), Length(max=256)])
     content = wtforms.TextAreaField('Content')
-    date = wtforms.DateField('Date')
-    startTime = wtforms.TimeField('Start Time', validators=[DataRequired()])
+    date = wtforms.DateField('Date', validators=[DataRequired()])
+    startTime = wtforms.TimeField('Start Time',validators=[Optional()])
     endTime = wtforms.TimeField('End Time', validators=[DataRequired()])
     color = wtforms.IntegerField('Color', validators=[DataRequired()])
 
-class AddDeadline(wtforms.Form):
-    title = wtforms.StringField('Schedule Title', validators=[DataRequired(), Length(max=256)])
-    content = wtforms.TextAreaField('Content')
-    date = wtforms.TimeField('Date')
-    endTime = wtforms.TimeField('End Time', validators=[DataRequired()])
-    color = wtforms.IntegerField('Color', validators=[DataRequired()])
-    grade = wtforms.IntegerField('Grade', validators=[DataRequired()]) # for teacher
