@@ -15,12 +15,37 @@ class User(db.Model):
     color = db.Column(db.Integer, nullable=False, default=0)  # 0是light，1是dark
 
 
-class Event(db.Model):  # the event on the month view。只有学生自己能建呗，就不需要target了
+class Event(db.Model):
     __tablename__ = 'event'
     EID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(255), db.ForeignKey('user.username'))  # who create this event
     eventTitle = db.Column(db.String(256), nullable=False)
     content = db.Column(db.Text)
-    startDate = db.Column(db.Date)
+    startDate = db.Column(db.Date, nullable=False)
     endDate = db.Column(db.Date, nullable=False)
     color = db.Column(db.Integer, nullable=False)
+
+class Schedule(db.Model):
+    __tablename__ = 'schedule'
+    SID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(255), db.ForeignKey('user.username'))  # who create this event
+    scheduleTitle = db.Column(db.String(256), nullable=False)
+    content = db.Column(db.Text)
+    date = db.Column(db.Date, nullable=False)
+    startTime = db.Column(db.Time, nullable=False)
+    endTime = db.Column(db.Time, nullable=False)
+    color = db.Column(db.Integer, nullable=False)
+
+
+class Deadline(db.Model):
+    __tablename__ = 'deadline'
+    DID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(255), db.ForeignKey('user.username'))  # who create this event
+    targetUsername = db.Column(db.String(255), db.ForeignKey('user.username'))  # who will receive this deadline
+    date = db.Column(db.Date, nullable=False)
+    deadlineTitle = db.Column(db.String(256), nullable=False)
+    content = db.Column(db.Text)
+    endTime = db.Column(db.Time, nullable=False)
+    color = db.Column(db.Integer, nullable=False)
+
+

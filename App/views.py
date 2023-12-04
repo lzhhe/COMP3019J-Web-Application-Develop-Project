@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, redirect, session, url_fo
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 
-from .forms import RegisterForm, LoginForm, FindForm, ChangeInfo, AddEvent
+from .forms import RegisterForm, LoginForm, FindForm, ChangeInfo, AddEvent, AddDeadline, AddSchedule
 from .models import *
 
 blue = Blueprint('cal_u', __name__)  # cal_u is name of blueprint
@@ -51,6 +51,75 @@ def weekView():
     else:
         response = redirect(url_for('cal_a.adminView'))
     return response
+
+
+@blue.route('/addSchedule', methods=['GET', 'POST'])
+def addSchedule():
+    if request.method == 'GET':
+        return redirect(url_for('cal_u.weekView'))
+    else:
+        form = AddSchedule(request.form)
+        if form.validate():
+            username = g.user.username
+            date = form.date.data
+            title = form.title.data
+            content = form.content.data
+            startTime = form.startTime.data
+            endTime = form.endTime.data
+            color = form.color.data
+            schedule = Schedule(username=username, scheduleTitle=title,content=content,date=date,startTime=startTime,endTime=endTime,color=color)
+            db.session.add(schedule)
+            db.session.commit()
+
+            new_schedule = {
+                "id": schedule.SID,
+                "title": schedule.scheduleTitle,
+                "content": schedule.content,
+                "date": schedule.date,
+                "startTime": schedule.startTime.isoformat(),
+                "endTime": schedule.endTime.isoformat(),
+                "color": schedule.color
+            }
+            return jsonify(new_schedule)
+
+        else:
+            # 如果表单验证失败，返回错误信息
+            return jsonify({'status': 'error', 'message': 'The schedule may have some problems'}), 400
+
+
+
+@blue.route('/addDeadline', methods=['GET', 'POST'])
+def addDeadline():
+    if request.method == 'GET':
+        return redirect(url_for('cal_u.weekView'))
+    else:
+        form = AddDeadline(request.form)
+        if form.validate():
+            username = g.user.username
+            date = form.date.data
+            title = form.title.data
+            content = form.content.data
+            endTime = form.endTime.data
+            color = form.color.data
+            # need a Date
+            deadline = Deadline(username=username, deadlineTitle=title, content=content,date=date,
+                                endTime=endTime, color=color)
+            db.session.add(deadline)
+            db.session.commit()
+
+            new_deadline = {
+                "id": deadline.DID,
+                "title": deadline.eventTitle,
+                "date":date,
+                "endTime": deadline.endTime.isoformat(),
+                "content": deadline.content,
+                "color": deadline.color
+            }
+            return jsonify(new_deadline )
+
+        else:
+            # 如果表单验证失败，返回错误信息
+            return jsonify({'status': 'error', 'message': 'The deadline may have some problems'}), 400
 
 
 @blue.route('/monthView')
@@ -224,55 +293,4 @@ def logout():
     response = redirect('main')
     return response
 
-# @blue.route('/addEvent', methods=['GET', 'POST'])
-# def addEvent():
-#     if request.method == 'GET':
-#         return render_template('addEvent.html')
-#     else:
-#         form = AddEvent(request.form)
-#         if form.validate():
-#             user = g.user
-#             if user.status == 1: #student
-#                 userStatus = 0 # student personal event
-#             elif user.status ==2:
-#                 userStatus = 1 # teacher personal event
-#
-#             if form.add_new_startDate is not None and form.add_new_startTime is not None:
-#                 eventStatus = 0
-#             else:
-#                 eventStatus = 1
-#
-#             username = g.user.username
-#             targetUser = username
-#             eventTitle = form.add_new_eventTitle
-#             content = form.add_new_content
-#             startDate = form.add_new_startDate
-#             endDate = form.add_new_endDate
-#             startTime = form.add_new_startTime
-#             endTime = form.add_new_endTime
-#             color = form.add_new_color
-#
-#             db.session.commit()
-#
-#             return redirect(url_for('cal_u.weekView'))
-#         else:
-#             # 如果表单验证失败，重定向到相同页面并显示错误
-#             return redirect(url_for('cal_u.weekView', error="The event may have some problems"))
-#
-#
-# @blue.route('/addGroupEvent', methods=['GET', 'POST'])
-# def addEvent():
-#     if request.method == 'GET':
-#         return render_template('addGroupEvent.html')
-#     else:
-#         form = AddEvent(request.form)
-#         if form.validate():
-#
-#             # db.session.add(new_event)
-#             db.session.commit()
-#
-#             return redirect(url_for('cal_u.weekView'))
-#         else:
-#             # 如果表单验证失败，重定向到相同页面并显示错误
-#             return redirect(url_for('cal_u.weekView', error="The event may have some problems"))
 #

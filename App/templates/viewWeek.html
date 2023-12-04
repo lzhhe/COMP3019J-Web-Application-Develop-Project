@@ -9,6 +9,22 @@
 
 {% endblock %}
 {% block extra_js %}
+    <script type="text/javascript">
+        const schedulesData = [
+            {% for schedule in schedules %}
+                {
+                    "id": "{{ schedule.SID }}",
+                    "title": "{{ schedule.scheduleTitle }}",
+                    "date": "{{ schedule.date }}",
+                    "startTime": "{{ schedule.startTime.isoformat() }}",
+                    "endTime": "{{ schedule.endTime.isoformat() }}",
+                    "content": "{{ schedule.content }}",
+                    "color": "{{ schedule.color }}"
+                }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ];
+        const addScheduleUrl = "{{ url_for('cal_u.addSchedule') }}";
+    </script>
     <script src="../static/js/viewWeek.js" type="module"></script>
     <script src="../static/js/resetData.js"></script>
 {% endblock %}
@@ -57,7 +73,8 @@
 
 
     </div>
-    {% include 'eventModel.html' %}
 
+    {% include 'scheduleModel.html' %}
     {% include 'resetInfor.html' %}
+
 {% endblock %}
