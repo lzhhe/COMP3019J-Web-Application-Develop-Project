@@ -43,7 +43,7 @@ function openModel(date, startTime, endTime) {
     $("#submitButton").show();
     $("#deleteButton").hide();
     $("#updateButton").hide();
-
+    $("#changeButton").show().val('schedule');
     $('#eventModal').find('input[type=text], textarea').val('');
     $("#date").val(date);
     $("#startTime").val(startTime);
@@ -76,6 +76,8 @@ function openEventModal1(data) {
 
 function openEventModal2(data) {
     $("#submitButton").hide();
+    console.log(data.target)
+    console.log(data.username)
     if (data.target === data.username) {
         $("#changeButton").hide();
         $("#updateButton").show();
@@ -83,8 +85,10 @@ function openEventModal2(data) {
     } else {
         $("#updateButton").hide();
         $("#deleteButton").hide();
-        $("#changeButton").show().val(data.username);
+        $("#changeButton").show().val(data.username).prop('disabled', true);
+
     }
+    $('#startTime').prop('disabled', true).val(''); // 或者设置为其他默认值
     $("#sdId").val(parseInt(data.id), 10);
     $("#eventTitle").val(data.title);
     $("#date").val(data.date);
@@ -97,7 +101,6 @@ function openEventModal2(data) {
         $("#eventModal").hide(); // 隐藏模态窗口
         $('#startTime').prop('disabled', true).val('none');
     });
-    $('#startTime').prop('disabled', false).val(''); // 或者设置为其他默认值
 }
 
 function getColor(colorCode) {
@@ -536,6 +539,7 @@ $(document).ready(function () {
 
     $('#submitButton').click(function (e) {
         e.preventDefault();
+
         const scheduleData = {
             title: $('#eventTitle').val(),
             startTime: $('#startTime').val(),
@@ -545,7 +549,11 @@ $(document).ready(function () {
             color: $('.color.active').data('color'),
         };
         console.log(scheduleData)
-
+        if (scheduleData.startTime !== '' &&
+            new Date(scheduleData.date + ' ' + scheduleData.startTime) >= new Date(scheduleData.date + ' ' + scheduleData.endTime)) {
+            alert('Error: Start time must be earlier than end time.');
+            return; // 阻止代码继续执行
+        }
         // 发送数据到服务器
         $.ajax({
             url: addScheduleUrl,
@@ -584,6 +592,12 @@ $(document).ready(function () {
         // if (updatedScheduleData.startTime !== '') {
         //
         // }
+
+        if (updatedScheduleData.startTime !== '' &&
+            new Date(updatedScheduleData.date + ' ' + updatedScheduleData.startTime) >= new Date(updatedScheduleData.date + ' ' + updatedScheduleData.endTime)) {
+            alert('Error: Start time must be earlier than end time.');
+            return; // 阻止代码继续执行
+        }
         $.ajax({
             url: updateScheduleUrl, // 确保这是用于更新事件的正确 URL
             type: 'PUT', // 更新操作通常使用 PUT 或 PATCH 方法

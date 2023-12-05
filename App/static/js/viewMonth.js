@@ -264,7 +264,10 @@ $(document).ready(function () {
             content: $('#content').val(),
             color: $('.color.active').data('color'),
         };
-
+        if (new Date(eventData.startDate) > new Date(eventData.endDate)) {
+            alert('Start date must be less than or equal to end date');
+            return; // 提前终止函数执行
+        }
         // 发送数据到服务器
         $.ajax({
             url: addEventUrl, // 服务器端添加事件的路由
@@ -294,7 +297,10 @@ $(document).ready(function () {
             content: $('#content').val(),
             color: $('.color.active').data('color'),
         };
-
+        if (new Date(updatedEventData.startDate) > new Date(updatedEventData.endDate)) {
+            alert('Start date must be less than or equal to end date');
+            return; // 提前终止函数执行
+        }
         // 发送数据到服务器
         $.ajax({
             url: updateEventUrl, // 确保这是用于更新事件的正确 URL
