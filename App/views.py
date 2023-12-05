@@ -115,14 +115,16 @@ def addSchedule():
 def updateSchedule():
     form = UpdateSchedule(request.form)
     if form.validate():
+        print(123)
         sid = form.sid.data
         schedule = Schedule.query.get(sid)
         if schedule:
+            print(222)
             schedule.scheduleTitle = form.title.data
             schedule.content = form.content.data
             schedule.date = form.date.data
-            schedule.startTime = form.startTime.isoformat(),
-            schedule.endTime = form.endTime.isoformat(),
+            schedule.startTime = form.startTime.data
+            schedule.endTime = form.endTime.data
             schedule.color = form.color.data
 
             db.session.commit()
@@ -132,15 +134,16 @@ def updateSchedule():
                 "content": schedule.content,
                 "date": schedule.date.isoformat(),
                 "startTime": schedule.startTime.isoformat(),
-                "endTime":  schedule.endTime.isoformat(),
+                "endTime": schedule.endTime.isoformat(),
                 "color": schedule.color
             }
             return jsonify(update_schedule)
         else:
+            print(333)
             return jsonify({'status': 'error', 'message': 'schedule not found'}), 404
     else:
+        print(444)
         return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
-
 
 
 @blue.route('/monthView')

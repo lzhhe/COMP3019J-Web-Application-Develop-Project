@@ -63,8 +63,8 @@ function openEventModal1(data) {
     $("#sdId").val(parseInt(data.id), 10);
     $("#eventTitle").val(data.title);
     $("#date").val(data.date);
-    $("#startTime").val(data.startTime);
-    $("#endTime").val(data.endTime);
+    $("#startTime").val(data.startTime.substring(0, 5));
+    $("#endTime").val(data.endTime.substring(0, 5));
     $("#content").val(data.content);
     $('.color').removeClass('active');
     $('.color[data-color="' + data.color + '"]').addClass('active');
@@ -522,6 +522,7 @@ $(document).ready(function () {
             content: $('#content').val(),
             color: $('.color.active').data('color'),
         };
+        console.log(scheduleData)
 
         // 发送数据到服务器
         $.ajax({
@@ -557,20 +558,24 @@ $(document).ready(function () {
             endTime: $('#endTime').val(),
             color: $('.color.active').data('color'),
         };
-
+        console.log(updatedScheduleData)
+        // if (updatedScheduleData.startTime !== '') {
+        //
+        // }
         $.ajax({
             url: updateScheduleUrl, // 确保这是用于更新事件的正确 URL
             type: 'PUT', // 更新操作通常使用 PUT 或 PATCH 方法
             data: updatedScheduleData,
             success: function (response) {
+                console.log(updatedScheduleData)
                 //updateLocalEventData(response); // response是回调的内容，从路由得到的
                 $('#eventModal').hide(); // 隐藏模态窗口
             },
             error: function () {
+                console.log(123)
                 alert('Error updating schedule');
             }
         });
-
     });
 
     /*$('#deleteButton').click(function (e) {
