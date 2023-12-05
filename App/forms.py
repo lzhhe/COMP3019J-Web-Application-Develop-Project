@@ -99,7 +99,6 @@ class UpdateEvent(wtforms.Form):
     color = wtforms.StringField(validators=[Optional()])
 
 
-
 class AddSchedule(wtforms.Form):
     title = wtforms.StringField('Schedule Title', validators=[DataRequired(), Length(max=256)])
     content = wtforms.TextAreaField('Content')
@@ -108,11 +107,12 @@ class AddSchedule(wtforms.Form):
     endTime = wtforms.TimeField('End Time', validators=[DataRequired()])
     color = wtforms.IntegerField('Color', validators=[DataRequired()])
 
+
 class UpdateSchedule(wtforms.Form):
     sid = wtforms.StringField()
     title = wtforms.StringField('Schedule Title', validators=[Optional()])
-    content = wtforms.TextAreaField('Content',validators=[Optional()])
+    content = wtforms.TextAreaField('Content', validators=[Optional()])
     date = wtforms.DateField('Date', validators=[Optional()])
-    startTime = wtforms.TimeField('Start Time',validators=[Optional()])
+    startTime = wtforms.TimeField('Start Time', validators=[Optional()])
     endTime = wtforms.TimeField('End Time', validators=[Optional()])
-    color = wtforms.IntegerField('Color',validators=[Optional()])
+    color = wtforms.IntegerField('Color', validators=[Optional()])

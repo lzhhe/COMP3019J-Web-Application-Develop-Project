@@ -63,8 +63,8 @@ function openEventModal1(data) {
     $("#sdId").val(parseInt(data.id), 10);
     $("#eventTitle").val(data.title);
     $("#date").val(data.date);
-    $("#startTime").val(data.startTime);
-    $("#endTime").val(data.endTime);
+    $("#startTime").val(data.startTime.substring(0,5));
+    $("#endTime").val(data.endTime.substring(0,5));
     $("#content").val(data.content);
     $('.color').removeClass('active');
     $('.color[data-color="' + data.color + '"]').addClass('active');
