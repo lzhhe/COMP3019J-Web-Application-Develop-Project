@@ -579,7 +579,37 @@ $(document).ready(function () {
 
     $('#updateButton').click(function (e) {
         e.preventDefault(); // 阻止表单默认提交
-        const updatedScheduleData = {
+
+        const startTime = $('#startTime').val(); // 直接获取startTime的值
+        const isDeadline = startTime === ''; // 判断startTime是否为空
+
+        if (isDeadline){
+            const updatedDeadlineData = {
+            did: parseInt($('#sdId').val(), 10), // 确保有一个字段来识别事件
+            title: $('#eventTitle').val(),
+            date: $('#date').val(),
+            content: $('#content').val(),
+            endTime: $('#endTime').val(),
+            color: $('.color.active').data('color'),
+            };
+            $.ajax({
+            url: updateDeadlineUrl, // 确保这是用于更新事件的正确 URL
+            type: 'PUT', // 更新操作通常使用 PUT 或 PATCH 方法
+            data: updatedDeadlineData,
+            success: function (response) {
+                console.log(updatedDeadlineData)
+                //updateLocalScheduleData(response)
+
+                $('#eventModal').hide(); // 隐藏模态窗口
+            },
+            error: function () {
+                alert('Error updating deadline');
+            }
+            });
+
+
+        }else{
+            const updatedScheduleData = {
             sid: parseInt($('#sdId').val(), 10), // 确保有一个字段来识别事件
             title: $('#eventTitle').val(),
             date: $('#date').val(),
@@ -588,10 +618,7 @@ $(document).ready(function () {
             endTime: $('#endTime').val(),
             color: $('.color.active').data('color'),
         };
-        console.log(updatedScheduleData)
-        // if (updatedScheduleData.startTime !== '') {
-        //
-        // }
+        //console.log(updatedScheduleData)
 
         if (updatedScheduleData.startTime !== '' &&
             new Date(updatedScheduleData.date + ' ' + updatedScheduleData.startTime) >= new Date(updatedScheduleData.date + ' ' + updatedScheduleData.endTime)) {
@@ -613,12 +640,33 @@ $(document).ready(function () {
                 alert('Error updating schedule');
             }
         });
+        }
+
+
     });
 
     $('#deleteButton').click(function (e) {
         e.preventDefault();
-        const sid = parseInt($('#sdId').val(), 10);
-        $.ajax({
+
+        const startTime = $('#startTime').val(); // 直接获取startTime的值
+        const isDeadline = startTime === ''; // 判断startTime是否为空
+
+        if (isDeadline){
+            const did = parseInt($('#sdId').val(), 10);
+            $.ajax({
+            url: delDeadlineUrl + "?did=" + did,  // 作为查询参数发送
+            type: 'DELETE',
+            success: function (response) {
+                //deleteLocalScheduleData(response)
+                $('#eventModal').hide();
+            },
+            error: function () {
+                alert('Error deleting event');
+            }
+            });
+        }else{
+            const sid = parseInt($('#sdId').val(), 10);
+            $.ajax({
             url: delScheduleUrl + "?sid=" + sid,  // 作为查询参数发送
             type: 'DELETE',
             success: function (response) {
@@ -628,7 +676,9 @@ $(document).ready(function () {
             error: function () {
                 alert('Error deleting event');
             }
-        });
+            });
+        }
+
     });
 });
 

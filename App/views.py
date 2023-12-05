@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, redirect, session, url_fo
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 
-from .forms import RegisterForm, LoginForm, FindForm, ChangeInfo, AddEvent, UpdateEvent, UpdateSchedule
+from .forms import RegisterForm, LoginForm, FindForm, ChangeInfo, AddEvent, UpdateEvent, UpdateSchedule, UpdateDeadline
 from .forms import RegisterForm, LoginForm, FindForm, ChangeInfo, AddEvent, AddSchedule
 from .models import *
 
@@ -157,6 +157,50 @@ def deleteSchedule():
     except Exception as e:
         print('e:', e)
         return jsonify({'code': 500, 'msg': 'Error deleting event'})
+
+
+@blue.route('/updateDeadline', methods=['PUT'])
+def updateDeadline():
+    form = UpdateDeadline(request.form)
+    if form.validate():
+        did = form.did.data
+        deadline = Deadline.query.get(did)
+        if deadline:
+            deadline.deadlineTitle = form.title.data
+            deadline.content = form.content.data
+            deadline.date = form.date.data
+            deadline.endTime = form.endTime.data
+            deadline.color = form.color.data
+
+            db.session.commit()
+            update_deadline = {
+                "id": deadline.DID,
+                "title": deadline.deadlineTitle,
+                "content": deadline.content,
+                "date": deadline.date.isoformat(),
+                "endTime": deadline.endTime.isoformat(),
+                "color": deadline.color
+            }
+            return jsonify(update_deadline)
+        else:
+
+            return jsonify({'status': 'error', 'message': 'deadline not found'}), 404
+    else:
+
+        return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
+
+
+@blue.route('/deleteDeadline', methods=['DELETE'])
+def deleteDeadline():
+    did = request.args.get('did')
+    deadline = Deadline.query.get(did)
+    try:
+        db.session.delete(deadline)
+        db.session.commit()
+        return jsonify(did)
+    except Exception as e:
+        print('e:', e)
+        return jsonify({'code': 500, 'msg': 'Error deleting deadline'})
 
 
 @blue.route('/monthView')

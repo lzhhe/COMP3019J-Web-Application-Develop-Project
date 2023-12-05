@@ -116,3 +116,12 @@ class UpdateSchedule(wtforms.Form):
     startTime = wtforms.TimeField('Start Time', validators=[Optional()])
     endTime = wtforms.TimeField('End Time', validators=[Optional()])
     color = wtforms.IntegerField('Color', validators=[Optional()])
+
+
+class UpdateDeadline(wtforms.Form):
+    did = wtforms.StringField()
+    title = wtforms.StringField('Schedule Title', validators=[Optional()])
+    content = wtforms.TextAreaField('Content', validators=[Optional()])
+    date = wtforms.DateField('Date', validators=[Optional()])
+    endTime = wtforms.TimeField('End Time', validators=[Optional()])
+    color = wtforms.IntegerField('Color', validators=[Optional()])
