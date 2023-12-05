@@ -5,6 +5,10 @@ const WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const DAY_MS = 86400000;
 const WEEK_MS = 7 * DAY_MS;
 const DAY_MINUTE = 24 * 60;
+const colorMap = {
+    '1': 'var(--color-red)', '2': 'var(--todo1)',
+    '3': 'var(--done1)', '4': 'var(--doing1)'
+};
 
 /*
 创建week元素
@@ -29,25 +33,105 @@ function toDate(date) {
         .toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 }
 
+function toDate1(date) {
+    // 格式化日期为 YYYY-MM-DD
+    return date.toISOString().split('T')[0];
+}
+
 function openModel(date, startTime, endTime) {
-    $("#eventModal").show(); // 显示模态窗口
-
-    $("#eventDate").val(date);
-    $("#eventStart").val(startTime);
-    $("#eventEnd").val(endTime);
-
+    $("#eventModal").show();
+    $("#date").val(date);
+    $("#startTime").val(startTime);
+    $("#endTime").val(endTime);
+    $("#updateButton").hide();
+    $("#deleteButton").hide();
     $("#cancelButton").off("click").on("click", function () {
         $("#eventModal").hide(); // 隐藏模态窗口
     });
 
 }
 
-class TimeLine {
-    constructor(date, width, height) {
-        this.top = height * 24 * ((date.getHours() * 60 + date.getMinutes()) / DAY_MINUTE);
-        this.left = date.getDay() * width;
-    }
+function openEventModal1(data) {
+    $("#submitButton").hide();
+    $("#changeButton").hide();
+    $("#updateButton").show();
+    $("#deleteButton").show();
+    $("#sdId").val(parseInt(data.id), 10);
+    $("#eventTitle").val(data.title);
+    $("#date").val(data.date);
+    $("#startTime").val(data.startTime);
+    $("#endTime").val(data.endTime);
+    $("#content").val(data.content);
+    $('.color').removeClass('active');
+    $('.color[data-color="' + data.color + '"]').addClass('active');
+    $("#eventModal").show();
+    $("#cancelButton").off("click").on("click", function () {
+        $("#eventModal").hide(); // 隐藏模态窗口
+    });
 }
+
+function getColor(colorCode) {
+    return colorMap[colorCode] || colorMap[2];
+}
+
+function getIndex(colorCode) {
+    return 15 - colorCode || 12;
+}
+
+function loadEventsForCurrentWeek() {
+    const startOfWeek = viewWeek.startOfWeek(viewWeek.selectedDate);
+    const endOfWeek = viewWeek.endOfWeek(viewWeek.selectedDate);
+
+    $('.slots .schedule').remove(); // 仅移除所有具有 'schedule' 类的 div
+
+    schedulesData.forEach(schedule => {
+        const scheduleDate = new Date(schedule.date);
+
+        // 检查事件是否在当前选定的周内
+        if ((scheduleDate >= startOfWeek && scheduleDate <= endOfWeek)) {
+            createScheduleDiv(schedule);
+        }
+    });
+}
+
+
+function createScheduleDiv(schedule) {
+    const startTimeParts = schedule.startTime.split(':');
+    const endTimeParts = schedule.endTime.split(':');
+    const startHour = parseInt(startTimeParts[0]);
+    const startMinutes = parseInt(startTimeParts[1]);
+    const endHour = parseInt(endTimeParts[0]);
+    const endMinutes = parseInt(endTimeParts[1]);
+    const startTotalMinutes = startHour * 60 + startMinutes;
+    const endTotalMinutes = endHour * 60 + endMinutes;
+    const durationMinutes = endTotalMinutes - startTotalMinutes;
+    const dayElement = $(`.day[data-date='${schedule.date}']`);
+    const scheduleDiv = $('<div></div>')
+        .addClass('schedule')
+        .css({
+            'position': 'absolute',
+            'top': `${startTotalMinutes * 0.5}px`, // 一小时对应30px
+            'margin-left': '3%',
+            'padding-left': '5%',
+            'padding-right': '5%',
+            'margin-right': '3%',
+            'width': '94%',
+            'border-radius': '6px',
+            'height': `${durationMinutes * 0.5}px`, // 持续时间转换为高度
+            'background-color': getColor(schedule.color), // 使用预定义的颜色
+            'z-index': getIndex(schedule.color), // 设置z-index
+            'cursor': 'pointer'
+        })
+        .data('schedule', schedule)
+        .text(schedule.title) // 可以添加更多信息
+        .click(function (e) {
+            e.stopPropagation();
+            openEventModal1($(this).data('schedule'));
+        });
+
+    dayElement.find('.slots').append(scheduleDiv);
+}
+
 
 class WeekCalendar {
     constructor() {
@@ -76,6 +160,8 @@ class WeekCalendar {
         const cal = this;
         $(".day").each(function () {
             const dayIndex = parseInt($(this).attr("data-dayIndex"));
+            const date = cal.weekList[dayIndex].date;
+            const formattedDate = toDate(date);
             const header = $("<div></div>").addClass("columnHeader").text(name);
             const slots = $("<div></div>").addClass("slots");
             $("<div></div>").addClass("dayDisplay").appendTo(header);
@@ -90,7 +176,7 @@ class WeekCalendar {
                         () => cal.hoverOut()
                     );
             }
-            $(this).append(header).append(slots);
+            $(this).attr("data-date", formattedDate).append(header).append(slots);
         });
     }
 
@@ -120,6 +206,11 @@ class WeekCalendar {
         this.weekList = Array.from({length: 7}, (_, i) => {
             const currentDate = new Date(startOfWeek.getTime() + i * DAY_MS);
             return new WeekItem(currentDate);
+        });
+        $(".day").each((index, element) => {
+            const date = this.weekList[index].date;
+            const formattedDate = toDate(date);
+            $(element).attr("data-date", formattedDate);
         });
     }
 
@@ -245,6 +336,8 @@ function updateWeekView() {
     calendarDateDivs.forEach(div => {
         div.addEventListener('click', function () {
             handleDateClick(smCalendar.selectedDate);
+            loadEventsForCurrentWeek();
+
         });
     });
 
@@ -260,7 +353,6 @@ function handleDateClick(date) {
     updateWeekView();
     updateTimeContainer();
     console.log('week')
-    // console.log(smCalendar.selectedDate,222)
 }
 
 document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
@@ -279,6 +371,7 @@ document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
         smCalendar.selectedDate = viewWeek.selectedDate;
         handleDateClick(viewWeek.selectedDate);
         console.log(viewWeek.selectedDate, 1111);
+        loadEventsForCurrentWeek();
     });
     btn_next.addEventListener("click", function () {
         viewWeek.toNextWeek();
@@ -286,16 +379,20 @@ document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
         smCalendar.listDates = getDates(smCalendar.selectedDate);
         smCalendar.selectedDate = viewWeek.selectedDate;
         handleDateClick(smCalendar.selectedDate);
+        loadEventsForCurrentWeek();
 
     });
 
     document.getElementById("smBtnL").addEventListener("click", function () {
         handleDateClick(smCalendar.selectedDate);
         console.log(smCalendar.selectedDate);
+        loadEventsForCurrentWeek();
+
     });
     document.getElementById("smBtnR").addEventListener("click", function () {
         handleDateClick(smCalendar.selectedDate);
         console.log(smCalendar.selectedDate);
+        loadEventsForCurrentWeek();
     });
 
 
@@ -304,27 +401,36 @@ document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
         viewWeek.toCurrentWeek();
         smCalendar.selectedDate = viewWeek.selectedDate;
         handleDateClick(smCalendar.selectedDate);
-
+        loadEventsForCurrentWeek();
     });
 
 });
 
 
-
-
 $(document).ready(function () {
+    schedulesData.forEach(schedule => {
+        createScheduleDiv(schedule)
+    });
+
+    $('#changeButton').click(function () {
+        if ($(this).val() === 'schedule') {
+            $(this).val('deadline');
+            $('#startTime').prop('disabled', true).val('none');
+        } else {
+            $(this).val('schedule');
+            $('#startTime').prop('disabled', false).val(''); // 或者设置为其他默认值
+        }
+    });
     $('.color').click(function () {
         $('.color').removeClass('active');
         $(this).addClass('active');
     });
 
-
     $('#submitButton').click(function (e) {
         e.preventDefault();
-
         const scheduleData = {
             title: $('#eventTitle').val(),
-            startTime: $('#startTime').val() ,
+            startTime: $('#startTime').val(),
             endTime: $('#endTime').val(),
             date: $('#date').val(),
             content: $('#content').val(),
@@ -337,8 +443,10 @@ $(document).ready(function () {
             type: 'POST',
             data: scheduleData,
             success: function (response) {
-                //schedulesData.push(response);
-                //createscheduleDiv(scheduleData);
+                $('#eventModal').find('input[type=text], input[type=date], textarea').val('');
+                $('.color').removeClass('active');
+                schedulesData.push(response);
+                createScheduleDiv(response);
                 $('#eventModal').hide();
             },
             error: function () {

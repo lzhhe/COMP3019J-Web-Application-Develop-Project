@@ -10,22 +10,29 @@
 {% endblock %}
 {% block extra_js %}
     <script type="text/javascript">
-        const schedulesData = [
+        let schedulesData = [
             {% for schedule in schedules %}
                 {
                     "id": "{{ schedule.SID }}",
                     "title": "{{ schedule.scheduleTitle }}",
-                    "date": "{{ schedule.date }}",
-                    "startTime": (function() {
-                try {
-                    return schedule.startTime.isoformat();
-                } catch (e) {
-                    return '';
-                }
-            })(),
+                    "date": "{{ schedule.date.isoformat() }}",
+                    "startTime": "{{ schedule.startTime.isoformat() }}",
                     "endTime": "{{ schedule.endTime.isoformat() }}",
                     "content": "{{ schedule.content }}",
                     "color": "{{ schedule.color }}"
+                }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        let deadlinesData = [
+            {% for deadline in deadlines %}
+                {
+                    "id": "{{ deadline.DID }}",
+                    "title": "{{ deadline.deadlineTitle }}",
+                    "date": "{{ deadline.date.isoformat() }}",
+                    "endTime": "{{ deadline.endTime.isoformat() }}",
+                    "content": "{{ deadline.content }}",
+                    "color": "{{ deadline.color }}"
                 }{% if not loop.last %},{% endif %}
             {% endfor %}
         ];

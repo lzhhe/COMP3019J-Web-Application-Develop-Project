@@ -46,7 +46,9 @@ def weekView():
     user = g.user
     session['last_page'] = 'weekView'
     if user.status == 1:
-        return render_template('viewWeek.html')
+        schedules = Schedule.query.filter_by(username=user.username).all()
+        deadlines = Deadline.query.filter_by(targetUsername=user.username).all()
+        return render_template('viewWeek.html', schedules=schedules, deadlines=deadlines)
     elif user.status == 2:
         response = redirect(url_for('cal_t.teacherView'))
     else:
@@ -82,7 +84,7 @@ def addSchedule():
                     "title": deadline.deadlineTitle,
                     "targetUsername": deadline.targetUsername,
                     "content": deadline.content,
-                    "date": deadline.date,
+                    "date": deadline.date.isoformat(),
                     "endTime": deadline.endTime.isoformat(),
                     "color": deadline.color
                 }
@@ -97,7 +99,7 @@ def addSchedule():
                     "id": schedule.SID,
                     "title": schedule.scheduleTitle,
                     "content": schedule.content,
-                    "date": schedule.date,
+                    "date": schedule.date.isoformat(),
                     "startTime": schedule.startTime.isoformat(),
                     "endTime": schedule.endTime.isoformat(),
                     "color": schedule.color

@@ -88,13 +88,15 @@ input[type="date"], input[type="time"]{
     border-radius: 5px;
     border: none;
 }
-
+#changeButton {
+    margin-left: 10px;
+    margin-top: 4px;
+}
 #deleteButton {
     background-color: var(--color-red);
 }
 
-.button:hover,
-.button:focus {
+.button:hover {
     opacity: 0.8;
 }
 

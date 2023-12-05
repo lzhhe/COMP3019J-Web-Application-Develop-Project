@@ -25,6 +25,7 @@ class Event(db.Model):
     endDate = db.Column(db.Date, nullable=False)
     color = db.Column(db.Integer, nullable=False)
 
+
 class Schedule(db.Model):
     __tablename__ = 'schedule'
     SID = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -47,5 +48,3 @@ class Deadline(db.Model):
     content = db.Column(db.Text)
     endTime = db.Column(db.Time, nullable=False)
     color = db.Column(db.Integer, nullable=False)
-
-
