@@ -85,7 +85,7 @@ class AddInfo(wtforms.Form):
 class AddEvent(wtforms.Form):
     title = wtforms.StringField('Event Title', validators=[DataRequired(), Length(max=256)])
     content = wtforms.TextAreaField('Content')
-    startDate = wtforms.DateField('Start Date')
+    startDate = wtforms.DateField('Start Date', validators=[DataRequired()])
     endDate = wtforms.DateField('End Date', validators=[DataRequired()])
     color = wtforms.IntegerField('Color', validators=[DataRequired()])
 
@@ -102,26 +102,11 @@ class UpdateEvent(wtforms.Form):
 class AddGroupEvent(wtforms.Form):
     add_new_grade = wtforms.IntegerField('Target', validators=[DataRequired(), NumberRange(min=1, max=4)])
 
-    add_new_eventTitle = wtforms.StringField('Event Title', validators=[DataRequired(), Length(max=256)])
-    add_new_content = wtforms.TextAreaField('Content')
-    add_new_startDate = wtforms.DateField('Start Date')
-    add_new_endDate = wtforms.DateField('End Date', validators=[DataRequired()])
-    add_new_startTime = wtforms.TimeField('Start Time')
-    add_new_endTime = wtforms.TimeField('End Time', validators=[DataRequired()])
-    add_new_color = wtforms.IntegerField('Color', validators=[DataRequired()])
 
-    def validate_Time(self, field):
-        startDate = self.add_new_startDate.data
-        endDate = self.add_new_endDate.data
-        startTime = self.add_new_startTime.data
-        endTime = self.add_new_endTime.data
-        if startDate and endDate:
-            if startDate > endDate:
-                raise wtforms.ValidationError("The start date can not be later than end date")
-            elif startDate == endDate and startTime and endTime and startTime >= endTime:
-                raise wtforms.ValidationError("In the same day, the start time must be earlier than end time")
-
-    def validate_grade(self, field):
-        grade = field.data
-        if grade not in [1, 2, 3, 4]:
-            raise wtforms.ValidationError("Your grade is wrong")
+class AddSchedule(wtforms.Form):
+    title = wtforms.StringField('Schedule Title', validators=[DataRequired(), Length(max=256)])
+    content = wtforms.TextAreaField('Content')
+    date = wtforms.DateField('Date', validators=[DataRequired()])
+    startTime = wtforms.TimeField('Start Time', validators=[Optional()])
+    endTime = wtforms.TimeField('End Time', validators=[DataRequired()])
+    color = wtforms.IntegerField('Color', validators=[DataRequired()])

@@ -312,4 +312,44 @@ document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
 
 
 
+$(document).ready(function () {
+    $('.color').click(function () {
+        $('.color').removeClass('active');
+        $(this).addClass('active');
+    });
+
+
+    $('#submitButton').click(function (e) {
+        e.preventDefault();
+
+        const scheduleData = {
+            title: $('#eventTitle').val(),
+            startTime: $('#startTime').val() ,
+            endTime: $('#endTime').val(),
+            date: $('#date').val(),
+            content: $('#content').val(),
+            color: $('.color.active').data('color'),
+        };
+
+        // 发送数据到服务器
+        $.ajax({
+            url: addScheduleUrl,
+            type: 'POST',
+            data: scheduleData,
+            success: function (response) {
+                //schedulesData.push(response);
+                //createscheduleDiv(scheduleData);
+                $('#eventModal').hide();
+            },
+            error: function () {
+                alert('Error adding event');
+            }
+        });
+    });
+
+    $('#deleteButton').click(function () {
+
+    });
+});
+
 

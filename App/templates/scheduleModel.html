@@ -1,0 +1,42 @@
+<form id="eventModal">
+    <h2 id="modalTitle">
+    </h2>
+    <label class="descriptor" for="title">Title</label>
+    <input required type="text" id="eventTitle" name="title" placeholder="title"/>
+    <label class="descriptor" for="Date">Date</label>
+    <br>
+    <input required type="Date" id="date" name="date"/>
+    <br>
+    <label class="descriptor" for="Time">Time</label>
+    <br>
+    <input type="time" id="startTime" name="startTime"/>
+    <span> -- </span>
+    <input required type="time" id="endTime" name="endTime"/>
+    <br>
+
+
+    <label for="content">
+        Content
+    </label>
+    <textarea id="content" name="content" placeholder="something you want"></textarea>
+
+    <label for="color">
+        Color
+    </label>
+    <div id="colors">
+
+        <input type="button" name="color" value="" class="color color-red" data-color="1"/>
+        <input type="button" name="color" value="" class="color color-blue" data-color="2"/>
+        <input type="button" name="color" value="" class="color color-green" data-color="3"/>
+        <input type="button" name="color" value="" class="color color-orange" data-color="4"/>
+    </div>
+    <div id="eventControls">
+        <input type="submit" value="Submit" class="button" id="submitButton"/>
+        <input type="button" value="Cancel" class="button" id="cancelButton"/>
+        <input type="submit" value="Delete" class="button" id="deleteButton"/>
+    </div>
+
+    <div id="errors">
+    </div>
+
+</form>
