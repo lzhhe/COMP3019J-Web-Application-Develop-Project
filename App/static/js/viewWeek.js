@@ -43,7 +43,8 @@ function openModel(date, startTime, endTime) {
     $("#submitButton").show();
     $("#deleteButton").hide();
     $("#updateButton").hide();
-    $("#changeButton").show().val('schedule');
+    $("#changeButton").show().val('schedule').removeClass('fixed').addClass('button')
+        .prop('disabled', false);
     $('#eventModal').find('input[type=text], textarea').val('');
     $("#date").val(date);
     $("#startTime").val(startTime);
@@ -85,7 +86,7 @@ function openEventModal2(data) {
     } else {
         $("#updateButton").hide();
         $("#deleteButton").hide();
-        $("#changeButton").show().val(data.username).prop('disabled', true);
+        $("#changeButton").show().val(data.username).prop('disabled', true).removeClass('button').addClass('fixed');
 
     }
     $('#startTime').prop('disabled', true).val(''); // 或者设置为其他默认值
@@ -144,8 +145,6 @@ function updateLocalScheduleData(updatedSchedule) {
         console.log(11)
     } else {
         schedulesData.push(updatedSchedule); // 如果找不到事件，可能需要添加
-        console.log(updatedSchedule.eid)
-        console.log(updatedSchedule)
     }
     loadEventsForCurrentWeek(); // 重新加载事件
 }
@@ -154,6 +153,26 @@ function deleteLocalScheduleData(sid) {
     schedulesData = schedulesData.filter(schedule => parseInt(schedule.id, 10) !== parseInt(sid, 10));
     console.log(sid)
     console.log(sid.type)
+    // 重新加载当前月份的事件以更新页面
+    loadEventsForCurrentWeek();
+}
+
+function updateLocalDeadlineData(updatedDeadline) {
+    const deadlineIndex = deadlinesData.findIndex(deadline =>
+        parseInt(deadline.id, 10) === updatedDeadline.id);
+    if (deadlineIndex !== -1) {
+        deadlinesData[deadlineIndex] = updatedDeadline;
+        console.log(11)
+    } else {
+        schedulesData.push(updatedDeadline); // 如果找不到事件，可能需要添加
+    }
+    loadEventsForCurrentWeek(); // 重新加载事件
+}
+
+function deleteLocalDeadlineData(did) {
+    deadlinesData = deadlinesData.filter(deadline => parseInt(deadline.id, 10) !== parseInt(did, 10));
+    // console.log(sid)
+    // console.log(sid.type)
     // 重新加载当前月份的事件以更新页面
     loadEventsForCurrentWeek();
 }
@@ -529,7 +548,7 @@ $(document).ready(function () {
             $('#startTime').prop('disabled', true).val('none');
         } else {
             $(this).val('schedule');
-            $('#startTime').prop('disabled', false).val(''); // 或者设置为其他默认值
+            $('#startTime').prop('disabled', false).val('00:00'); // 或者设置为其他默认值
         }
     });
     $('.color').click(function () {
@@ -583,63 +602,62 @@ $(document).ready(function () {
         const startTime = $('#startTime').val(); // 直接获取startTime的值
         const isDeadline = startTime === ''; // 判断startTime是否为空
 
-        if (isDeadline){
+        if (isDeadline) {
             const updatedDeadlineData = {
-            did: parseInt($('#sdId').val(), 10), // 确保有一个字段来识别事件
-            title: $('#eventTitle').val(),
-            date: $('#date').val(),
-            content: $('#content').val(),
-            endTime: $('#endTime').val(),
-            color: $('.color.active').data('color'),
+                did: parseInt($('#sdId').val(), 10), // 确保有一个字段来识别事件
+                title: $('#eventTitle').val(),
+                date: $('#date').val(),
+                content: $('#content').val(),
+                endTime: $('#endTime').val(),
+                color: $('.color.active').data('color'),
             };
             $.ajax({
-            url: updateDeadlineUrl, // 确保这是用于更新事件的正确 URL
-            type: 'PUT', // 更新操作通常使用 PUT 或 PATCH 方法
-            data: updatedDeadlineData,
-            success: function (response) {
-                console.log(updatedDeadlineData)
-                //updateLocalScheduleData(response)
+                url: updateDeadlineUrl, // 确保这是用于更新事件的正确 URL
+                type: 'PUT', // 更新操作通常使用 PUT 或 PATCH 方法
+                data: updatedDeadlineData,
+                success: function (response) {
+                    console.log(updatedDeadlineData)
+                    updateLocalDeadlineData(response)
 
-                $('#eventModal').hide(); // 隐藏模态窗口
-            },
-            error: function () {
-                alert('Error updating deadline');
-            }
+                    $('#eventModal').hide(); // 隐藏模态窗口
+                },
+                error: function () {
+                    alert('Error updating deadline');
+                }
             });
 
 
-        }else{
+        } else {
             const updatedScheduleData = {
-            sid: parseInt($('#sdId').val(), 10), // 确保有一个字段来识别事件
-            title: $('#eventTitle').val(),
-            date: $('#date').val(),
-            content: $('#content').val(),
-            startTime: $('#startTime').val(),
-            endTime: $('#endTime').val(),
-            color: $('.color.active').data('color'),
-        };
-        //console.log(updatedScheduleData)
+                sid: parseInt($('#sdId').val(), 10), // 确保有一个字段来识别事件
+                title: $('#eventTitle').val(),
+                date: $('#date').val(),
+                content: $('#content').val(),
+                startTime: startTime,
+                endTime: $('#endTime').val(),
+                color: $('.color.active').data('color'),
+            };
+            //console.log(updatedScheduleData)
 
-        if (updatedScheduleData.startTime !== '' &&
-            new Date(updatedScheduleData.date + ' ' + updatedScheduleData.startTime) >= new Date(updatedScheduleData.date + ' ' + updatedScheduleData.endTime)) {
-            alert('Error: Start time must be earlier than end time.');
-            return; // 阻止代码继续执行
-        }
-        $.ajax({
-            url: updateScheduleUrl, // 确保这是用于更新事件的正确 URL
-            type: 'PUT', // 更新操作通常使用 PUT 或 PATCH 方法
-            data: updatedScheduleData,
-            success: function (response) {
-                console.log(updatedScheduleData)
-                updateLocalScheduleData(response)
-                //updateLocalEventData(response); // response是回调的内容，从路由得到的
-                $('#eventModal').hide(); // 隐藏模态窗口
-            },
-            error: function () {
-                console.log(123)
-                alert('Error updating schedule');
+            if (new Date(updatedScheduleData.date + ' ' + updatedScheduleData.startTime) >= new Date(updatedScheduleData.date + ' ' + updatedScheduleData.endTime)) {
+                alert('Error: Start time must be earlier than end time.');
+                return; // 阻止代码继续执行
             }
-        });
+            $.ajax({
+                url: updateScheduleUrl, // 确保这是用于更新事件的正确 URL
+                type: 'PUT', // 更新操作通常使用 PUT 或 PATCH 方法
+                data: updatedScheduleData,
+                success: function (response) {
+                    console.log(updatedScheduleData)
+                    updateLocalScheduleData(response)
+                    // updateLocalEventData(response); // response是回调的内容，从路由得到的
+                    $('#eventModal').hide(); // 隐藏模态窗口
+                },
+                error: function () {
+                    console.log(123)
+                    alert('Error updating schedule');
+                }
+            });
         }
 
 
@@ -651,31 +669,31 @@ $(document).ready(function () {
         const startTime = $('#startTime').val(); // 直接获取startTime的值
         const isDeadline = startTime === ''; // 判断startTime是否为空
 
-        if (isDeadline){
+        if (isDeadline) {
             const did = parseInt($('#sdId').val(), 10);
             $.ajax({
-            url: delDeadlineUrl + "?did=" + did,  // 作为查询参数发送
-            type: 'DELETE',
-            success: function (response) {
-                //deleteLocalScheduleData(response)
-                $('#eventModal').hide();
-            },
-            error: function () {
-                alert('Error deleting event');
-            }
+                url: delDeadlineUrl + "?did=" + did,  // 作为查询参数发送
+                type: 'DELETE',
+                success: function (response) {
+                    deleteLocalDeadlineData(response)
+                    $('#eventModal').hide();
+                },
+                error: function () {
+                    alert('Error deleting event');
+                }
             });
-        }else{
+        } else {
             const sid = parseInt($('#sdId').val(), 10);
             $.ajax({
-            url: delScheduleUrl + "?sid=" + sid,  // 作为查询参数发送
-            type: 'DELETE',
-            success: function (response) {
-                deleteLocalScheduleData(response)
-                $('#eventModal').hide();
-            },
-            error: function () {
-                alert('Error deleting event');
-            }
+                url: delScheduleUrl + "?sid=" + sid,  // 作为查询参数发送
+                type: 'DELETE',
+                success: function (response) {
+                    deleteLocalScheduleData(response)
+                    $('#eventModal').hide();
+                },
+                error: function () {
+                    alert('Error deleting event');
+                }
             });
         }
 

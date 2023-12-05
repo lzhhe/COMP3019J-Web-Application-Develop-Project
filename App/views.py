@@ -2,6 +2,7 @@ from datetime import datetime
 from functools import wraps
 
 from flask import Blueprint, render_template, request, redirect, session, url_for, g, app, jsonify
+from sqlalchemy import and_
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 
@@ -45,10 +46,27 @@ def weekView():
     # uid = request.cookies.get('uid')
     user = g.user
     session['last_page'] = 'weekView'
+    view_type = request.args.get('type', 'all')  # 默认值为 'week'
     if user.status == 1:
-        schedules = Schedule.query.filter_by(username=user.username).all()
-        deadlines = Deadline.query.filter_by(targetUsername=user.username).all()
-        return render_template('viewWeek.html', schedules=schedules, deadlines=deadlines)
+        if view_type == 'all':
+            schedules = Schedule.query.filter_by(username=user.username).all()
+            deadlines = Deadline.query.filter_by(targetUsername=user.username).all()
+            return render_template('viewWeek.html', schedules=schedules, deadlines=deadlines)
+        elif view_type == 'schedule':
+            schedules = Schedule.query.filter_by(username=user.username).all()
+            return render_template('viewWeek.html', schedules=schedules, deadlines='')
+        elif view_type == 'ddl':
+            deadlines = Deadline.query.filter_by(targetUsername=user.username).all()
+            return render_template('viewWeek.html', schedules='', deadlines=deadlines)
+        elif view_type == 'teacherddl':
+            deadlines = Deadline.query.filter(
+                and_(
+                    Deadline.targetUsername == user.username,
+                    Deadline.username != user.username
+                )
+            ).all()
+            return render_template('viewWeek.html', schedules='', deadlines=deadlines)
+
     elif user.status == 2:
         response = redirect(url_for('cal_t.teacherView'))
     else:

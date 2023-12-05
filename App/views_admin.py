@@ -177,6 +177,9 @@ def delInfor():
         uid = request.form.get('id')
         user = User.query.get(uid)
         try:
+            Schedule.query.filter_by(username=user.username).delete()
+            Event.query.filter_by(username=user.username).delete()
+            Deadline.query.filter_by(username=user.username).delete()
             db.session.delete(user)
             db.session.commit()
         except Exception as e:
