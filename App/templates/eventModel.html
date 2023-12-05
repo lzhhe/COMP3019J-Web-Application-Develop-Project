@@ -1,8 +1,11 @@
 <form id="eventModal">
     <h2 id="modalTitle">
     </h2>
+    <input type="hidden" id="eventId" name="eid"/>
+
     <label class="descriptor" for="title">Title</label>
-    <input required type="text" id="eventTitle" name="title" placeholder="title"/>
+    <input required type="text" id="eventTitle" name="title" placeholder="title"
+           value=""/>
     <label class="descriptor" for="date">Date</label>
     <br>
     <input required type="date" id="startDate" name="startDate"/>
@@ -28,6 +31,7 @@
     </div>
     <div id="eventControls">
         <input type="submit" value="Submit" class="button" id="submitButton"/>
+        <input type="submit" value="Update" class="button" id="updateButton"/>
         <input type="button" value="Cancel" class="button" id="cancelButton"/>
         <input type="submit" value="Delete" class="button" id="deleteButton"/>
     </div>

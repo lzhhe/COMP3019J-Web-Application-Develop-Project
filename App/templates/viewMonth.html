@@ -10,7 +10,7 @@
 {% endblock %}
 {% block extra_js %}
      <script type="text/javascript">
-        const eventsData = [
+        let eventsData = [
             {% for event in events %}
                 {
                     "id": "{{ event.EID }}",
@@ -23,6 +23,8 @@
             {% endfor %}
         ];
         const addEventUrl = "{{ url_for('cal_u.addEvent') }}";
+        const updateEventUrl = "{{ url_for('cal_u.updateEvent') }}";
+        const delEventUrl = "{{ url_for('cal_u.deleteEvent') }}";
     </script>
     <script src="../static/js/viewMonth.js" type="module"></script>
     <script src="../static/js/resetData.js"></script>

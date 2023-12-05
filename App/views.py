@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, redirect, session, url_fo
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 
-from .forms import RegisterForm, LoginForm, FindForm, ChangeInfo, AddEvent
+from .forms import RegisterForm, LoginForm, FindForm, ChangeInfo, AddEvent, UpdateEvent
 from .models import *
 
 blue = Blueprint('cal_u', __name__)  # cal_u is name of blueprint
@@ -100,6 +100,48 @@ def addEvent():
         else:
             # 如果表单验证失败，返回错误信息
             return jsonify({'status': 'error', 'message': 'The event may have some problems'}), 400
+
+
+@blue.route('/updateEvent', methods=['PUT'])
+def updateEvent():
+    form = UpdateEvent(request.form)
+    if form.validate():
+        eid = form.eid.data
+        event = Event.query.get(eid)
+        if event:
+            event.eventTitle = form.title.data
+            event.content = form.content.data
+            event.startDate = form.startDate.data
+            event.endDate = form.endDate.data
+            event.color = form.color.data
+
+            db.session.commit()
+            update_event = {
+                "id": event.EID,
+                "title": event.eventTitle,
+                "startDate": event.startDate.isoformat(),
+                "endDate": event.endDate.isoformat(),
+                "content": event.content,
+                "color": event.color
+            }
+            return jsonify(update_event)
+        else:
+            return jsonify({'status': 'error', 'message': 'Event not found'}), 404
+    else:
+        return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
+
+
+@blue.route('/deleteEvent', methods=['DELETE'])
+def deleteEvent():
+    eid = request.args.get('eid')  # 或使用 request.json.get('eid') 如果你发送 JSON
+    event = Event.query.get(eid)
+    try:
+        db.session.delete(event)
+        db.session.commit()
+        return jsonify(eid)
+    except Exception as e:
+        print('e:', e)
+        return jsonify({'code': 500, 'msg': 'Error deleting event'})
 
 
 @blue.route('/yearView')

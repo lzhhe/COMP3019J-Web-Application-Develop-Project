@@ -90,6 +90,9 @@ body {
     margin-bottom: 1px;
     text-align: center;
 }
+.event:hover {
+    cursor: pointer;
+}
 
 .today {
     background-color: var(--sm-today-border-color);

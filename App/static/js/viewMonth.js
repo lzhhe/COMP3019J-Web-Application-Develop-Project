@@ -74,7 +74,13 @@ function toDate(date) {
 
 function openModel(date) {
     $("#eventModal").show(); // 显示模态窗口
+    $("#submitButton").show();
     $("#deleteButton").hide();
+    $("#updateButton").hide();
+
+    $('#eventModal').find('input[type=text], textarea').val('');
+
+
     $("#startDate").val(date);
     $("#endDate").val(date);
     $("#cancelButton").off("click").on("click", function () {
@@ -102,12 +108,58 @@ function createEventDiv(event) {
         const eventDiv = $('<div></div>')
             .addClass('event')
             .text(event.title)
-            .css('background-color', getColor(event.color));
+            .css('background-color', getColor(event.color))
+            .data('event', event) // 将事件数据附加到 div 上
+            .click(function (e) {
+                e.stopPropagation();
+                openEventModal($(this).data('event'));
+            });
 
         // 将事件 div 添加到对应的事件容器中
         eventContainer.append(eventDiv);
     }
 }
+
+function openEventModal(eventData) {
+    // 填充模态窗口的字段
+    $("#submitButton").hide();
+    $("#updateButton").show();
+    $("#deleteButton").show();
+    $('#eventId').val(parseInt(eventData.id), 10);
+    $('#eventTitle').val(eventData.title);
+    $('#startDate').val(eventData.startDate);
+    $('#endDate').val(eventData.endDate);
+    $('#content').val(eventData.content);
+    $('.color').removeClass('active');
+    $('.color[data-color="' + eventData.color + '"]').addClass('active');
+    $("#eventModal").show();
+    $("#cancelButton").off("click").on("click", function () {
+        $("#eventModal").hide(); // 隐藏模态窗口
+    });
+}
+
+function updateLocalEventData(updatedEvent) {
+    const eventIndex = eventsData.findIndex(event =>
+        parseInt(event.id, 10) === updatedEvent.id);
+    if (eventIndex !== -1) {
+        eventsData[eventIndex] = updatedEvent;
+        console.log(11)
+    } else {
+        eventsData.push(updatedEvent); // 如果找不到事件，可能需要添加
+        console.log(updatedEvent.eid)
+        console.log(eventIndex)
+    }
+    loadEventsForCurrentMonth(); // 重新加载事件
+}
+
+function deleteLocalEventData(eid) {
+    eventsData = eventsData.filter(event => parseInt(event.id, 10) !== parseInt(eid, 10));
+    console.log(eid)
+    console.log(eid.type)
+    // 重新加载当前月份的事件以更新页面
+    loadEventsForCurrentMonth();
+}
+
 
 function toDate1(date) {
     // 格式化日期为 YYYY-MM-DD
@@ -147,7 +199,8 @@ $(document).ready(function () {
             hoverOut
         );
         (function (index) {
-            dayDiv.click(function () {
+            dayDiv.click(function (e) {
+                // e.stopPropagation();
                 clickSlot(index);
             });
         })(i);
@@ -201,8 +254,6 @@ $(document).ready(function () {
         $('.color').removeClass('active');
         $(this).addClass('active');
     });
-
-
     $('#submitButton').click(function (e) {
         e.preventDefault(); // 阻止表单默认提交
 
@@ -221,8 +272,11 @@ $(document).ready(function () {
             data: eventData,
             success: function (response) {
                 eventsData.push(response);
-                createEventDiv(eventData);
+                $('#eventModal').find('input[type=text], input[type=date], textarea').val('');
+                $('.color').removeClass('active');
+                createEventDiv(response);
                 $('#eventModal').hide(); // 隐藏模态窗口
+                console.log(eventsData)
             },
             error: function () {
                 alert('Error adding event');
@@ -230,8 +284,46 @@ $(document).ready(function () {
         });
     });
 
-    $('#deleteButton').click(function () {
+    $('#updateButton').click(function (e) {
+        e.preventDefault(); // 阻止表单默认提交
+        const updatedEventData = {
+            eid: parseInt($('#eventId').val(), 10), // 确保有一个字段来识别事件
+            title: $('#eventTitle').val(),
+            startDate: $('#startDate').val(),
+            endDate: $('#endDate').val(),
+            content: $('#content').val(),
+            color: $('.color.active').data('color'),
+        };
 
+        // 发送数据到服务器
+        $.ajax({
+            url: updateEventUrl, // 确保这是用于更新事件的正确 URL
+            type: 'PUT', // 更新操作通常使用 PUT 或 PATCH 方法
+            data: updatedEventData,
+            success: function (response) {
+                updateLocalEventData(response); // response是回调的内容，从路由得到的
+                $('#eventModal').hide(); // 隐藏模态窗口
+            },
+            error: function () {
+                alert('Error updating event');
+            }
+        });
+    });
+
+    $('#deleteButton').click(function (e) {
+        e.preventDefault();
+        const eid = parseInt($('#eventId').val(), 10);
+        $.ajax({
+            url: delEventUrl + "?eid=" + eid,  // 作为查询参数发送
+            type: 'DELETE',
+            success: function (response) {
+                deleteLocalEventData(response)
+                $('#eventModal').hide();
+            },
+            error: function () {
+                alert('Error deleting event');
+            }
+        });
     });
 
 });

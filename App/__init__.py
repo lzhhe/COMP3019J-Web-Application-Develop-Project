@@ -11,7 +11,7 @@ HOSTNAME = "127.0.0.1"
 PORT = 3306
 USERNAME = "root"
 # PASSWORD= “123456“
-PASSWORD = "131a2abLZH"
+PASSWORD = "123456"
 FLASK_DB = "calendar_web"
 
 

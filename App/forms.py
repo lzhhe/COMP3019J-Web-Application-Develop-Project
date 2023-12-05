@@ -90,6 +90,15 @@ class AddEvent(wtforms.Form):
     color = wtforms.IntegerField('Color', validators=[DataRequired()])
 
 
+class UpdateEvent(wtforms.Form):
+    eid = wtforms.StringField()
+    title = wtforms.StringField(validators=[Optional()])
+    content = wtforms.StringField(validators=[Optional()])
+    startDate = wtforms.StringField(validators=[Optional()])
+    endDate = wtforms.StringField(validators=[Optional()])
+    color = wtforms.StringField(validators=[Optional()])
+
+
 class AddGroupEvent(wtforms.Form):
     add_new_grade = wtforms.IntegerField('Target', validators=[DataRequired(), NumberRange(min=1, max=4)])
 
