@@ -157,4 +157,24 @@ body {
 .weather-container {
     display: none;
 }
+.schedule, .deadline {
+    transition: transform 0.3s ease;
+}
+.schedule:hover, .deadline:hover {
+    transform: scale(102%);
+}
+
+.deadline::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px; /* 小圆的直径 */
+    height: 12px; /* 小圆的直径 */
+    background-color: var(--changeView-color); /* 圆的颜色 */
+    border-radius: 50%; /* 使其成为圆形 */
+}
+
 

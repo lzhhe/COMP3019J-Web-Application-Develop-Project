@@ -39,12 +39,16 @@ function toDate1(date) {
 }
 
 function openModel(date, startTime, endTime) {
-    $("#eventModal").show();
+    $("#eventModal").show(); // 显示模态窗口
+    $("#submitButton").show();
+    $("#deleteButton").hide();
+    $("#updateButton").hide();
+
+    $('#eventModal').find('input[type=text], textarea').val('');
     $("#date").val(date);
     $("#startTime").val(startTime);
     $("#endTime").val(endTime);
-    $("#updateButton").hide();
-    $("#deleteButton").hide();
+
     $("#cancelButton").off("click").on("click", function () {
         $("#eventModal").hide(); // 隐藏模态窗口
     });
@@ -70,6 +74,32 @@ function openEventModal1(data) {
     });
 }
 
+function openEventModal2(data) {
+    $("#submitButton").hide();
+    if (data.target === data.username) {
+        $("#changeButton").hide();
+        $("#updateButton").show();
+        $("#deleteButton").show();
+    } else {
+        $("#updateButton").hide();
+        $("#deleteButton").hide();
+        $("#changeButton").show().val(data.username);
+    }
+    $("#sdId").val(parseInt(data.id), 10);
+    $("#eventTitle").val(data.title);
+    $("#date").val(data.date);
+    $("#endTime").val(data.endTime);
+    $("#content").val(data.content);
+    $('.color').removeClass('active');
+    $('.color[data-color="' + data.color + '"]').addClass('active');
+    $("#eventModal").show();
+    $("#cancelButton").off("click").on("click", function () {
+        $("#eventModal").hide(); // 隐藏模态窗口
+        $('#startTime').prop('disabled', true).val('none');
+    });
+    $('#startTime').prop('disabled', false).val(''); // 或者设置为其他默认值
+}
+
 function getColor(colorCode) {
     return colorMap[colorCode] || colorMap[2];
 }
@@ -83,6 +113,7 @@ function loadEventsForCurrentWeek() {
     const endOfWeek = viewWeek.endOfWeek(viewWeek.selectedDate);
 
     $('.slots .schedule').remove(); // 仅移除所有具有 'schedule' 类的 div
+    $('.slots .deadline').remove();
 
     schedulesData.forEach(schedule => {
         const scheduleDate = new Date(schedule.date);
@@ -90,6 +121,14 @@ function loadEventsForCurrentWeek() {
         // 检查事件是否在当前选定的周内
         if ((scheduleDate >= startOfWeek && scheduleDate <= endOfWeek)) {
             createScheduleDiv(schedule);
+        }
+    });
+    deadlinesData.forEach(deadline => {
+        const deadlineDate = new Date(deadline.date);
+
+        // 检查事件是否在当前选定的周内
+        if ((deadlineDate >= startOfWeek && deadlineDate <= endOfWeek)) {
+            createDeadlineDiv(deadline);
         }
     });
 }
@@ -120,7 +159,8 @@ function createScheduleDiv(schedule) {
             'height': `${durationMinutes * 0.5}px`, // 持续时间转换为高度
             'background-color': getColor(schedule.color), // 使用预定义的颜色
             'z-index': getIndex(schedule.color), // 设置z-index
-            'cursor': 'pointer'
+            'cursor': 'pointer',
+            'hover': ''
         })
         .data('schedule', schedule)
         .text(schedule.title) // 可以添加更多信息
@@ -132,6 +172,36 @@ function createScheduleDiv(schedule) {
     dayElement.find('.slots').append(scheduleDiv);
 }
 
+function createDeadlineDiv(deadline) {
+    const endTimeParts = deadline.endTime.split(':');
+    const endHour = parseInt(endTimeParts[0]);
+    const endMinutes = parseInt(endTimeParts[1]);
+    const endTotalMinutes = endHour * 60 + endMinutes;
+    const dayElement = $(`.day[data-date='${deadline.date}']`);
+    const deadlineDiv = $('<div></div>')
+        .addClass('deadline')
+        .css({
+            'position': 'absolute',
+            'top': `${endTotalMinutes * 0.5}px`, // 一小时对应30px
+            'margin-left': '3%',
+            'padding-left': '5%',
+            'padding-right': '5%',
+            'margin-right': '3%',
+            'width': '94%',
+            'border-radius': '6px',
+            'height': '4px', // 持续时间转换为高度
+            'background-color': getColor(deadline.color), // 使用预定义的颜色
+            'z-index': 2 * getIndex(deadline.color), // 设置z-index
+            'cursor': 'pointer',
+        })
+        .data('deadline', deadline)
+        .click(function (e) {
+            e.stopPropagation();
+            openEventModal2($(this).data('deadline'));
+        });
+
+    dayElement.find('.slots').append(deadlineDiv);
+}
 
 class WeekCalendar {
     constructor() {
@@ -411,6 +481,9 @@ $(document).ready(function () {
     schedulesData.forEach(schedule => {
         createScheduleDiv(schedule)
     });
+    deadlinesData.forEach(deadline => {
+        createDeadlineDiv(deadline)
+    });
 
     $('#changeButton').click(function () {
         if ($(this).val() === 'schedule') {
@@ -445,8 +518,13 @@ $(document).ready(function () {
             success: function (response) {
                 $('#eventModal').find('input[type=text], input[type=date], textarea').val('');
                 $('.color').removeClass('active');
-                schedulesData.push(response);
-                createScheduleDiv(response);
+                if (response.hasOwnProperty('startTime')) {
+                    schedulesData.push(response);
+                    createScheduleDiv(response);
+                } else {
+                    deadlinesData.push(response);
+                    createDeadlineDiv(response);
+                }
                 $('#eventModal').hide();
             },
             error: function () {
