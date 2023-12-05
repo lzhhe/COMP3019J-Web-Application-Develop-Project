@@ -88,8 +88,8 @@ function openEventModal2(data) {
     $("#sdId").val(parseInt(data.id), 10);
     $("#eventTitle").val(data.title);
     $("#date").val(data.date);
-    $("#endTime").val(data.endTime);
     $("#content").val(data.content);
+    $("#endTime").val(data.endTime.substring(0, 5));
     $('.color').removeClass('active');
     $('.color[data-color="' + data.color + '"]').addClass('active');
     $("#eventModal").show();
@@ -131,6 +131,28 @@ function loadEventsForCurrentWeek() {
             createDeadlineDiv(deadline);
         }
     });
+}
+
+function updateLocalScheduleData(updatedSchedule) {
+    const scheduleIndex = schedulesData.findIndex(schedule =>
+        parseInt(schedule.id, 10) === updatedSchedule.id);
+    if (scheduleIndex !== -1) {
+        schedulesData[scheduleIndex] = updatedSchedule;
+        console.log(11)
+    } else {
+        schedulesData.push(updatedSchedule); // 如果找不到事件，可能需要添加
+        console.log(updatedSchedule.eid)
+        console.log(updatedSchedule)
+    }
+    loadEventsForCurrentWeek(); // 重新加载事件
+}
+
+function deleteLocalScheduleData(sid) {
+    schedulesData = schedulesData.filter(schedule => parseInt(schedule.id, 10) !== parseInt(sid, 10));
+    console.log(sid)
+    console.log(sid.type)
+    // 重新加载当前月份的事件以更新页面
+    loadEventsForCurrentWeek();
 }
 
 
@@ -568,6 +590,7 @@ $(document).ready(function () {
             data: updatedScheduleData,
             success: function (response) {
                 console.log(updatedScheduleData)
+                updateLocalScheduleData(response)
                 //updateLocalEventData(response); // response是回调的内容，从路由得到的
                 $('#eventModal').hide(); // 隐藏模态窗口
             },
@@ -578,21 +601,21 @@ $(document).ready(function () {
         });
     });
 
-    /*$('#deleteButton').click(function (e) {
+    $('#deleteButton').click(function (e) {
         e.preventDefault();
-        const sid = parseInt($('#eventId').val(), 10);
+        const sid = parseInt($('#sdId').val(), 10);
         $.ajax({
             url: delScheduleUrl + "?sid=" + sid,  // 作为查询参数发送
             type: 'DELETE',
             success: function (response) {
-                deleteLocalEventData(response)
+                deleteLocalScheduleData(response)
                 $('#eventModal').hide();
             },
             error: function () {
                 alert('Error deleting event');
             }
         });
-    });*/
+    });
 });
 
 

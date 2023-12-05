@@ -146,6 +146,19 @@ def updateSchedule():
         return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
 
 
+@blue.route('/deleteSchedule', methods=['DELETE'])
+def deleteSchedule():
+    sid = request.args.get('sid')  # 或使用 request.json.get('eid') 如果你发送 JSON
+    schedule = Schedule.query.get(sid)
+    try:
+        db.session.delete(schedule)
+        db.session.commit()
+        return jsonify(sid)
+    except Exception as e:
+        print('e:', e)
+        return jsonify({'code': 500, 'msg': 'Error deleting event'})
+
+
 @blue.route('/monthView')
 @session_required
 def monthView():
