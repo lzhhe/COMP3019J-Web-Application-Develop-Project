@@ -458,6 +458,19 @@ document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
         console.log(smCalendar.selectedDate);
         loadEventsForCurrentWeek();
 
+        // 发送数据到服务器
+        $.ajax({
+            url: updateScheduleUrl, // 确保这是用于更新事件的正确 URL
+            type: 'PUT', // 更新操作通常使用 PUT 或 PATCH 方法
+            data: updatedScheduleData,
+            success: function (response) {
+                // updateLocalScheduleData(response); // response是回调的内容，从路由得到的
+                $('#eventModal').hide(); // 隐藏模态窗口
+            },
+            error: function () {
+                alert('Error updating schedule');
+            }
+        });
     });
     document.getElementById("smBtnR").addEventListener("click", function () {
         handleDateClick(smCalendar.selectedDate);
@@ -533,9 +546,48 @@ $(document).ready(function () {
         });
     });
 
-    $('#deleteButton').click(function () {
+    $('#updateButton').click(function (e) {
+        e.preventDefault(); // 阻止表单默认提交
+        const updatedScheduleData = {
+            sid: parseInt($('#sdId').val(), 10), // 确保有一个字段来识别事件
+            title: $('#eventTitle').val(),
+            date: $('#date').val(),
+            content: $('#content').val(),
+            startTime: $('#startTime').val(),
+            endTime: $('#endTime').val(),
+            color: $('.color.active').data('color'),
+        };
+
+        $.ajax({
+            url: updateScheduleUrl, // 确保这是用于更新事件的正确 URL
+            type: 'PUT', // 更新操作通常使用 PUT 或 PATCH 方法
+            data: updatedScheduleData,
+            success: function (response) {
+                //updateLocalEventData(response); // response是回调的内容，从路由得到的
+                $('#eventModal').hide(); // 隐藏模态窗口
+            },
+            error: function () {
+                alert('Error updating schedule');
+            }
+        });
 
     });
+
+    /*$('#deleteButton').click(function (e) {
+        e.preventDefault();
+        const sid = parseInt($('#eventId').val(), 10);
+        $.ajax({
+            url: delScheduleUrl + "?sid=" + sid,  // 作为查询参数发送
+            type: 'DELETE',
+            success: function (response) {
+                deleteLocalEventData(response)
+                $('#eventModal').hide();
+            },
+            error: function () {
+                alert('Error deleting event');
+            }
+        });
+    });*/
 });
 
 

@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, redirect, session, url_fo
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 
-from .forms import RegisterForm, LoginForm, FindForm, ChangeInfo, AddEvent, UpdateEvent
+from .forms import RegisterForm, LoginForm, FindForm, ChangeInfo, AddEvent, UpdateEvent, UpdateSchedule
 from .forms import RegisterForm, LoginForm, FindForm, ChangeInfo, AddEvent, AddSchedule
 from .models import *
 
@@ -109,6 +109,38 @@ def addSchedule():
         else:
             # 如果表单验证失败，返回错误信息
             return jsonify({'status': 'error', 'message': 'The schedule may have some problems'}), 400
+
+
+@blue.route('/updateSchedule', methods=['PUT'])
+def updateSchedule():
+    form = UpdateSchedule(request.form)
+    if form.validate():
+        sid = form.sid.data
+        schedule = Schedule.query.get(sid)
+        if schedule:
+            schedule.scheduleTitle = form.title.data
+            schedule.content = form.content.data
+            schedule.date = form.date.data
+            schedule.startTime = form.startTime.isoformat(),
+            schedule.endTime = form.endTime.isoformat(),
+            schedule.color = form.color.data
+
+            db.session.commit()
+            update_schedule = {
+                "id": schedule.SID,
+                "title": schedule.scheduleTitle,
+                "content": schedule.content,
+                "date": schedule.date.isoformat(),
+                "startTime": schedule.startTime.isoformat(),
+                "endTime":  schedule.endTime.isoformat(),
+                "color": schedule.color
+            }
+            return jsonify(update_schedule)
+        else:
+            return jsonify({'status': 'error', 'message': 'schedule not found'}), 404
+    else:
+        return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
+
 
 
 @blue.route('/monthView')
