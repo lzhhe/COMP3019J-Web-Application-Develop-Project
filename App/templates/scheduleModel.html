@@ -13,7 +13,7 @@
     <label class="descriptor" for="Time">Time</label>
     <br>
     <input type="time" id="startTime" name="startTime"/>
-    <span> -- </span>
+    <span id="gang"> -- </span>
     <input required type="time" id="endTime" name="endTime"/>
     <br>
 
@@ -28,10 +28,10 @@
     </label>
     <div id="colors">
 
-        <input type="button" name="color" value="" class="color color-red" data-color="1"/>
-        <input type="button" name="color" value="" class="color color-blue" data-color="2"/>
-        <input type="button" name="color" value="" class="color color-green" data-color="3"/>
-        <input type="button" name="color" value="" class="color color-orange" data-color="4"/>
+        <input required type="button" name="color" value="" class="color color-red" data-color="1"/>
+        <input required type="button" name="color" value="" class="color color-blue" data-color="2"/>
+        <input required type="button" name="color" value="" class="color color-green" data-color="3"/>
+        <input required type="button" name="color" value="" class="color color-orange" data-color="4"/>
     </div>
     <div id="eventControls">
         <input type="submit" value="Submit" class="button" id="submitButton"/>

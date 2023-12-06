@@ -25,6 +25,10 @@
 
 </head>
 <body>
+
+
+<div id="loader"></div>
+
 <!-- 这是头部导航栏 -->
 <div class="header">
     <div class="header-left">
@@ -189,8 +193,11 @@
         {% endblock %}
     </div>
 </div>
-
-
+<script>
+    window.onload = function () {
+        document.getElementById('loader').style.display = 'none';
+    };
+</script>
 </body>
 </html>
 

@@ -101,7 +101,7 @@ input[type="date"], input[type="time"]{
 }
 .fixed {
     padding: 10px 20px;
-    background-color: var(--todo1);
+    background-color: var(--done1);
     color: white;
     cursor: pointer;
     margin-right: 12px;

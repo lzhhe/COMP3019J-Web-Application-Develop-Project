@@ -1,3 +1,8 @@
+body {
+    /*全局禁止滚动条，只有需要滚动的时候再设置*/
+    overflow: hidden;
+}
+
 .changeView {
     display: none;
 }
@@ -5,10 +10,193 @@
 .changeMonth {
     display: none;
 }
+
+.functions {
+    margin-top: 55px;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.searchThing {
+    display: flex;
+    align-items: center;
+}
+
+.search {
+    padding: 8px 12px;
+    border: 1px solid var(--admin-search-border);
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.search:focus {
+    border-color: var(--admin-search-focus);
+    outline: none;
+}
+
+.searchButton {
+    padding: 6px 15px;
+    background-color: var(--admin-search-focus);
+    color: var(--sm-selected-color);
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.searchButton:hover {
+    background-color: var(--admin-searchButton-hover);
+}
+
+.back {
+    padding: 6px 15px;
+    background-color: var(--admin-back);
+    color: var(--sm-selected-color);
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.back:hover {
+    background-color: var(--admin-back-hover);
+}
+
+
+.pagination {
+    display: inline-block; /* Allows the pagination to sit side by side with other elements */
+    margin-left: 20px; /* Space it a little bit from the other elements */
+}
+
+.pagination a {
+    color: var(--pagination-a);
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid var(--color-ddd);
+    margin: 0 4px;
+}
+
+.pagination a.active {
+    background-color: var(--pagination-a);
+    color: var(--color-ddd);
+    border: 1px solid var(--pagination-a);
+}
+
+.pagination a:hover:not(.active) {
+    background-color: var(--color-ddd);
+}
+
+.pagination a.disabled {
+    color: var(--color-aaa);
+    cursor: default;
+}
+
+.ellipsis {
+    display: inline-block;
+    padding: 8px 12px;
+    color: var(--color-333);
+}
+
+
+/* 为整个表格设置样式 */
+
+.users {
+    width: 100%;
+    border-collapse: collapse; /* 删除表格单元格之间的间距 */
+    box-shadow: 0 0 20px var(--changeViewDrop-shadow);
+}
+
+tbody {
+    counter-reset: nums var(--starting-number);
+}
+
+tbody tr td:first-child::before {
+    counter-increment: nums;
+    content: counter(nums);
+}
+
+/* 为表头设置样式 */
+.users thead {
+    background-color: var(--admin-thead);
+    color: var(--sm-selected-color);
+}
+
+.users thead th {
+    padding: 10px 20px;
+}
+
+
+/* 为表格单元格设置样式 */
+.users td, .users th {
+    padding: 10px 15px;
+    text-align: center;
+    border: 1px solid var(--color-ddd);
+}
+
+/* 为可排序的表头添加悬停效果 */
+.users th.sortable:hover {
+    background-color: var(--pagination-a);
+    cursor: pointer;
+}
+
+/* 为按钮设置简单的样式 */
+.users button {
+    background-color: var(--pagination-a);
+    color: var(--text-color);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.users button:hover {
+    background-color: var(--admin-botton-hover);
+}
+
+.color-block {
+    width: 50px;
+    height: 20px;
+    border-radius: 10px;
+    margin: auto;
+    display: inline-block;
+}
+
+.red .color-block {
+    background-color: var(--color-red);
+}
+
+.blue .color-block {
+    background-color: var(--todo1);
+}
+
+.green .color-block {
+    background-color: var(--done1);
+}
+
+.yellow .color-block {
+    background-color: var(--doing1);
+}
+
+.search {
+    width: 30%;
+    padding: 12px 20px;
+    margin: 8px 5px;
+    display: inline-block;
+    border: 1px solid var(--admin-search-border);
+    box-sizing: border-box;
+    transition: border-color 0.3s ease; /* 平滑过渡效果 */
+}
+
 .weather-container {
     display: none;
-}
-body {
-    /*全局禁止滚动条，只有需要滚动的时候再设置*/
-    overflow: hidden;
 }
