@@ -74,48 +74,7 @@ def adminView():
 @admin.route('/searchThing')
 def searchThing():
     search = request.args.get("search")
-
-    # 定义条件映射
-    conditions = []
-
-    # 对于性别
-    gender_map = {
-        "none": 0,
-        "male": 1,
-        "female": 2
-    }
-    if search in gender_map:
-        conditions.append(User.gender == gender_map[search])
-
-    # 对于身份
-    status_map = {
-        "student": 1,
-        "teacher": 2
-    }
-    if search in status_map:
-        conditions.append(User.status == status_map[search])
-
-    # 对于年级
-    if search.isdigit() and int(search) in [1, 2, 3, 4]:
-        conditions.append(User.grade == int(search))
-
-    # 对于用户名和邮箱的查询
-    conditions.append(User.username.contains(search))
-    conditions.append(User.email.contains(search))
-
-    # 最终组合条件
-    final_conditions = or_(*conditions) & (User.status != 0)
-
-    # 获取分页参数
-    page = request.args.get('page', default=1, type=int)  # 默认为第一页
-    per_page = request.args.get('per_page', default=8, type=int)  # 默认每页8条记录
-
-    # 使用paginate()方法
-    pagination = User.query.filter(final_conditions).paginate(page=page, per_page=per_page, error_out=False)
-    users = pagination.items
-
-    return render_template('adminView.html', users=users, current_sort='status', current_order='asc',
-                           pagination=pagination, current_page=page, per_page=per_page)
+    return redirect(url_for('cal_a.adminView', search=search))
 
 
 @admin.route('/addInfor', methods=['GET', 'POST'])
@@ -180,6 +139,7 @@ def delInfor():
             Schedule.query.filter_by(username=user.username).delete()
             Event.query.filter_by(username=user.username).delete()
             Deadline.query.filter_by(username=user.username).delete()
+            Deadline.query.filter_by(targetUsername=user.username).delete()
             db.session.delete(user)
             db.session.commit()
         except Exception as e:
