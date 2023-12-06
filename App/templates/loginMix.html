@@ -90,10 +90,16 @@
                 <button class="hidden" id="login">Switch to Login</button>
                 <div id="register-message">
                     <span>Password must contain the following:</span> <br>
-                    <div id="letter" class="invalid">A <b>lowercase</b> letter</div> <br>
-                    <div id="capital" class="invalid">A <b>uppercase</b> letter</div> <br>
-                    <div id="number" class="invalid">A <b>number</b></div> <br>
-                    <div id="special" class="invalid">A <b>special</b> letter</div> <br>
+                    <div id="length" class="invalid">length from <b>4</b> to <b>20</b></div>
+                    <br>
+                    <div id="letter" class="invalid">A <b>lowercase</b> letter</div>
+                    <br>
+                    <div id="capital" class="invalid">A <b>uppercase</b> letter</div>
+                    <br>
+                    <div id="number" class="invalid">A <b>number</b></div>
+                    <br>
+                    <div id="special" class="invalid">A <b>special</b> letter</div>
+                    <br>
                 </div>
             </div>
 
@@ -134,7 +140,8 @@
 <script>
     const container = document.getElementById("login_container"),
         registerBtn = document.getElementById("register"),
-        loginBtn = document.getElementById("login");
+        loginBtn = document.getElementById("login"),
+        registerButton = document.getElementById("signUpSubmitField");
     const signUpUsernameField = document.getElementById("signUpUsernameField");
     const signUpEmailField = document.getElementById("signUpEmailField");
     const signUpPasswordField = document.getElementById("signUpPasswordField");
@@ -146,6 +153,8 @@
     const capital = document.getElementById("capital");
     const number = document.getElementById("number");
     const special = document.getElementById("special");
+    const length = document.getElementById("length");
+    let couldType = false;
 
     registerBtn.addEventListener("click", () => {
         clearFormFields();
@@ -173,6 +182,11 @@
         number.classList.add("invalid");
         special.classList.remove("valid");
         special.classList.add("invalid");
+        length.classList.remove("valid");
+        length.classList.add("invalid");
+        couldType = false;
+        registerButton.classList.add("notallow");
+        registerButton.disabled = true;
     }
 
     const changeSignUpPassword = document.getElementById(
@@ -258,44 +272,26 @@
             special.classList.add("invalid");
         }
 
+        const minLength = 4;
+        const maxLength = 20;
+        if (signUpPasswordField.value.length >= minLength && signUpPasswordField.value.length <= maxLength) {
+            length.classList.remove("invalid");
+            length.classList.add("valid");
+            couldType = true;
+        } else {
+            length.classList.remove("valid");
+            length.classList.add("invalid");
+            couldType = false;
+        }
+
+        if (couldType) {
+            registerButton.classList.remove("notallow");
+            registerButton.disabled = false;
+        } else {
+            registerButton.classList.add("notallow");
+            registerButton.disabled = true;
+        }
     }
-
-
-    {#$(document).ready(function () {#}
-    {##}
-    {#    function handleFormSubmit(formSelector, postUrl) {#}
-    {#        $(formSelector).submit(function (event) {#}
-    {#            event.preventDefault();#}
-    {##}
-    {#            // 获取表单数据#}
-    {#            var formData = $(this).serialize();#}
-    {##}
-    {#            // 发送AJAX请求#}
-    {#            $.ajax({#}
-    {#                type: "POST",#}
-    {#                url: postUrl,#}
-    {#                data: formData,#}
-    {#                dataType: "json",#}
-    {#                success: function (response) {#}
-    {#                    let infoSelector = formSelector + " .information";#}
-    {#                    $(infoSelector).text(response.message);#}
-    {##}
-    {#                    // 如果是登录请求且状态为成功，则重定向到主页面#}
-    {#                    if (response.status === "success" && postUrl === "/login") {#}
-    {#                        window.location.href = "/main";#}
-    {#                    }#}
-    {#                },#}
-    {#                error: function (jqXHR, textStatus, errorThrown) {#}
-    {#                    alert("请求失败: " + textStatus + "\n错误信息: " + errorThrown);#}
-    {#                }#}
-    {#            });#}
-    {#        });#}
-    {#    }#}
-    {##}
-    {#    handleFormSubmit("#registerForm", "/register");#}
-    {#    handleFormSubmit("#loginForm", "/login");#}
-    {#    handleFormSubmit("#findForm", "/find_password");#}
-    {##}
 
 
 </script>

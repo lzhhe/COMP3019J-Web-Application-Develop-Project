@@ -71,11 +71,15 @@ button {
     /*变手*/
 }
 
+
 button:hover {
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
     border: 1px solid #3498db;
 }
-
+.notallow:hover {
+    cursor: not-allowed;
+    background-color: #616161;
+}
 .login_container button.hidden {
     background-color: transparent;
     border-color: #fff;
@@ -194,7 +198,7 @@ input:focus {
     height: auto;
     font-size: 6px;
     position: absolute;
-    bottom: 10%;
+    bottom: 4%;
     display: inline-block;
     visibility: hidden;
 }
