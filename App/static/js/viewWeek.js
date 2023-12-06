@@ -83,20 +83,25 @@ function openEventModal2(data) {
         $("#changeButton").hide();
         $("#updateButton").show();
         $("#deleteButton").show();
+        $("#eventTitle").val(data.title).prop('disabled', false);
+        $("#date").val(data.date).prop('disabled', false);
+        $("#content").val(data.content).prop('disabled', false);
+        $("#endTime").val(data.endTime.substring(0, 5)).prop('disabled', false);
+        $('.color').removeClass('active').prop('disabled', false);
+        $('.color[data-color="' + data.color + '"]').addClass('active');
     } else {
         $("#updateButton").hide();
         $("#deleteButton").hide();
         $("#changeButton").show().val(data.username).prop('disabled', true).removeClass('button').addClass('fixed');
-
+        $("#eventTitle").val(data.title).prop('disabled', true);
+        $("#date").val(data.date).prop('disabled', true);
+        $("#content").val(data.content).prop('disabled', true);
+        $("#endTime").val(data.endTime.substring(0, 5)).prop('disabled', true);
+        $('.color').removeClass('active').prop('disabled', true);
+        $('.color[data-color="' + data.color + '"]').addClass('active');
     }
     $('#startTime').prop('disabled', true).val(''); // 或者设置为其他默认值
     $("#sdId").val(parseInt(data.id), 10);
-    $("#eventTitle").val(data.title);
-    $("#date").val(data.date);
-    $("#content").val(data.content);
-    $("#endTime").val(data.endTime.substring(0, 5));
-    $('.color').removeClass('active');
-    $('.color[data-color="' + data.color + '"]').addClass('active');
     $("#eventModal").show();
     $("#cancelButton").off("click").on("click", function () {
         $("#eventModal").hide(); // 隐藏模态窗口

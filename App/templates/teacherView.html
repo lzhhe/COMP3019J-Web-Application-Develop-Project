@@ -5,6 +5,7 @@
 {% block extra_css %}
     <link rel="stylesheet" href="../static/css/teacherView.css">
     <link rel="stylesheet" href="../static/css/modal.css">
+    <link rel="stylesheet" href="../static/css/eventModel.css">
 
 {% endblock %}
 {% block extra_js %}
@@ -12,6 +13,126 @@
     <script src="../static/js/resetData.js"></script>
 {% endblock %}
 {% block mainBody %}
+
+    {% if errors %}
+        <script>
+            let errorMsgs;
+            {% if errors is string %}
+                errorMsgs = "{{ errors }}";
+            {% else %}
+                errorMsgs = [
+                    {% for field, error_messages in errors.items() %}
+                        "{{ error_messages|join(', ') }}",
+                    {% endfor %}
+                ].join("\n");  // 使用换行符将每个字段的错误分隔开
+            {% endif %}
+            alert(errorMsgs);
+        </script>
+    {% endif %}
+    <div class="functions">
+        <form class="searchThing" method="get" action="{{ url_for('cal_t.searchThing') }}">
+            <label for="search"></label><input class="search" id="search" type="search" placeholder="search"
+                                               name="search">
+            <button class="searchButton" id="searchButton" type="submit">Search</button>
+        </form>
+        <button class="back" id="back">back index</button>
+        <button class="back" id="addButton">add
+        </button>
+
+        <div class="pagination">
+            {% if pagination.pages > 1 %}
+                <a href="{{ url_for('cal_t.teacherView', page=1, sort=current_sort, order=current_order, search=request.args.get('search')) }}">&laquo;
+                    First</a>
+                <a href="{{ url_for('cal_t.teacherView', page=pagination.prev_num, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                   {% if not pagination.has_prev %}class="disabled"{% endif %}>&lsaquo; Prev</a>
+
+                <!-- Always display the first page -->
+                <a href="{{ url_for('cal_t.teacherView', page=1, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                   {% if 1 == pagination.page %}class="active"{% endif %}>1</a>
+                {% if pagination.page > 4 %}
+                    <span class="ellipsis">...</span>
+                {% endif %}
+
+                {% for page_num in range(pagination.page - 2, pagination.page + 3) %}
+                    {% if 1 < page_num < pagination.pages %}
+                        <a href="{{ url_for('cal_t.teacherView', page=page_num, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                           {% if page_num == pagination.page %}class="active"{% endif %}>{{ page_num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if pagination.page < pagination.pages - 3 %}
+                    <span class="ellipsis">...</span>
+                {% endif %}
+
+                <!-- Always display the last page -->
+                <a href="{{ url_for('cal_t.teacherView', page=pagination.pages, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                   {% if pagination.pages == pagination.page %}class="active"{% endif %}>{{ pagination.pages }}</a>
+
+                <a href="{{ url_for('cal_t.teacherView', page=pagination.next_num, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                   {% if not pagination.has_next %}class="disabled"{% endif %}>Next &rsaquo;</a>
+                <a href="{{ url_for('cal_t.teacherView', page=pagination.pages, sort=current_sort, order=current_order, search=request.args.get('search')) }}">Last
+                    &raquo;</a>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <table class="users" id="users">
+        <thead>
+        <tr>
+            <th>Number</th>
+            <th>targetStudent</th>
+            <th class="sortable" data-sort="date"
+                {% if current_sort == "date" %}data-current-order="{{ current_order }}" {% endif %}>
+                date
+                {% if current_sort == "date" and current_order == "asc" %}&uarr;
+                    {% elif current_sort == "date" %}&darr;{% endif %}
+            </th>
+            <th>time</th>
+            <th class="sortable" data-sort="color"
+                {% if current_sort == "color" %}data-current-order="{{ current_order }}"{% endif %}>
+                urgent
+                {% if current_sort == "color" and current_order == "asc" %}&uarr;
+                    {% elif current_sort == "color" %}&darr;{% endif %}
+            </th>
+            <th>operation</th>
+        </tr>
+        </thead>
+        <tbody style="--starting-number: {{ (current_page-1) * per_page }}">
+        {% for ddl in deadlines %}
+            {% if ddl.color == 1 %}
+                {% set g = "red" %}
+            {% elif ddl.color == 2 or ddl.color == 0 %}
+                {% set g = "blue" %}
+            {% elif ddl.color == 3 %}
+                {% set g = "green" %}
+            {% else %}
+                {% set g = "yellow" %}
+            {% endif %}
+            <tr>
+                <td class="numbers"></td>
+                <td>{{ ddl.targetUsername }}</td>
+                <td>{{ ddl.date }}</td>
+                <td>{{ ddl.endTime }}</td>
+                <td data-title="{{ ddl.deadlineTitle }}"
+                    data-date="{{ ddl.date }}"
+                    data-endtime="{{ ddl.endTime}}"
+                    data-color="{{ ddl.color }}"
+                    data-content="{{ ddl.content }}"
+                    class="{{ g }}">
+                    <div class="color-block"></div>
+                </td>
+                <td>
+                    <button data-id="{{ ddl.DID }}" class="alt">alt</button>
+                    <button data-id="{{ ddl.DID }}" class="del">del</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+
     <div id="resetData" class="modal">
         <form class="modal-content animate" method="post" id="resetForm" action="{{ url_for('cal_t.changeInfor') }}">
             <input type="hidden" name="user_uid" id="user_uid">
@@ -46,4 +167,6 @@
             </div>
         </form>
     </div>
+    {% include 'scheduleModel.html' %}
+
 {% endblock %}
