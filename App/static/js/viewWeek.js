@@ -46,9 +46,12 @@ function openModel(date, startTime, endTime) {
     $("#changeButton").show().val('schedule').removeClass('fixed').addClass('button')
         .prop('disabled', false);
     $('#eventModal').find('input[type=text], textarea').val('');
-    $("#date").val(date);
-    $("#startTime").val(startTime);
-    $("#endTime").val(endTime);
+    $("#date").val(date).prop('disabled', false);
+    $("#startTime").val(startTime).prop('disabled', false);
+    $("#endTime").val(endTime).prop('disabled', false);
+    $("#eventTitle").prop('disabled', false);
+    $("#content").prop('disabled', false);
+    $(".color").prop('disabled', false);
 
     $("#cancelButton").off("click").on("click", function () {
         $("#eventModal").hide(); // 隐藏模态窗口
@@ -62,12 +65,12 @@ function openEventModal1(data) {
     $("#updateButton").show();
     $("#deleteButton").show();
     $("#sdId").val(parseInt(data.id), 10);
-    $("#eventTitle").val(data.title);
-    $("#date").val(data.date);
-    $("#startTime").val(data.startTime.substring(0, 5));
-    $("#endTime").val(data.endTime.substring(0, 5));
-    $("#content").val(data.content);
-    $('.color').removeClass('active');
+    $("#eventTitle").val(data.title).prop('disabled', false);
+    $("#date").val(data.date).prop('disabled', false);
+    $("#startTime").val(data.startTime.substring(0, 5)).prop('disabled', false);
+    $("#endTime").val(data.endTime.substring(0, 5)).prop('disabled', false);
+    $("#content").val(data.content).prop('disabled', false);
+    $('.color').removeClass('active').prop('disabled', false);
     $('.color[data-color="' + data.color + '"]').addClass('active');
     $("#eventModal").show();
     $("#cancelButton").off("click").on("click", function () {
