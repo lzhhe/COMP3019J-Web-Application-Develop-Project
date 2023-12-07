@@ -14,6 +14,7 @@ body {
 .mainBody {
     overflow-y: auto;
 }
+
 #calendarWeek {
     height: calc(100vh);
     overflow-y: auto;
@@ -157,9 +158,17 @@ body {
 .weather-container {
     display: none;
 }
+
+.schedule {
+    padding-top: 2%;
+    font-size: 16px;
+    color: var(--title-color);
+}
+
 .schedule, .deadline {
     transition: transform 0.3s ease;
 }
+
 .schedule:hover, .deadline:hover {
     transform: scale(102%);
 }

@@ -215,8 +215,7 @@ $(document).ready(function () {
         calendar.preMonth();
         updateDayDivText(); // 调用函数来更新日历视图
         $('#time_container').text(monthTitle());
-        smCalendar.preMonth();
-        handleDateClick(smCalendar.selectedDate);
+        handleDateClick(calendar.selectedDate);
         loadEventsForCurrentMonth();
     });
 
@@ -224,7 +223,7 @@ $(document).ready(function () {
         calendar.nextMonth();
         updateDayDivText(); // 调用函数来更新日历视图
         $('#time_container').text(monthTitle());
-        handleDateClick(smCalendar.selectedDate);
+        handleDateClick(calendar.selectedDate);
         loadEventsForCurrentMonth();
 
     });
@@ -239,13 +238,14 @@ $(document).ready(function () {
         calendar.preMonth();
         updateDayDivText(); // 调用函数来更新日历视图
         $('#time_container').text(monthTitle());
+        handleDateClick(calendar.selectedDate);
         loadEventsForCurrentMonth();
     });
     $('#smBtnR').click(function () {
         calendar.nextMonth();
         updateDayDivText(); // 调用函数来更新日历视图
         $('#time_container').text(monthTitle());
-        handleDateClick(smCalendar.selectedDate);
+        handleDateClick(calendar.selectedDate);
         loadEventsForCurrentMonth();
 
     });

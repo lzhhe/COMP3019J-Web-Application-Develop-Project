@@ -209,6 +209,10 @@ function createScheduleDiv(schedule) {
             'background-color': getColor(schedule.color), // 使用预定义的颜色
             'z-index': getIndex(schedule.color), // 设置z-index
             'cursor': 'pointer',
+            'overflow': 'hidden',
+            'text-overflow': 'ellipsis',
+            'white-space': 'nowrap',
+            'font-family': 'Monospace',
             'hover': ''
         })
         .data('schedule', schedule)
