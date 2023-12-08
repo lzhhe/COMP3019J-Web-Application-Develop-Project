@@ -77,13 +77,41 @@ def addDDL():
             color = form.color.data
             users = User.query.filter(User.status == 1, User.grade == g.user.grade).all()
             for user in users:
+
                 deadline = Deadline(username=username, targetUsername=user.username, deadlineTitle=title,
                                     content=content,
                                     date=date, endTime=endTime, color=color)
                 db.session.add(deadline)
-            db.session.commit()
+                db.session.commit()
+
+                overlapping_schedules = Schedule.query.filter(
+                    Schedule.username == user.username,
+                    Schedule.date == date,
+                    Schedule.startTime < endTime,
+                    endTime < Schedule.endTime
+                ).all()
+
+                if overlapping_schedules:
+                    log_message = f"STeacher deadline add may overlap with existing schedules for {username} on {date}, from {overlapping_schedules[0].startTime} to {overlapping_schedules[0].endTime}"
+                    log_entry = Log(logContent=log_message, logType=1)
+                    db.session.add(log_entry)
+                    db.session.commit()
+                else:
+                    log_message = f"Teacher deadline added: {title}, for {username} on {date} at {endTime}"
+                    log_entry = Log(logContent=log_message, logType=0)
+                    db.session.add(log_entry)
+                    db.session.commit()
+
+
             return jsonify({'code': 200, 'message': 'Deadline added successfully'})
         else:
+
+            log_message = f"Failed to add teacher deadline: Form validation failed for {g.user.username}"
+            log_type = 2  # Error for validation failure
+            log_entry = Log(logContent=log_message, logType=log_type)
+            db.session.add(log_entry)
+            db.session.commit()
+
             return jsonify({'code': 400, 'message': 'Form validation failed'}), 400
 
 
@@ -102,12 +130,48 @@ def updateDDL():
                 ddl.endTime = form.endTime.data
                 ddl.content = form.content.data
                 ddl.color = form.color.data
+
                 db.session.commit()
+
+                # Check for overlapping schedules
+                overlapping_schedules = Schedule.query.filter(
+                    Schedule.username == ddl.targetUsername,
+                    Schedule.date == ddl.date,
+                    Schedule.startTime < ddl.endTime,
+                    ddl.endTime < Schedule.endTime
+                ).all()
+
+                if overlapping_schedules:
+                    log_message = f"Teacher deadline update may overlap with existing schedules for {ddl.targetUsername} on {ddl.date}, from {overlapping_schedules[0].startTime} to {overlapping_schedules[0].endTime}"
+                    log_type = 1  # Log type for warning
+                else:
+                    log_message = f"Teacher deadline added: {ddl.title}, for {ddl.targetUsername} on {ddl.date} at {ddl.endTime}"
+                    log_type = 0  # Log type for successful operation
+
+                log_entry = Log(logContent=log_message, logType=log_type)
+                db.session.add(log_entry)
+                db.session.commit()
+
                 return jsonify({'code': 200, 'message': 'Deadline updated successfully'})
             else:
-                return jsonify({'code': 400, 'message': 'Form validation failed'}), 400
+
+                log_message = f"Deadline update failed: Deadline with ID {did} not found"
+                log_type = 2  # Error for not found
+                log_entry = Log(logContent=log_message, logType=log_type)
+                db.session.add(log_entry)
+                db.session.commit()
+
+                return jsonify({'code': 400, 'message': 'Deadline not found'}), 400
         else:
+
+            log_message = "Deadline update failed: Form validation error"
+            log_type = 2  # Error for validation failure
+            log_entry = Log(logContent=log_message, logType=log_type)
+            db.session.add(log_entry)
+            db.session.commit()
+
             return jsonify({'code': 400, 'message': 'Form validation failed'}), 400
+
 
 
 @teacher.route('/delDDL', methods=['GET', 'POST'])
@@ -117,12 +181,37 @@ def delDDL():
     else:
         did = request.form.get('did')
         ddl = Deadline.query.get(did)
-        try:
-            db.session.delete(ddl)
+        if ddl:
+            try:
+                db.session.delete(ddl)
+                db.session.commit()
+
+                # Log successful deletion
+                log_message = f"Teacher successfully deleted deadline: ID {did}"
+                log_type = 0  # Log type for successful operation
+                log_entry = Log(logContent=log_message, logType=log_type)
+                db.session.add(log_entry)
+                db.session.commit()
+
+                return jsonify({'code': 200, 'msg': 'delete successfully!'})
+            except Exception as e:
+                # Log exception during deletion
+                log_message = f"Error deleting deadline: ID {did}, Error: {e}"
+                log_type = 2  # Log type for error
+                log_entry = Log(logContent=log_message, logType=log_type)
+                db.session.add(log_entry)
+                db.session.commit()
+
+                return jsonify({'code': 500, 'msg': 'Error deleting deadline'})
+        else:
+            # Log if deadline not found
+            log_message = f"Delete failed: Deadline with ID {did} not found"
+            log_type = 2  # Log type for error
+            log_entry = Log(logContent=log_message, logType=log_type)
+            db.session.add(log_entry)
             db.session.commit()
-        except Exception as e:
-            print('e:', e)
-        return jsonify({'code': 200, 'msg': 'delete successfully!'})
+
+            return jsonify({'code': 400, 'msg': 'Deadline not found'}), 400
 
 
 @teacher.route('/changeInfor', methods=['GET', 'POST'])
@@ -136,21 +225,39 @@ def changeInfor():
             password = form.new_password.data
             gender = form.choose_gender.data
             grade = form.choose_grade.data
+            updated_fields = []
+
             if password:
                 user.password = generate_password_hash(password)
+                updated_fields.append("password")
             if gender:
                 user.gender = gender
+                updated_fields.append("gender")
             if grade:
                 user.grade = grade
+                updated_fields.append("grade")
+
+            if updated_fields:
+                db.session.commit()
+                log_message = f"Teacher {user.username} successfully updated: {', '.join(updated_fields)}"
+                log_type = 0  # Log type for successful operation
+            else:
+                log_message = f"Teacher {user.username} made no changes"
+                log_type = 1  # Log type for no change made
+
+            log_entry = Log(logContent=log_message, logType=log_type)
+            db.session.add(log_entry)
             db.session.commit()
 
             return redirect(url_for('cal_t.teacherView'))
         else:
+            # Log form validation failure
+            log_message = f"Teacher {g.user.username} information change failed: Form validation error"
+            log_type = 2  # Log type for operation error
+            log_entry = Log(logContent=log_message, logType=log_type)
+            db.session.add(log_entry)
+            db.session.commit()
+
             return redirect(url_for('cal_t.teacherView', error="the username has existed"))
 
 
-@teacher.route('/logout')
-def logout():
-    session.pop('uid')
-    response = redirect('main')
-    return response
