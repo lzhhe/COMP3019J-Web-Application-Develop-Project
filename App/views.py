@@ -509,22 +509,40 @@ def login():
             username = form.signInUsernameField.data
             password = form.signInPasswordField.data
             user = User.query.filter_by(username=username).first()
-            # 还if user吗，就是输入错用户名和密码的情况是不一致的
-            if check_password_hash(user.password, password):
-                if user.status == 1:
+
+            if user and check_password_hash(user.password, password):
+                # Successful login
+                if user.status == 1:  # Student
                     response = redirect('/weekView')
-                elif user.status == 2:
+                elif user.status == 2:  # Teacher
                     response = redirect(url_for('cal_t.teacherView'))
-                else:
+                else:  # Admin
                     response = redirect(url_for('cal_a.adminView'))
+
+                log_message = f"User {username} logged in as {'student' if user.status == 1 else 'teacher' if user.status == 2 else 'admin'}"
+                log_type = 0
                 session['uid'] = user.UID
-                return response
             else:
-                # warning
-                return render_template('loginMix.html', errors="the password is wrong")
+                # Incorrect username or password
+                response = render_template('loginMix.html', errors="Username or password is incorrect")
+                log_type = 1
+                log_message = f"Failed login attempt for username: {username} Wrong password or username"
+
+            # Log the login attempt
+            log_entry = Log(logContent=log_message, logType=log_type)
+            db.session.add(log_entry)
+            db.session.commit()
+            return response
+
         else:
-            # error
+            # Validation error
+            log_message = "Login validation failed"
+            log_type = 2
+            log_entry = Log(logContent=log_message, logType=log_type)
+            db.session.add(log_entry)
+            db.session.commit()
             return render_template('loginMix.html', errors=form.errors)
+
 
 
 @blue.route('/register', methods=['GET', 'POST'])
@@ -534,19 +552,31 @@ def register():
     elif request.method == 'POST':
         form = RegisterForm(request.form)
         if form.validate():
-            email = form.signUpEmailField.data  # 修改这里
-            username = form.signUpUsernameField.data  # 修改这里
-            password = form.signUpPasswordField.data  # 修改这里
+            email = form.signUpEmailField.data
+            username = form.signUpUsernameField.data
+            password = form.signUpPasswordField.data
             user = User(email=email, username=username, password=generate_password_hash(password))
             db.session.add(user)
             db.session.commit()
-            # 成功
+
+            log_message = f"New user {username} successfully registered"
+            log_type = 0
+            log_entry = Log(logContent=log_message, logType=log_type)
+            db.session.add(log_entry)
+            db.session.commit()
+
             response = redirect('/weekView')
             session['uid'] = user.UID
             return response
         else:
-            print(form.errors)
-            # 输入的用户名已经存在，username就是输入的用户名，直接错误
+            username = form.signUpUsernameField.data
+            log_message = "Registration validation failed: " + (f"New user {username} registered failed due to repeat "
+                                                                f"username")
+            log_type = 2  # Log type for registration error
+            log_entry = Log(logContent=log_message, logType=log_type)
+            db.session.add(log_entry)
+            db.session.commit()
+
             return render_template('loginMix.html', errors=form.errors)
 
 
@@ -566,11 +596,32 @@ def find_password():
                 db.session.commit()
                 response = redirect('/weekView')
                 session['uid'] = user.UID
+
+                log_message = f"User {username} successfully reset password"
+                log_type = 0  # Log type for successful operation
+                log_entry = Log(logContent=log_message, logType=log_type)
+                db.session.add(log_entry)
+                db.session.commit()
+
                 return response
             else:
+
+                log_message = f"Password reset failed for {username}: Email mismatch"
+                log_type = 2  # Log type for operation error
+                log_entry = Log(logContent=log_message, logType=log_type)
+                db.session.add(log_entry)
+                db.session.commit()
+
                 return render_template('loginMix.html', errors="the email is wrong")
-        else:  # 用户不存在
-            print(form.errors)
+        else:
+
+            username = g.user.username
+            log_message = f"Password reset failed: User {username} not found"
+            log_type = 2  # Log type for operation error
+            log_entry = Log(logContent=log_message, logType=log_type)
+            db.session.add(log_entry)
+            db.session.commit()
+
             return render_template('loginMix.html', errors=form.errors)
 
 
@@ -585,23 +636,65 @@ def changeInfor():
             password = form.new_password.data
             gender = form.choose_gender.data
             grade = form.choose_grade.data
+            updated_fields = []
+
             if password:
                 user.password = generate_password_hash(password)
+                updated_fields.append("password")
             if gender:
                 user.gender = gender
+                updated_fields.append("gender")
             if grade:
                 user.grade = grade
+                updated_fields.append("grade")
+
+            if updated_fields:
+                db.session.commit()
+                log_message = f"User {user.username} successfully updated: {', '.join(updated_fields)}"
+                log_type = 0  # Log type for successful operation
+            else:
+                log_message = f"User {user.username} made no changes"
+                log_type = 1  # Log type for no change made
+
+            log_entry = Log(logContent=log_message, logType=log_type)
+            db.session.add(log_entry)
             db.session.commit()
 
             return redirect(url_for('cal_u.weekView'))
         else:
+            log_message = f"User {g.user.username} information change failed: Form validation error"
+            log_type = 2  # Log type for operation error
+            log_entry = Log(logContent=log_message, logType=log_type)
+            db.session.add(log_entry)
+            db.session.commit()
+
             return redirect(url_for('cal_u.weekView', error="the username has existed"))
+
 
 
 @blue.route('/logout')
 def logout():
-    session.pop('uid')
+    uid = session.get('uid')
+    if uid:
+        # Assuming you have a way to retrieve the username from the user ID
+        user = User.query.get(uid)
+        if user:
+            username = user.username
+            log_message = f"User {username} logged out"
+        else:
+            log_message = f"Unknown user (ID: {uid}) logged out"
+    else:
+        log_message = "User logout attempt with no active session"
+
+    log_type = 0  # Log type for normal operation
+    log_entry = Log(logContent=log_message, logType=log_type)
+    db.session.add(log_entry)
+    db.session.commit()
+
+    # Proceed with logout
+    session.pop('uid', None)  # Safely remove 'uid' from session
     response = redirect('main')
     return response
+
 
 #
