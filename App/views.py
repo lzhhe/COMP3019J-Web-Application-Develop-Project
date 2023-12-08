@@ -2,7 +2,7 @@ from datetime import datetime
 from functools import wraps
 
 from flask import Blueprint, render_template, request, redirect, session, url_for, g, app, jsonify
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 
@@ -131,8 +131,10 @@ def addSchedule():
                 overlapping_schedules = Schedule.query.filter(
                     Schedule.username == username,
                     Schedule.date == date,
-                    Schedule.startTime < endTime,
-                    Schedule.endTime > startTime
+                    or_(
+                        and_(Schedule.startTime <= startTime, Schedule.endTime >= startTime),
+                        and_(Schedule.startTime <= endTime, Schedule.endTime >= endTime),
+                    )
                 ).all()
 
                 if overlapping_schedules:
@@ -145,6 +147,9 @@ def addSchedule():
                     log_entry = Log(logContent=log_message, logType=0)
                     db.session.add(log_entry)
                     db.session.commit()
+
+                db.session.add(schedule)
+                db.session.commit()
 
 
                 return jsonify(new_schedule)
@@ -168,8 +173,10 @@ def updateSchedule():
                 Schedule.SID != sid,  # Exclude the current schedule from the check
                 Schedule.username == schedule.username,  # Assuming username is a field in Schedule
                 Schedule.date == form.date.data,
-                Schedule.startTime < form.endTime.data,
-                Schedule.endTime > form.startTime.data
+                or_(
+                    and_(Schedule.startTime <= form.startTime.data, Schedule.endTime >= form.startTime.data),
+                    and_(Schedule.startTime <= form.endTime.data, Schedule.endTime >= form.endTime.data),
+                )
             ).all()
 
             # Update schedule
