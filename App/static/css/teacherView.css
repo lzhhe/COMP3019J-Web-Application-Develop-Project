@@ -163,8 +163,27 @@ tbody tr td:first-child::before {
     background-color: var(--admin-botton-hover);
 }
 
+.tableTitle:nth-child(1){
+    width: 15%;
+}
+.tableTitle:nth-child(2){
+    width: 20%;
+}
+.tableTitle:nth-child(3){
+    width: 15%;
+}
+.tableTitle:nth-child(4){
+    width: 15%;
+}
+.tableTitle:nth-child(5){
+    width: 15%;
+}
+.tableTitle:nth-child(6){
+    width: 20%;
+}
+
 .color-block {
-    width: 50px;
+    width: 70px;
     height: 20px;
     border-radius: 10px;
     margin: auto;

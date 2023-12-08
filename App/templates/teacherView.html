@@ -80,22 +80,22 @@
     <table class="users" id="users">
         <thead>
         <tr>
-            <th>Number</th>
-            <th>targetStudent</th>
-            <th class="sortable" data-sort="date"
+            <th class="tableTitle">Number</th>
+            <th class="tableTitle">targetStudent</th>
+            <th class="sortable tableTitle" data-sort="date"
                 {% if current_sort == "date" %}data-current-order="{{ current_order }}" {% endif %}>
                 date
                 {% if current_sort == "date" and current_order == "asc" %}&uarr;
                     {% elif current_sort == "date" %}&darr;{% endif %}
             </th>
-            <th>time</th>
-            <th class="sortable" data-sort="color"
+            <th class="tableTitle">time</th>
+            <th class="sortable tableTitle" data-sort="color"
                 {% if current_sort == "color" %}data-current-order="{{ current_order }}"{% endif %}>
                 urgent
                 {% if current_sort == "color" and current_order == "asc" %}&uarr;
                     {% elif current_sort == "color" %}&darr;{% endif %}
             </th>
-            <th>operation</th>
+            <th class="tableTitle">operation</th>
         </tr>
         </thead>
         <tbody style="--starting-number: {{ (current_page-1) * per_page }}">

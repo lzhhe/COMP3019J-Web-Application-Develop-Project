@@ -144,7 +144,7 @@ tbody tr td:first-child::before {
 }
 
 /* 为可排序的表头添加悬停效果 */
-.users th.sortable:hover {
+.users th.sortable:hover, .users th.sortable1:hover {
     background-color: var(--pagination-a);
     cursor: pointer;
 }
@@ -203,4 +203,65 @@ tbody tr td:first-child::before {
 
 .weather-container {
     display: none;
+}
+
+.tableTitle:nth-child(1) {
+    width: 10%;
+}
+
+.tableTitle:nth-child(2) {
+    width: 50%;
+}
+
+.tableTitle:nth-child(3) {
+    width: 20%;
+}
+
+.tableTitle:nth-child(4) {
+    width: 20%;
+}
+
+.TABLE:nth-child(1){
+    width: 10%;
+}
+.TABLE:nth-child(2){
+    width: 10%;
+}
+.TABLE:nth-child(3){
+    width: 15%;
+}
+.TABLE:nth-child(4){
+    width: 35%;
+}
+.TABLE:nth-child(5){
+    width: 10%;
+}
+.TABLE:nth-child(6){
+    width: 10%;
+}
+.TABLE:nth-child(7){
+    width: 10%;
+}
+
+
+.color-block {
+    width: 70%;
+    height: 20px;
+    border-radius: 10px;
+    margin: auto;
+    display: inline-block;
+    text-align: center;
+    justify-items: center;
+}
+
+.Error .color-block {
+    background-color: var(--color-red);
+}
+
+.Information .color-block {
+    background-color: var(--done1);
+}
+
+.Warning .color-block {
+    background-color: var(--doing1);
 }

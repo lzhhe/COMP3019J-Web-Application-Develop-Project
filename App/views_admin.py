@@ -77,6 +77,31 @@ def searchThing():
     return redirect(url_for('cal_a.adminView', search=search))
 
 
+@admin.route('/adminLogs')
+def adminLogs():
+    # 获取请求参数
+    sort = request.args.get('sort', default='time', type=str)  # 默认排序字段为时间
+    order = request.args.get('order', default='asc', type=str)  # 默认排序顺序为升序
+
+    # 确保sort是一个有效的字段
+    valid_sort_fields = ['time', 'logType']  # 假设可排序字段为时间和类型
+    if sort not in valid_sort_fields:
+        abort(400, description="Invalid sort field")
+
+    # 动态排序
+    order_func = desc if order == 'desc' else asc
+    query = Log.query.order_by(order_func(getattr(Log, sort)))  # 假设日志模型为Log
+
+    # 分页处理
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=12, type=int)  # 默认每页10条记录
+    pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+    logs = pagination.items
+
+    return render_template('adminLogs.html', logs=logs, current_sort=sort, current_order=order, pagination=pagination,
+                           current_page=page, per_page=per_page)
+
+
 @admin.route('/addInfor', methods=['GET', 'POST'])
 def addInfor():
     if request.method == 'GET':

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-    adminView
+    adminLogs
 {% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="../static/css/adminView.css">
@@ -30,25 +30,17 @@
         </script>
     {% endif %}
     <div class="functions">
-        <form class="searchThing" method="get" action="{{ url_for('cal_a.searchThing') }}">
-            <label for="search"></label><input class="search" id="search" type="search" placeholder="search"
-                                               name="search">
-            <button class="searchButton" id="searchButton" type="submit">Search</button>
-        </form>
         <button class="back" id="back">back index</button>
-        <button class="back" id="add"
-                onclick="document.getElementById('addData').style.display='block'">add
-        </button>
 
         <div class="pagination">
             {% if pagination.pages > 1 %}
-                <a href="{{ url_for('cal_a.adminView', page=1, sort=current_sort, order=current_order, search=request.args.get('search')) }}">&laquo;
+                <a href="{{ url_for('cal_a.adminLogs', page=1, sort=current_sort, order=current_order, search=request.args.get('search')) }}">&laquo;
                     First</a>
-                <a href="{{ url_for('cal_a.adminView', page=pagination.prev_num, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                <a href="{{ url_for('cal_a.adminLogs', page=pagination.prev_num, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
                    {% if not pagination.has_prev %}class="disabled"{% endif %}>&lsaquo; Prev</a>
 
                 <!-- Always display the first page -->
-                <a href="{{ url_for('cal_a.adminView', page=1, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                <a href="{{ url_for('cal_a.adminLogs', page=1, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
                    {% if 1 == pagination.page %}class="active"{% endif %}>1</a>
                 {% if pagination.page > 4 %}
                     <span class="ellipsis">...</span>
@@ -56,7 +48,7 @@
 
                 {% for page_num in range(pagination.page - 2, pagination.page + 3) %}
                     {% if 1 < page_num < pagination.pages %}
-                        <a href="{{ url_for('cal_a.adminView', page=page_num, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                        <a href="{{ url_for('cal_a.adminLogs', page=page_num, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
                            {% if page_num == pagination.page %}class="active"{% endif %}>{{ page_num }}</a>
                     {% endif %}
                 {% endfor %}
@@ -66,12 +58,12 @@
                 {% endif %}
 
                 <!-- Always display the last page -->
-                <a href="{{ url_for('cal_a.adminView', page=pagination.pages, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                <a href="{{ url_for('cal_a.adminLogs', page=pagination.pages, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
                    {% if pagination.pages == pagination.page %}class="active"{% endif %}>{{ pagination.pages }}</a>
 
-                <a href="{{ url_for('cal_a.adminView', page=pagination.next_num, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
+                <a href="{{ url_for('cal_a.adminLogs', page=pagination.next_num, sort=current_sort, order=current_order, search=request.args.get('search')) }}"
                    {% if not pagination.has_next %}class="disabled"{% endif %}>Next &rsaquo;</a>
-                <a href="{{ url_for('cal_a.adminView', page=pagination.pages, sort=current_sort, order=current_order, search=request.args.get('search')) }}">Last
+                <a href="{{ url_for('cal_a.adminLogs', page=pagination.pages, sort=current_sort, order=current_order, search=request.args.get('search')) }}">Last
                     &raquo;</a>
             {% endif %}
         </div>
@@ -81,89 +73,35 @@
     <table class="users" id="users">
         <thead>
         <tr>
-            <th>Number</th>
-            <th class="sortable" data-sort="status"
-                {% if current_sort == "status" %}data-current-order="{{ current_order }}" {% endif %}>
-                status
-                {% if current_sort == "status" and current_order == "asc" %}&uarr;
-                    {% elif current_sort == "status" %}&darr;{% endif %}
+            <th class="tableTitle">Number</th>
+            <th class="tableTitle">LogContent</th>
+            <th class="sortable1 tableTitle" data-sort="time"
+                {% if current_sort == "time" %}data-current-order="{{ current_order }}" {% endif %}>
+                time
+                {% if current_sort == "time" and current_order == "asc" %}&uarr;
+                    {% elif current_sort == "time" %}&darr;{% endif %}
             </th>
-
-            <th>username</th>
-            <th>email</th>
-            <th class="sortable" data-sort="gender"
-                {% if current_sort == "gender" %}data-current-order="{{ current_order }}"{% endif %}>gender
-                {% if current_sort == "gender" and current_order == "asc" %}&uarr;
-                    {% elif current_sort == "gender" %}&darr;{% endif %}
+            <th class="sortable1 tableTitle" data-sort="logType"
+                {% if current_sort == "logType" %}data-current-order="{{ current_order }}"{% endif %}>logType
+                {% if current_sort == "logType" and current_order == "asc" %}&uarr;
+                    {% elif current_sort == "logType" %}&darr;{% endif %}
             </th>
-            <th class="sortable" data-sort="grade"
-                {% if current_sort == "grade" %}data-current-order="{{ current_order }}"{% endif %}>grade
-                {% if current_sort == "grade" and current_order == "asc" %}&uarr;
-                    {% elif current_sort == "grade" %}&darr;{% endif %}
-            </th>
-
-            <th>operation</th>
         </tr>
         </thead>
         <tbody style="--starting-number: {{ (current_page-1) * per_page }}">
-        {% for user in users %}
-            {% set s = "student" if user.status == 1 else "teacher" %}
-            {% set g = "none" if user.gender == 0 else ("male" if user.gender == 1 else "female") %}
+        {% for log in logs %}
+            {% set g = "Information" if log.logType == 0 else ("Warning" if log.logType == 1 else "Error") %}
             <tr>
                 <td class="numbers"></td>
-                <td class="{{ s }}">{{ s }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.email }}</td>
-                <td class="{{ g }}">{{ g }}</td>
-                <td>{{ user.grade }}</td>
-                <td>
-                    <button onclick="document.getElementById('resetData').style.display='block'"
-                            data-id="{{ user.UID }}" class="alt">alt
-                    </button>
-                    <button data-id="{{ user.UID }}" class="del">del</button>
+                <td class="logContent" title="{{ log.logContent }}">{{ log.logContent }}</td>
+                <td>{{ log.time }}</td>
+                <td class="{{ g }}">
+                    <div class="color-block">{{ g }}</div>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-
-    <div id="resetData" class="modal">
-        <form class="modal-content animate" method="post" id="resetForm" action="{{ url_for('cal_a.changeInfor') }}">
-            <input type="hidden" name="user_uid" id="user_uid">
-            <div class="find-container">
-                <span onclick="document.getElementById('resetData').style.display='none'" class="close"
-                      title="Close Modal">&times;</span>
-                <label for="new-password"><b>New password</b></label>
-                <input type="text" placeholder="Enter New password" id="new-password" name="new_password"/>
-
-                <label><b>Choose gender</b></label>
-                <div class="choice radio">
-                    <label for="choose-male" class="block">male</label>
-                    <input type="radio" name="choose_gender" id="choose-male" value="1">
-                    <label for="choose-female" class="block">female</label>
-                    <input type="radio" name="choose_gender" id="choose-female" value="2">
-                </div>
-
-
-                <label><b>Choose grade</b></label>
-                <div class="choice radio">
-                    <label for="choose-one" class="block">1</label>
-                    <input type="radio" name="choose_grade" id="choose-one" value="1">
-                    <label for="choose-two" class="block">2</label>
-                    <input type="radio" name="choose_grade" id="choose-two" value="2">
-                    <label for="choose-three" class="block">3</label>
-                    <input type="radio" name="choose_grade" id="choose-three" value="3">
-                    <label for="choose-four" class="block">4</label>
-                    <input type="radio" name="choose_grade" id="choose-four" value="4">
-                </div>
-
-                <button type="submit" class="change-info">Change Information</button>
-            </div>
-        </form>
-    </div>
-
-
 {% endblock %}
 
 

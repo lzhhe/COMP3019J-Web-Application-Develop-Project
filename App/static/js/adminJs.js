@@ -25,6 +25,20 @@ $(document).ready(function () {
         // 添加sort, order和search查询参数
         window.location.href = `/admin/adminView?sort=${sortBy}&order=${newOrder}${searchParam}`;
     });
+    $(".sortable1").click(function () {
+        let sortBy = $(this).data('sort');
+        let currentOrder = $(this).attr('data-current-order') || 'asc'; // 默认为asc
+        let newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+
+        let currentSearch = new URL(window.location.href).searchParams.get("search") || '';
+        let searchParam = currentSearch ? `&search=${currentSearch}` : '';
+
+        // 添加sort, order和search查询参数
+        window.location.href = `/admin/adminLogs?sort=${sortBy}&order=${newOrder}${searchParam}`;
+    });
+    $('#toLog').click(function () {
+        window.location.href = `/admin/adminLogs`;
+    });
     $('#back').click(function () {
         window.location.href = `/admin/adminView`;
     });

@@ -92,7 +92,7 @@ def addDDL():
                 ).all()
 
                 if overlapping_schedules:
-                    log_message = f"STeacher deadline add may overlap with existing schedules for {username} on {date}, from {overlapping_schedules[0].startTime} to {overlapping_schedules[0].endTime}"
+                    log_message = f"Teacher deadline add may overlap with existing schedules for {username} on {date}, from {overlapping_schedules[0].startTime} to {overlapping_schedules[0].endTime}"
                     log_entry = Log(logContent=log_message, logType=1)
                     db.session.add(log_entry)
                     db.session.commit()
@@ -101,7 +101,6 @@ def addDDL():
                     log_entry = Log(logContent=log_message, logType=0)
                     db.session.add(log_entry)
                     db.session.commit()
-
 
             return jsonify({'code': 200, 'message': 'Deadline added successfully'})
         else:
@@ -171,7 +170,6 @@ def updateDDL():
             db.session.commit()
 
             return jsonify({'code': 400, 'message': 'Form validation failed'}), 400
-
 
 
 @teacher.route('/delDDL', methods=['GET', 'POST'])
@@ -259,5 +257,3 @@ def changeInfor():
             db.session.commit()
 
             return redirect(url_for('cal_t.teacherView', error="the username has existed"))
-
-

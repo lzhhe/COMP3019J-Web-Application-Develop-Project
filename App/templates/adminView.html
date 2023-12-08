@@ -36,6 +36,7 @@
             <button class="searchButton" id="searchButton" type="submit">Search</button>
         </form>
         <button class="back" id="back">back index</button>
+        <button class="back" id="toLog">to logs page</button>
         <button class="back" id="add"
                 onclick="document.getElementById('addData').style.display='block'">add
         </button>
@@ -81,28 +82,28 @@
     <table class="users" id="users">
         <thead>
         <tr>
-            <th>Number</th>
-            <th class="sortable" data-sort="status"
+            <th class="TABLE">Number</th>
+            <th class="sortable TABLE" data-sort="status"
                 {% if current_sort == "status" %}data-current-order="{{ current_order }}" {% endif %}>
                 status
                 {% if current_sort == "status" and current_order == "asc" %}&uarr;
                     {% elif current_sort == "status" %}&darr;{% endif %}
             </th>
 
-            <th>username</th>
-            <th>email</th>
-            <th class="sortable" data-sort="gender"
+            <th class="TABLE">username</th>
+            <th class="TABLE">email</th>
+            <th class="sortable TABLE" data-sort="gender"
                 {% if current_sort == "gender" %}data-current-order="{{ current_order }}"{% endif %}>gender
                 {% if current_sort == "gender" and current_order == "asc" %}&uarr;
                     {% elif current_sort == "gender" %}&darr;{% endif %}
             </th>
-            <th class="sortable" data-sort="grade"
+            <th class="sortable TABLE" data-sort="grade"
                 {% if current_sort == "grade" %}data-current-order="{{ current_order }}"{% endif %}>grade
                 {% if current_sort == "grade" and current_order == "asc" %}&uarr;
                     {% elif current_sort == "grade" %}&darr;{% endif %}
             </th>
 
-            <th>operation</th>
+            <th class="TABLE">operation</th>
         </tr>
         </thead>
         <tbody style="--starting-number: {{ (current_page-1) * per_page }}">
