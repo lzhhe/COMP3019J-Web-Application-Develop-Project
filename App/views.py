@@ -80,10 +80,9 @@ def addSchedule():
         return redirect(url_for('cal_u.weekView'))
     else:
         form = AddSchedule(request.form)
-
+        username = g.user.username
         if form.validate():
 
-            username = g.user.username
             date = form.date.data
             title = form.title.data
             content = form.content.data
@@ -115,8 +114,6 @@ def addSchedule():
             else:
                 schedule = Schedule(username=username, scheduleTitle=title, content=content, date=date,
                                     startTime=startTime, endTime=endTime, color=color)
-                db.session.add(schedule)
-                db.session.commit()
 
                 new_schedule = {
                     "id": schedule.SID,
@@ -165,6 +162,7 @@ def addSchedule():
 @blue.route('/updateSchedule', methods=['PUT'])
 def updateSchedule():
     form = UpdateSchedule(request.form)
+    username = g.user.username
     if form.validate():
         sid = form.sid.data
         schedule = Schedule.query.get(sid)
@@ -198,7 +196,6 @@ def updateSchedule():
                 "color": schedule.color
             }
 
-            username = g.user.username
             if overlapping_schedules:
                 log_type = 1  # Overlap found
                 log_message = f"User {username} updated schedule with overlap: {schedule.scheduleTitle}, ID: {sid}"
@@ -213,7 +210,6 @@ def updateSchedule():
             return jsonify(update_schedule)
         else:
             # Log failed update - schedule not found, with username
-            username = g.user.username
             log_message = f"User {username} failed to update schedule: ID {sid} not found"
             log_entry = Log(logContent=log_message, logType=2)
             db.session.add(log_entry)
@@ -221,7 +217,6 @@ def updateSchedule():
             return jsonify({'status': 'error', 'message': 'schedule not found'}), 404
     else:
         # Log failed update - invalid data, with username
-        username = g.user.username
         log_message = f"User {username} failed to update schedule: Invalid data"
         log_entry = Log(logContent=log_message, logType=2)
         db.session.add(log_entry)
@@ -233,12 +228,12 @@ def updateSchedule():
 def deleteSchedule():
     sid = request.args.get('sid')  # 或使用 request.json.get('eid') 如果你发送 JSON
     schedule = Schedule.query.get(sid)
+    username = g.user.username
     if schedule:
         try:
             db.session.delete(schedule)
             db.session.commit()
 
-            username = g.user.username
             log_message = f"User {username} successfully deleted schedule: ID {sid}"
             log_entry = Log(logContent=log_message, logType=0)
             db.session.add(log_entry)
@@ -247,7 +242,6 @@ def deleteSchedule():
             return jsonify(sid)
         except Exception as e:
 
-            username = g.user.username
             log_message = f"User {username} failed to delete schedule: ID {sid}, Warning: {e}"
             log_entry = Log(logContent=log_message, logType=1)
             db.session.add(log_entry)
@@ -255,7 +249,6 @@ def deleteSchedule():
 
             return jsonify({'code': 500, 'msg': 'Error deleting event'})
     else:
-        username = g.user.username
         log_message = f"User {username} failed to delete schedule: ID {sid} not found"
         log_entry = Log(logContent=log_message, logType=2)
         db.session.add(log_entry)
@@ -267,6 +260,7 @@ def deleteSchedule():
 @blue.route('/updateDeadline', methods=['PUT'])
 def updateDeadline():
     form = UpdateDeadline(request.form)
+    username = g.user.username
     if form.validate():
         did = form.did.data
         deadline = Deadline.query.get(did)
@@ -287,7 +281,6 @@ def updateDeadline():
                 "color": deadline.color
             }
 
-            username = g.user.username
             log_message = f"User {username} successfully updated deadline: {deadline.deadlineTitle}, ID: {did}"
             log_entry = Log(logContent=log_message, logType=0)
             db.session.add(log_entry)
@@ -296,7 +289,6 @@ def updateDeadline():
             return jsonify(update_deadline)
         else:
 
-            username = g.user.username
             log_message = f"User {username} failed to update deadline: ID {did} not found"
             log_entry = Log(logContent=log_message, logType=1)
             db.session.add(log_entry)
@@ -305,7 +297,6 @@ def updateDeadline():
             return jsonify({'status': 'error', 'message': 'deadline not found'}), 404
     else:
 
-        username = g.user.username
         log_message = f"User {username} failed to update deadline: Invalid data"
         log_entry = Log(logContent=log_message, logType=2)
         db.session.add(log_entry)
@@ -318,13 +309,13 @@ def updateDeadline():
 def deleteDeadline():
     did = request.args.get('did')
     deadline = Deadline.query.get(did)
+    username = g.user.username
     if deadline:
 
         try:
             db.session.delete(deadline)
             db.session.commit()
 
-            username = g.user.username
             log_message = f"User {username} successfully deleted deadline: ID {did}"
             log_entry = Log(logContent=log_message, logType=0)
             db.session.add(log_entry)
@@ -333,7 +324,6 @@ def deleteDeadline():
             return jsonify(did)
         except Exception as e:
 
-            username = g.user.username
             log_message = f"User {username} failed to delete deadline: ID {did}, Warning: {e}"
             log_entry = Log(logContent=log_message, logType=1)
             db.session.add(log_entry)
@@ -341,7 +331,6 @@ def deleteDeadline():
 
             return jsonify({'code': 500, 'msg': 'Error deleting deadline'})
     else:
-        username = g.user.username
         log_message = f"User {username} failed to delete deadline: ID {did} not found"
         log_entry = Log(logContent=log_message, logType=2)
         db.session.add(log_entry)
@@ -369,8 +358,8 @@ def addEvent():
         return redirect(url_for('cal_u.monthView'))
     else:
         form = AddEvent(request.form)
+        username = g.user.username
         if form.validate():
-            username = g.user.username
             title = form.title.data
             content = form.content.data
             startDate = form.startDate.data
@@ -398,7 +387,6 @@ def addEvent():
 
         else:
 
-            username = g.user.username
             log_message = f"User {username} failed to add event. Form validation failed."
             log_entry = Log(logContent=log_message, logType=2)
             db.session.add(log_entry)
@@ -593,6 +581,7 @@ def find_password():
         return render_template('loginMix.html')
     elif request.method == 'POST':
         form = FindForm(request.form)
+        username = g.user.username
         if form.validate():
             username = form.find_uname.data
             email = form.find_email.data
@@ -622,7 +611,6 @@ def find_password():
                 return render_template('loginMix.html', errors="the email is wrong")
         else:
 
-            username = g.user.username
             log_message = f"Password reset failed: User {username} not found"
             log_type = 2  # Log type for operation error
             log_entry = Log(logContent=log_message, logType=log_type)
