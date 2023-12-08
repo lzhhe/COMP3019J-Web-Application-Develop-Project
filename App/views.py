@@ -106,6 +106,11 @@ def addSchedule():
                     "endTime": deadline.endTime.isoformat(),
                     "color": deadline.color
                 }
+
+                log_message = f"Deadline added: {title}, for {username} on {date}, ends at {endTime}"
+                log_entry = Log(logContent=log_message, logType=0)
+                db.session.add(log_entry)
+                db.session.commit()
                 return jsonify(new_deadline)
             else:
                 schedule = Schedule(username=username, scheduleTitle=title, content=content, date=date,
@@ -122,22 +127,52 @@ def addSchedule():
                     "endTime": schedule.endTime.isoformat(),
                     "color": schedule.color
                 }
+
+                overlapping_schedules = Schedule.query.filter(
+                    Schedule.username == username,
+                    Schedule.date == date,
+                    Schedule.startTime < endTime,
+                    Schedule.endTime > startTime
+                ).all()
+
+                if overlapping_schedules:
+                    log_message = f"Schedule added with overlapping: Overlapping schedule found for {username} on {date}, from {startTime} to {endTime}"
+                    log_entry = Log(logContent=log_message, logType=1)
+                    db.session.add(log_entry)
+                    db.session.commit()
+                else:
+                    log_message = f"Schedule added: {title}, for {username} on {date}, from {startTime} to {endTime}"
+                    log_entry = Log(logContent=log_message, logType=0)
+                    db.session.add(log_entry)
+                    db.session.commit()
+
+
                 return jsonify(new_schedule)
 
         else:
-            # 如果表单验证失败，返回错误信息
-            return jsonify({'status': 'error', 'message': 'The schedule may have some problems'}), 400
+            log_message = f"Failed to add schedule/deadline for {g.user.username}. Form validation failed."
+            log_entry = Log(logContent=log_message, logType=2)
+            db.session.add(log_entry)
+            db.session.commit()
+            return jsonify({'status': 'error', 'message': 'The schedule/deadline may have some problems'}), 400
 
 
 @blue.route('/updateSchedule', methods=['PUT'])
 def updateSchedule():
     form = UpdateSchedule(request.form)
     if form.validate():
-        print(123)
         sid = form.sid.data
         schedule = Schedule.query.get(sid)
         if schedule:
-            print(222)
+            overlapping_schedules = Schedule.query.filter(
+                Schedule.SID != sid,  # Exclude the current schedule from the check
+                Schedule.username == schedule.username,  # Assuming username is a field in Schedule
+                Schedule.date == form.date.data,
+                Schedule.startTime < form.endTime.data,
+                Schedule.endTime > form.startTime.data
+            ).all()
+
+            # Update schedule
             schedule.scheduleTitle = form.title.data
             schedule.content = form.content.data
             schedule.date = form.date.data
@@ -155,12 +190,35 @@ def updateSchedule():
                 "endTime": schedule.endTime.isoformat(),
                 "color": schedule.color
             }
+
+            username = g.user.username
+            if overlapping_schedules:
+                log_type = 1  # Overlap found
+                log_message = f"User {username} updated schedule with overlap: {schedule.scheduleTitle}, ID: {sid}"
+            else:
+                log_type = 2  # No overlap
+                log_message = f"User {username} successfully updated schedule without overlap: {schedule.scheduleTitle}, ID: {sid}"
+
+            log_entry = Log(logContent=log_message, logType=log_type)
+            db.session.add(log_entry)
+            db.session.commit()
+
             return jsonify(update_schedule)
         else:
-            print(333)
+            # Log failed update - schedule not found, with username
+            username = g.user.username
+            log_message = f"User {username} failed to update schedule: ID {sid} not found"
+            log_entry = Log(logContent=log_message, logType=2)
+            db.session.add(log_entry)
+            db.session.commit()
             return jsonify({'status': 'error', 'message': 'schedule not found'}), 404
     else:
-        print(444)
+        # Log failed update - invalid data, with username
+        username = g.user.username
+        log_message = f"User {username} failed to update schedule: Invalid data"
+        log_entry = Log(logContent=log_message, logType=2)
+        db.session.add(log_entry)
+        db.session.commit()
         return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
 
 
@@ -168,13 +226,35 @@ def updateSchedule():
 def deleteSchedule():
     sid = request.args.get('sid')  # 或使用 request.json.get('eid') 如果你发送 JSON
     schedule = Schedule.query.get(sid)
-    try:
-        db.session.delete(schedule)
+    if schedule:
+        try:
+            db.session.delete(schedule)
+            db.session.commit()
+
+            username = g.user.username
+            log_message = f"User {username} successfully deleted schedule: ID {sid}"
+            log_entry = Log(logContent=log_message, logType=0)
+            db.session.add(log_entry)
+            db.session.commit()
+
+            return jsonify(sid)
+        except Exception as e:
+
+            username = g.user.username
+            log_message = f"User {username} failed to delete schedule: ID {sid}, Warning: {e}"
+            log_entry = Log(logContent=log_message, logType=1)
+            db.session.add(log_entry)
+            db.session.commit()
+
+            return jsonify({'code': 500, 'msg': 'Error deleting event'})
+    else:
+        username = g.user.username
+        log_message = f"User {username} failed to delete schedule: ID {sid} not found"
+        log_entry = Log(logContent=log_message, logType=2)
+        db.session.add(log_entry)
         db.session.commit()
-        return jsonify(sid)
-    except Exception as e:
-        print('e:', e)
-        return jsonify({'code': 500, 'msg': 'Error deleting event'})
+
+        return jsonify({'code': 404, 'msg': 'Schedule not found'}), 404
 
 
 @blue.route('/updateDeadline', methods=['PUT'])
@@ -199,11 +279,30 @@ def updateDeadline():
                 "endTime": deadline.endTime.isoformat(),
                 "color": deadline.color
             }
+
+            username = g.user.username
+            log_message = f"User {username} successfully updated deadline: {deadline.deadlineTitle}, ID: {did}"
+            log_entry = Log(logContent=log_message, logType=0)
+            db.session.add(log_entry)
+            db.session.commit()
+
             return jsonify(update_deadline)
         else:
 
+            username = g.user.username
+            log_message = f"User {username} failed to update deadline: ID {did} not found"
+            log_entry = Log(logContent=log_message, logType=1)
+            db.session.add(log_entry)
+            db.session.commit()
+
             return jsonify({'status': 'error', 'message': 'deadline not found'}), 404
     else:
+
+        username = g.user.username
+        log_message = f"User {username} failed to update deadline: Invalid data"
+        log_entry = Log(logContent=log_message, logType=2)
+        db.session.add(log_entry)
+        db.session.commit()
 
         return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
 
@@ -212,14 +311,34 @@ def updateDeadline():
 def deleteDeadline():
     did = request.args.get('did')
     deadline = Deadline.query.get(did)
-    try:
-        db.session.delete(deadline)
-        db.session.commit()
-        return jsonify(did)
-    except Exception as e:
-        print('e:', e)
-        return jsonify({'code': 500, 'msg': 'Error deleting deadline'})
+    if deadline:
 
+        try:
+            db.session.delete(deadline)
+            db.session.commit()
+
+            username = g.user.username
+            log_message = f"User {username} successfully deleted deadline: ID {did}"
+            log_entry = Log(logContent=log_message, logType=0)
+            db.session.add(log_entry)
+            db.session.commit()
+
+            return jsonify(did)
+        except Exception as e:
+
+            username = g.user.username
+            log_message = f"User {username} failed to delete deadline: ID {did}, Warning: {e}"
+            log_entry = Log(logContent=log_message, logType=1)
+            db.session.add(log_entry)
+            db.session.commit()
+
+            return jsonify({'code': 500, 'msg': 'Error deleting deadline'})
+    else:
+        username = g.user.username
+        log_message = f"User {username} failed to delete deadline: ID {did} not found"
+        log_entry = Log(logContent=log_message, logType=2)
+        db.session.add(log_entry)
+        db.session.commit()
 
 @blue.route('/monthView')
 @session_required
@@ -255,6 +374,11 @@ def addEvent():
             db.session.add(event)
             db.session.commit()
 
+            log_message = f"User {username} successfully added event: {title}, ID: {event.EID}"
+            log_entry = Log(logContent=log_message, logType=0)
+            db.session.add(log_entry)
+            db.session.commit()
+
             new_event = {
                 "id": event.EID,
                 "title": event.eventTitle,
@@ -266,13 +390,20 @@ def addEvent():
             return jsonify(new_event)
 
         else:
-            # 如果表单验证失败，返回错误信息
+
+            username = g.user.username
+            log_message = f"User {username} failed to add event. Form validation failed."
+            log_entry = Log(logContent=log_message, logType=2)
+            db.session.add(log_entry)
+            db.session.commit()
+
             return jsonify({'status': 'error', 'message': 'The event may have some problems'}), 400
 
 
 @blue.route('/updateEvent', methods=['PUT'])
 def updateEvent():
     form = UpdateEvent(request.form)
+    username = g.user.username
     if form.validate():
         eid = form.eid.data
         event = Event.query.get(eid)
@@ -292,24 +423,59 @@ def updateEvent():
                 "content": event.content,
                 "color": event.color
             }
+
+            log_message = f"User {username} successfully updated event: {event.eventTitle}, ID: {eid}"
+            log_entry = Log(logContent=log_message, logType=0)
+            db.session.add(log_entry)
+            db.session.commit()
+
             return jsonify(update_event)
         else:
+
+            log_message = f"User {username} failed to update event: ID {eid} not found"
+            log_entry = Log(logContent=log_message, logType=1)
+            db.session.add(log_entry)
+            db.session.commit()
+
             return jsonify({'status': 'error', 'message': 'Event not found'}), 404
     else:
+
+        log_message = f"User {username} failed to update event: Invalid data"
+        log_entry = Log(logContent=log_message, logType=2)
+        db.session.add(log_entry)
+        db.session.commit()
+
         return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
 
 
 @blue.route('/deleteEvent', methods=['DELETE'])
 def deleteEvent():
+    username = g.user.username
     eid = request.args.get('eid')  # 或使用 request.json.get('eid') 如果你发送 JSON
     event = Event.query.get(eid)
-    try:
-        db.session.delete(event)
+    if event:
+        try:
+            db.session.delete(event)
+            db.session.commit()
+
+            log_message = f"User {username} successfully deleted event: ID {eid}"
+            log_entry = Log(logContent=log_message, logType=0)
+            db.session.add(log_entry)
+            db.session.commit()
+
+            return jsonify(eid)
+        except Exception as e:
+            log_message = f"User {username} failed to delete event: ID {eid}, Waring: {e}"
+            log_entry = Log(logContent=log_message, logType=1)
+            db.session.add(log_entry)
+            db.session.commit()
+
+            return jsonify({'code': 500, 'msg': 'Error deleting event'})
+    else:
+        log_message = f"User {username} failed to delete event: ID {eid} not found"
+        log_entry = Log(logContent=log_message, logType=2)
+        db.session.add(log_entry)
         db.session.commit()
-        return jsonify(eid)
-    except Exception as e:
-        print('e:', e)
-        return jsonify({'code': 500, 'msg': 'Error deleting event'})
 
 
 @blue.route('/yearView')
@@ -340,9 +506,10 @@ def login():
     elif request.method == 'POST':
         form = LoginForm(request.form)
         if form.validate():
-            username = form.signInUsernameField.data  # 修改这里
-            password = form.signInPasswordField.data  # 修改这里
+            username = form.signInUsernameField.data
+            password = form.signInPasswordField.data
             user = User.query.filter_by(username=username).first()
+            # 还if user吗，就是输入错用户名和密码的情况是不一致的
             if check_password_hash(user.password, password):
                 if user.status == 1:
                     response = redirect('/weekView')
@@ -353,8 +520,10 @@ def login():
                 session['uid'] = user.UID
                 return response
             else:
+                # warning
                 return render_template('loginMix.html', errors="the password is wrong")
         else:
+            # error
             return render_template('loginMix.html', errors=form.errors)
 
 
@@ -371,12 +540,13 @@ def register():
             user = User(email=email, username=username, password=generate_password_hash(password))
             db.session.add(user)
             db.session.commit()
-
+            # 成功
             response = redirect('/weekView')
             session['uid'] = user.UID
             return response
         else:
             print(form.errors)
+            # 输入的用户名已经存在，username就是输入的用户名，直接错误
             return render_template('loginMix.html', errors=form.errors)
 
 

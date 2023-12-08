@@ -48,3 +48,11 @@ class Deadline(db.Model):
     content = db.Column(db.Text)
     endTime = db.Column(db.Time, nullable=False)
     color = db.Column(db.Integer, nullable=False)
+
+
+class Log(db.Model):
+    __tablename__ = 'log'
+    LID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    logContent = db.Column(db.Text)
+    time = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    logType = db.Column(db.Integer, nullable=False, default=0)  # 0 information，1 warning，2 error
