@@ -115,16 +115,6 @@ def addSchedule():
                 schedule = Schedule(username=username, scheduleTitle=title, content=content, date=date,
                                     startTime=startTime, endTime=endTime, color=color)
 
-                new_schedule = {
-                    "id": schedule.SID,
-                    "title": schedule.scheduleTitle,
-                    "content": schedule.content,
-                    "date": schedule.date.isoformat(),
-                    "startTime": schedule.startTime.isoformat(),
-                    "endTime": schedule.endTime.isoformat(),
-                    "color": schedule.color
-                }
-
                 overlapping_schedules = Schedule.query.filter(
                     Schedule.username == username,
                     Schedule.date == date,
@@ -148,6 +138,15 @@ def addSchedule():
                 db.session.add(schedule)
                 db.session.commit()
 
+                new_schedule = {
+                    "id": schedule.SID,
+                    "title": schedule.scheduleTitle,
+                    "content": schedule.content,
+                    "date": schedule.date.isoformat(),
+                    "startTime": schedule.startTime.isoformat(),
+                    "endTime": schedule.endTime.isoformat(),
+                    "color": schedule.color
+                }
 
                 return jsonify(new_schedule)
 
@@ -166,6 +165,7 @@ def updateSchedule():
     if form.validate():
         sid = form.sid.data
         schedule = Schedule.query.get(sid)
+        print(schedule.scheduleTitle)
         if schedule:
             overlapping_schedules = Schedule.query.filter(
                 Schedule.SID != sid,  # Exclude the current schedule from the check
@@ -200,7 +200,7 @@ def updateSchedule():
                 log_type = 1  # Overlap found
                 log_message = f"User {username} updated schedule with overlap: {schedule.scheduleTitle}, ID: {sid}"
             else:
-                log_type = 2  # No overlap
+                log_type = 0  # No overlap
                 log_message = f"User {username} successfully updated schedule without overlap: {schedule.scheduleTitle}, ID: {sid}"
 
             log_entry = Log(logContent=log_message, logType=log_type)
@@ -226,7 +226,7 @@ def updateSchedule():
 
 @blue.route('/deleteSchedule', methods=['DELETE'])
 def deleteSchedule():
-    sid = request.args.get('sid')  # 或使用 request.json.get('eid') 如果你发送 JSON
+    sid = request.args.get('sid')
     schedule = Schedule.query.get(sid)
     username = g.user.username
     if schedule:
@@ -335,6 +335,7 @@ def deleteDeadline():
         log_entry = Log(logContent=log_message, logType=2)
         db.session.add(log_entry)
         db.session.commit()
+
 
 @blue.route('/monthView')
 @session_required
@@ -539,7 +540,6 @@ def login():
             return render_template('loginMix.html', errors=form.errors)
 
 
-
 @blue.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
@@ -666,7 +666,6 @@ def changeInfor():
             return redirect(url_for('cal_u.weekView', error="the username has existed"))
 
 
-
 @blue.route('/logout')
 def logout():
     uid = session.get('uid')
@@ -690,6 +689,5 @@ def logout():
     session.pop('uid', None)  # Safely remove 'uid' from session
     response = redirect('main')
     return response
-
 
 #

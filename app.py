@@ -11,7 +11,7 @@ app = create_app()
 def my_before():
     uid = session.get('uid')
     if uid:
-        user = User.query.get(uid)
+        user = db.session.get(User, uid)
         setattr(g, 'user', user)
     else:
         setattr(g, 'user', None)
@@ -27,7 +27,7 @@ def update_color_mode():
     # 检查用户是否登录
     if 'uid' in session:
         uid = session['uid']
-        user = User.query.get(uid)  # 获取当前登录的用户
+        user = db.session.get(User, uid)
         if user:
             data = request.json
             # 假设用户模型中有一个color属性，可以是0或1来表示颜色模式
@@ -45,7 +45,7 @@ def update_color_mode():
 def get_user_color_mode():
     if 'uid' not in session:
         return jsonify({'error': 'User not logged in'}), 401
-    user = User.query.get(session['uid'])
+    user = db.session.get(User, session['uid'])
     if user:
         return jsonify({'colorMode': user.color})
     else:
