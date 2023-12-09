@@ -47,18 +47,23 @@ def weekView():
     user = g.user
     session['last_page'] = 'weekView'
     view_type = request.args.get('type', 'all')  # 默认值为 'week'
+    # 如果是学生
     if user.status == 1:
         if view_type == 'all':
+            # 如果要看所有的，就把这个学生有关的schedule和ddl都传过去
             schedules = Schedule.query.filter_by(username=user.username).all()
             deadlines = Deadline.query.filter_by(targetUsername=user.username).all()
             return render_template('viewWeek.html', schedules=schedules, deadlines=deadlines)
         elif view_type == 'schedule':
+            # 只看schedule
             schedules = Schedule.query.filter_by(username=user.username).all()
             return render_template('viewWeek.html', schedules=schedules, deadlines='')
         elif view_type == 'ddl':
+            # 只看ddl
             deadlines = Deadline.query.filter_by(targetUsername=user.username).all()
             return render_template('viewWeek.html', schedules='', deadlines=deadlines)
         elif view_type == 'teacherddl':
+            # 只看老师给这个学生设置的ddl
             deadlines = Deadline.query.filter(
                 and_(
                     Deadline.targetUsername == user.username,
@@ -581,9 +586,8 @@ def find_password():
         return render_template('loginMix.html')
     elif request.method == 'POST':
         form = FindForm(request.form)
-        username = g.user.username
+        username = form.find_uname.data
         if form.validate():
-            username = form.find_uname.data
             email = form.find_email.data
             password = form.find_password.data
             user = User.query.filter_by(username=username).first()

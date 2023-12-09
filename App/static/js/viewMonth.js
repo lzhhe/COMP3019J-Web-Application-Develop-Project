@@ -44,20 +44,14 @@ function updateDayDivText() {
 
 
 function loadEventsForCurrentMonth() {
+    const startDate = toDate(calendar.listDates[0].date);
+    const endDate = toDate(calendar.listDates[41].date);
     const currentYear = calendar.selectedDate.getFullYear();
     const currentMonth = calendar.selectedDate.getMonth() + 1; // JavaScript 中月份是从 0 开始的
 
     $('.events').empty(); // 清空所有事件容器
-
     eventsData.forEach(event => {
-        const eventStartDate = new Date(event.startDate);
-        const eventEndDate = new Date(event.endDate);
-
-        // 检查事件是否在当前月份
-        if (eventStartDate.getMonth() + 1 === currentMonth && eventStartDate.getFullYear() === currentYear ||
-            eventEndDate.getMonth() + 1 === currentMonth && eventEndDate.getFullYear() === currentYear) {
-            createEventDiv(event);
-        }
+        createEventDiv(event);
     });
 }
 

@@ -10,6 +10,7 @@
 {% endblock %}
 {% block extra_js %}
     <script type="text/javascript">
+    // 把数据库内的信息通过json得到
         let schedulesData = [
             {% for schedule in schedules %}
                 {

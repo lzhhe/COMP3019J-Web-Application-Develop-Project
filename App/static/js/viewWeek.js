@@ -17,10 +17,10 @@ class WeekItem {
     constructor(date) {
         this.date = date;
         this.day = date.getDate();
-        this.weekNum = date.getDay();
+        this.weekNum = date.getDay();  // 周几0-6
         this.weekText = WEEK[this.weekNum];
-        this.isToday = WeekItem.isSameDate(new Date(), date);
-        this.isWeekend = this.weekNum === 0 || this.weekNum === 6;
+        this.isToday = WeekItem.isSameDate(new Date(), date);  // 是否今天
+        this.isWeekend = this.weekNum === 0 || this.weekNum === 6;  // 是否周末
     }
 
     static isSameDate(date1, date2) {
@@ -28,6 +28,11 @@ class WeekItem {
     }
 }
 
+/**
+ * 转换成字符串样式放在form表单里。格式化日期为 YYYY-MM-DD
+ * @param date
+ * @returns {string}
+ */
 function toDate(date) {
     return `${date.getFullYear()}-${(date.getMonth() + 1)
         .toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
@@ -38,17 +43,23 @@ function toDate1(date) {
     return date.toISOString().split('T')[0];
 }
 
+/**
+ * 打开form表单。会提前传入默认的时间和日期。此时是创建schedule或ddl的表单。
+ * @param date
+ * @param startTime
+ * @param endTime
+ */
 function openModel(date, startTime, endTime) {
     $("#eventModal").show(); // 显示模态窗口
-    $("#submitButton").show();
-    $("#deleteButton").hide();
-    $("#updateButton").hide();
+    $("#submitButton").show();  // 展示提交按钮
+    $("#deleteButton").hide();  // 隐藏删除按钮
+    $("#updateButton").hide();  // 隐藏更新按钮
     $("#changeButton").show().val('schedule').removeClass('fixed').addClass('button')
-        .prop('disabled', false);
-    $('#eventModal').find('input[type=text], textarea').val('');
-    $("#date").val(date).prop('disabled', false);
-    $("#startTime").val(startTime).prop('disabled', false);
-    $("#endTime").val(endTime).prop('disabled', false);
+        .prop('disabled', false);  // 允许change按钮修改是schedule还是ddl
+    $('#eventModal').find('input[type=text], textarea').val('');  // 默认title和content输入框是空
+    $("#date").val(date).prop('disabled', false);  // 允许date修改并填入默认日期
+    $("#startTime").val(startTime).prop('disabled', false);  // 允许开始时间修改并填入默认时间
+    $("#endTime").val(endTime).prop('disabled', false);  // 允许结束时间修改并填入默认时间
     $("#eventTitle").prop('disabled', false);
     $("#content").prop('disabled', false);
     $(".color").prop('disabled', false);
@@ -59,15 +70,19 @@ function openModel(date, startTime, endTime) {
 
 }
 
+/**
+ * 打开schedule的细节。学生可以删除修改自己的schedule。对应的各种内容是数据库里面的，但是允许修改
+ * @param data
+ */
 function openEventModal1(data) {
-    $("#submitButton").hide();
+    $("#submitButton").hide();  // submit隐藏。update替代它
     $("#changeButton").hide();
     $("#updateButton").show();
     $("#deleteButton").show();
-    $("#sdId").val(parseInt(data.id), 10);
+    $("#sdId").val(parseInt(data.id), 10);  // 设置为数据库中schedule的id
     $("#eventTitle").val(data.title).prop('disabled', false);
     $("#date").val(data.date).prop('disabled', false);
-    $("#startTime").val(data.startTime.substring(0, 5)).prop('disabled', false);
+    $("#startTime").val(data.startTime.substring(0, 5)).prop('disabled', false);  // 必须加入substring，不然数据会出问题
     $("#endTime").val(data.endTime.substring(0, 5)).prop('disabled', false);
     $("#content").val(data.content).prop('disabled', false);
     $('.color').removeClass('active').prop('disabled', false);
@@ -78,11 +93,15 @@ function openEventModal1(data) {
     });
 }
 
+/**
+ * 打开ddl的细节。如果是老师设置的ddl，学生只能查看不能修改。学生自己的可以修改删除
+ * @param data
+ */
 function openEventModal2(data) {
     $("#submitButton").hide();
     console.log(data.target)
     console.log(data.username)
-    if (data.target === data.username) {
+    if (data.target === data.username) {  // target表示作用人。如果不是自己的话就表示是老师设的
         $("#changeButton").hide();
         $("#updateButton").show();
         $("#deleteButton").show();
@@ -112,14 +131,27 @@ function openEventModal2(data) {
     });
 }
 
+/**
+ * 根据数据库中的属性设置时间的颜色
+ * @param colorCode
+ * @returns {*}
+ */
 function getColor(colorCode) {
     return colorMap[colorCode] || colorMap[2];
 }
 
+/**
+ * 紧急程度，修改z-index
+ * @param colorCode
+ * @returns {number|number}
+ */
 function getIndex(colorCode) {
     return 15 - colorCode || 12;
 }
 
+/**
+ * 得到当前周的起止时间，然后在schedulesData里找date在这里面的，再画
+ */
 function loadEventsForCurrentWeek() {
     const startOfWeek = viewWeek.startOfWeek(viewWeek.selectedDate);
     const endOfWeek = viewWeek.endOfWeek(viewWeek.selectedDate);
@@ -145,6 +177,10 @@ function loadEventsForCurrentWeek() {
     });
 }
 
+/**
+ * 先找此时id等于修改的schedule的id，然后修改样式重画
+ * @param updatedSchedule
+ */
 function updateLocalScheduleData(updatedSchedule) {
     const scheduleIndex = schedulesData.findIndex(schedule =>
         parseInt(schedule.id, 10) === updatedSchedule.id);
@@ -259,29 +295,38 @@ function createDeadlineDiv(deadline) {
     dayElement.find('.slots').append(deadlineDiv);
 }
 
+/**
+ * 周类
+ */
 class WeekCalendar {
     constructor() {
-        this.selectedDate = new Date();
+        this.selectedDate = new Date();  // 当前选中的日期
         this.selectedDate.setHours(0, 0, 0, 0);
-        this.weekList = [];
+        this.weekList = [];  // 当前周的所有日子
         this.initWeek();
         this.setupTimes();
         this.setupDays();
     }
 
+    /**
+     * 画最左边的时间窗格。在col-1里创建内部的时间格div
+     */
     setupTimes() {
         const header = $("<div></div>").addClass("columnHeader");
         const slots = $("<div></div>").addClass("slots");
         for (let hour = 0; hour < 24; hour++) {
             $("<div></div>")
                 .attr("data-hour", hour)
-                .addClass("time")
+                .addClass("time")  // 每一个小格子都有一个类交time
                 .text(`${hour}:00 - ${hour + 1}:00`)
                 .appendTo(slots);
         }
         $(".col-1").append(header).append(slots);
     }
 
+    /**
+     * 初始化week视图内部的空格子.为每个day的竖列都创建对应的可点击的窗格
+     */
     setupDays() {
         const cal = this;
         $(".day").each(function () {
@@ -293,11 +338,11 @@ class WeekCalendar {
             $("<div></div>").addClass("dayDisplay").appendTo(header);
             for (let hour = 0; hour < 24; hour++) {
                 $("<div></div>")
-                    .attr("data-hour", hour)
+                    .attr("data-hour", hour)  // 自定义属性，为了方便得到对应的时间
                     .appendTo(slots)
-                    .addClass("slot")
-                    .click(() => cal.clickSlot(hour, dayIndex))
-                    .hover(
+                    .addClass("slot")  // 每一个格子属于slot类，添加到slots内
+                    .click(() => cal.clickSlot(hour, dayIndex))  // 格子点击之后调用对应的方法，把数据传进去
+                    .hover(  // 修改样式，更清晰
                         () => cal.hoverOver(hour),
                         () => cal.hoverOut()
                     );
@@ -306,12 +351,17 @@ class WeekCalendar {
         });
     }
 
+    /**
+     * 把对应的hour信息和对应的dayIndex传进去，得到对应的时间，利用索引得到当前week列表的日期
+     * @param hour
+     * @param dayIndex
+     */
     clickSlot(hour, dayIndex) {
-        const date = toDate(this.weekList[dayIndex].date);
-        const startTime = hour.toString().padStart(2, "0") + ":00";
+        const date = toDate(this.weekList[dayIndex].date);  // 就是week列表的第几日的date信息
+        const startTime = hour.toString().padStart(2, "0") + ":00";  // 利用hour得到的是开始时间
         const endTime = hour < 23 ? (hour + 1).toString().padStart(2, "0") + ":00"
             : hour.toString().padStart(2, "0") + ":59";
-        openModel(date, startTime, endTime);
+        openModel(date, startTime, endTime);  // 此时先传入默认的时间
     }
 
 
@@ -375,7 +425,6 @@ class WeekCalendar {
         return start;
     }
 
-    function
 
     endOfWeek(date) {
         const end = new Date(date);
@@ -547,6 +596,7 @@ document.addEventListener("DOMContentLoaded", function (qualifiedName, value) {
 
 
 $(document).ready(function () {
+    // 循环每个json数据，然后画出
     schedulesData.forEach(schedule => {
         createScheduleDiv(schedule)
     });
@@ -554,6 +604,9 @@ $(document).ready(function () {
         createDeadlineDiv(deadline)
     });
 
+    /**
+     * 改变是否是schedule还是ddl
+     */
     $('#changeButton').click(function () {
         if ($(this).val() === 'schedule') {
             $(this).val('deadline');
@@ -563,14 +616,21 @@ $(document).ready(function () {
             $('#startTime').prop('disabled', false).val('00:00'); // 或者设置为其他默认值
         }
     });
+    /**
+     * 设置颜色情况。添加css样式
+     */
     $('.color').click(function () {
         $('.color').removeClass('active');
         $(this).addClass('active');
     });
 
+    /**
+     * 提交按钮的逻辑
+     */
     $('#submitButton').click(function (e) {
-        e.preventDefault();
+        e.preventDefault();  // 防止默认提交。ajax必备
 
+        // 传递json数据
         const scheduleData = {
             title: $('#eventTitle').val(),
             startTime: $('#startTime').val(),
@@ -580,6 +640,7 @@ $(document).ready(function () {
             color: $('.color.active').data('color'),
         };
         console.log(scheduleData)
+        // 不允许开始时间大于结束时间
         if (scheduleData.startTime !== '' &&
             new Date(scheduleData.date + ' ' + scheduleData.startTime) >= new Date(scheduleData.date + ' ' + scheduleData.endTime)) {
             alert('Error: Start time must be earlier than end time.');
@@ -590,11 +651,11 @@ $(document).ready(function () {
             url: addScheduleUrl,
             type: 'POST',
             data: scheduleData,
-            success: function (response) {
+            success: function (response) {  // response就是路由传回来的数据信息
                 $('#eventModal').find('input[type=text], input[type=date], textarea').val('');
                 $('.color').removeClass('active');
                 if (response.hasOwnProperty('startTime')) {
-                    schedulesData.push(response);
+                    schedulesData.push(response); // 把路由传过来的数据添加到对应的json数组，然后画出
                     createScheduleDiv(response);
                 } else {
                     deadlinesData.push(response);
@@ -608,6 +669,9 @@ $(document).ready(function () {
         });
     });
 
+    /**
+     * 和submit同理
+     */
     $('#updateButton').click(function (e) {
         e.preventDefault(); // 阻止表单默认提交
 
@@ -675,6 +739,9 @@ $(document).ready(function () {
 
     });
 
+    /**
+     * 也是同理
+     */
     $('#deleteButton').click(function (e) {
         e.preventDefault();
 

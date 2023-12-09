@@ -1,7 +1,9 @@
 class DateItem {
     constructor(date) {
         this.date = date;
+        //day表示数字
         this.day = date.getDate(); // 得到几号
+        //today是否是今天
         this.today = false;
         this.preMonth = false;
         this.nextMonth = false;
@@ -12,6 +14,7 @@ class DateItem {
 
 const dayMs = 86400000;
 const weekMs = 604800000;
+//得到今天的时间
 const today = new Date();
 
 /**
@@ -70,7 +73,7 @@ function getPrevMonthDays(date) {
     // date为当前日期
     const prevMonthDays = [];
     const currentFirstDate = getFirstDay(date); // 得到当前月份的第一天
-    const currentFirstDateWeekDay = currentFirstDate.getDay(); // 星期几，0表示周日，123456为周123456
+    const currentFirstDateWeekDay = currentFirstDate.getDay(); // 本月第一天是星期几，0表示周日，123456为周123456
     const currentFirstDateTime = currentFirstDate.getTime();
     // 获取 currentFirstDate 对象的时间戳。基于1970.1.1，之前之后都可
     // 利用毫秒可以在不同时区显示正确的时间
@@ -110,6 +113,7 @@ function getNextMonthDays(date, appendOrNot) {
 /**
  * 得到这一个月的所有日期
  */
+//本月所有日期
 function getCurrentMonthDays(date) {
     const currentDays = [];
     const firstDate = getFirstDay(date);
