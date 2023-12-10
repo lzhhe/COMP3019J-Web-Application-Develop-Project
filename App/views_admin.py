@@ -4,11 +4,15 @@ from functools import wraps
 from flask import Blueprint, render_template, request, redirect, session, url_for, g, abort, jsonify
 from sqlalchemy import or_, desc, asc
 from werkzeug.security import generate_password_hash, check_password_hash
-import requests
+import csv
+import os
+
 
 from .forms import RegisterForm, LoginForm, FindForm, AddInfo, ChangeInfo
 from .models import *
 from .views import session_required
+
+
 
 admin = Blueprint('cal_a', __name__, url_prefix="/admin")  # cal_u is name of blueprint
 
@@ -98,9 +102,39 @@ def adminLogs():
     pagination = query.paginate(page=page, per_page=per_page, error_out=False)
     logs = pagination.items
 
+    generate_csv_files()
+
     return render_template('adminLogs.html', logs=logs, current_sort=sort, current_order=order, pagination=pagination,
                            current_page=page, per_page=per_page)
 
+def generate_csv_files():
+    # 从数据库中获取所有日志记录
+    all_logs = Log.query.all()
+
+    # 分别创建information, warning, error类型的CSV文件
+    create_csv_for_type(all_logs, 0, 'information_logs.csv')  # 0 表示information
+    create_csv_for_type(all_logs, 1, 'warning_logs.csv')     # 1 表示warning
+    create_csv_for_type(all_logs, 2, 'error_logs.csv')       # 2 表示error
+
+def create_csv_for_type(logs, log_type, filename):
+    filtered_logs = [log for log in logs if log.logType == log_type]
+
+    # 保存到CSV文件
+    save_logs_to_csv(filename, filtered_logs)
+
+def save_logs_to_csv(filename, logs):
+    # 确定要写入的字段
+    fieldnames = ['LID', 'time', 'logType', 'logContent']  # 根据您的Log模型进行更新
+
+    # 创建CSV文件并写入数据
+    with open(filename, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+        for log in logs:
+            # 格式化时间字段
+            log_dict = {fieldname: getattr(log, fieldname) for fieldname in fieldnames}
+            log_dict['time'] = log_dict['time'].strftime("%Y-%m-%d %H:%M:%S") if log_dict['time'] else ''
+            writer.writerow(log_dict)
 
 @admin.route('/addInfor', methods=['GET', 'POST'])
 def addInfor():
