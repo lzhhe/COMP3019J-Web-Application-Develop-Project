@@ -14,19 +14,19 @@
 {% endblock %}
 {% block mainBody %}
 
-    {% if errors %}
+   {% if errors %} <!-- 错误信息处理 -->
         <script>
             let errorMsgs;
             {% if errors is string %}
-                errorMsgs = "{{ errors }}";
+                errorMsgs = "{{ errors }}"; <!-- 字符串形式的错误信息 -->
             {% else %}
                 errorMsgs = [
                     {% for field, error_messages in errors.items() %}
-                        "{{ error_messages|join(', ') }}",
+                        "{{ error_messages|join(', ') }}", <!-- 多个错误信息 -->
                     {% endfor %}
-                ].join("\n");  // 使用换行符将每个字段的错误分隔开
+                ].join("\n"); <!-- 使用换行符连接错误信息 -->
             {% endif %}
-            alert(errorMsgs);
+            alert(errorMsgs); <!-- 显示错误信息 -->
         </script>
     {% endif %}
     <div class="functions">

@@ -78,7 +78,7 @@ def weekView():
         response = redirect(url_for('cal_a.adminView'))
     return response
 
-
+# 添加日程和ddl
 @blue.route('/addSchedule', methods=['GET', 'POST'])
 def addSchedule():
     if request.method == 'GET':
@@ -94,6 +94,8 @@ def addSchedule():
             startTime = form.startTime.data
             endTime = form.endTime.data
             color = form.color.data
+
+            # 由于日程和ddl只有起始时间有区别所以可以写在一个函数当中
 
             if startTime is None:  # deadline
                 deadline = Deadline(username=username, targetUsername=username, deadlineTitle=title, content=content,
@@ -129,6 +131,7 @@ def addSchedule():
                     )
                 ).all()
 
+                # 日程需要要进行一定的检查，如果重复就给管理员一个告警，但是仍然可以正常添加
                 if overlapping_schedules:
                     log_message = f"Schedule added with overlapping: Overlapping schedule found for {username} on {date}, from {startTime} to {endTime}"
                     log_entry = Log(logContent=log_message, logType=1)
@@ -170,7 +173,9 @@ def updateSchedule():
     if form.validate():
         sid = form.sid.data
         schedule = Schedule.query.get(sid)
-        print(schedule.scheduleTitle)
+        # print(schedule.scheduleTitle)
+
+        # 基本一样的逻辑
         if schedule:
             overlapping_schedules = Schedule.query.filter(
                 Schedule.SID != sid,  # Exclude the current schedule from the check
@@ -214,14 +219,14 @@ def updateSchedule():
 
             return jsonify(update_schedule)
         else:
-            # Log failed update - schedule not found, with username
+
             log_message = f"User {username} failed to update schedule: ID {sid} not found"
             log_entry = Log(logContent=log_message, logType=2)
             db.session.add(log_entry)
             db.session.commit()
             return jsonify({'status': 'error', 'message': 'schedule not found'}), 404
     else:
-        # Log failed update - invalid data, with username
+
         log_message = f"User {username} failed to update schedule: Invalid data"
         log_entry = Log(logContent=log_message, logType=2)
         db.session.add(log_entry)
@@ -269,6 +274,7 @@ def updateDeadline():
     if form.validate():
         did = form.did.data
         deadline = Deadline.query.get(did)
+        # 也是一样的逻辑
         if deadline:
             deadline.deadlineTitle = form.title.data
             deadline.content = form.content.data
@@ -365,6 +371,9 @@ def addEvent():
     else:
         form = AddEvent(request.form)
         username = g.user.username
+
+        # 添加事件，这部分只会显示在月视图当中 谷歌是这样做的
+
         if form.validate():
             title = form.title.data
             content = form.content.data
@@ -406,6 +415,7 @@ def updateEvent():
     form = UpdateEvent(request.form)
     username = g.user.username
     if form.validate():
+        # 一样的逻辑
         eid = form.eid.data
         event = Event.query.get(eid)
         if event:
@@ -694,4 +704,4 @@ def logout():
     response = redirect('main')
     return response
 
-#
+

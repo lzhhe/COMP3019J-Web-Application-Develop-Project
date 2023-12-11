@@ -31,10 +31,10 @@ def teacherView():
     if search:
         search_conditions = [
             Deadline.targetUsername.contains(search),
-            Deadline.deadlineTitle.contains(search),  # 如果您想包括标题在搜索中
-            Deadline.content.contains(search),  # 如果您想包括内容在搜索中
-            Deadline.endTime.contains(search),  # 如果您想包括内容在搜索中
-            Deadline.date.contains(search)  # 如果您想包括内容在搜索中
+            Deadline.deadlineTitle.contains(search),
+            Deadline.content.contains(search),
+            Deadline.endTime.contains(search),
+            Deadline.date.contains(search)
         ]
         conditions.append(or_(*search_conditions))
 
@@ -57,7 +57,7 @@ def teacherView():
 
 
 @teacher.route('/searchThing')
-def searchThing():
+def searchThing():# 搜索学生
     search = request.args.get("search", default="")
     return redirect(url_for('cal_t.teacherView', search=search))
 
@@ -67,6 +67,8 @@ def addDDL():
     if request.method == 'GET':
         return redirect(url_for('cal_t.teacherView'))
     else:
+        # 一样的逻辑但是不同的是老师的ddl不能被学生删除或者更改
+        # 教师会根据自身的年级给同年级的学生添加ddl
         form = AddSchedule(request.form)
         if form.validate():
             username = g.user.username
@@ -91,6 +93,7 @@ def addDDL():
                     endTime < Schedule.endTime
                 ).all()
 
+                # 一样的逻辑如果加在学生自己的设置的时间的中间，会给管理员一个告警，但是仍然可以正常添加
                 if overlapping_schedules:
                     log_message = f"Teacher deadline add may overlap with existing schedules for {username} on {date}, from {overlapping_schedules[0].startTime} to {overlapping_schedules[0].endTime}"
                     log_entry = Log(logContent=log_message, logType=1)
@@ -119,6 +122,7 @@ def updateDDL():
     if request.method == 'GET':
         return redirect(url_for('cal_t.teacherView'))
     else:
+        # 一样的逻辑
         form = UpdateDeadline(request.form)
         if form.validate():
             did = form.did.data
@@ -217,6 +221,7 @@ def changeInfor():
     if request.method == 'GET':
         return redirect('/teacherView')
     else:
+        # 改变用户信息  与学生一样
         form = ChangeInfo(request.form)
         if form.validate():
             user = g.user

@@ -83,6 +83,8 @@ def searchThing():
 
 @admin.route('/adminLogs')
 def adminLogs():
+    # 查看日志页面，在这里会生成日志的CSV文件
+    # 原初的数据在数据库中，这里将其转换为CSV文件
     # 获取请求参数
     sort = request.args.get('sort', default='time', type=str)  # 默认排序字段为时间
     order = request.args.get('order', default='asc', type=str)  # 默认排序顺序为升序
@@ -141,6 +143,7 @@ def addInfor():
     if request.method == 'GET':
         return redirect('/adminView')
     else:
+        # 管理员手动添加用户
         form = AddInfo(request.form)
         if form.validate():
             username = form.add_new_username.data
@@ -164,6 +167,7 @@ def changeInfor():
     if request.method == 'GET':
         return redirect('/adminView')
     else:
+        # 更改是用户信息
         form = ChangeInfo(request.form)
         if form.validate():
             uid = form.user_uid.data
